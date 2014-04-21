@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
-    class SoundManager
+    class AudioManager
     {
-        public SoundManager()
+        public AudioManager()
         {
 
 

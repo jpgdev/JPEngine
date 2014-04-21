@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    class SpriteManager
+    public class SpriteManager
     {
         SpriteBatch _spriteBatch;
 

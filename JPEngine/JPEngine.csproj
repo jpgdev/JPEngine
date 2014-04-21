@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Managers\SoundManager.cs" />
+    <Compile Include="Managers\AudioManager.cs" />
+    <Compile Include="Managers\TexturesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\SpriteManager.cs" />
   </ItemGroup>

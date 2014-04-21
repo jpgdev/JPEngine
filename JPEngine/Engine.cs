@@ -15,16 +15,22 @@ namespace JPEngine
 
         private SpriteManager _spriteManager;
         private GraphicsDevice _graphicsDevice;
+        private Configuration _configuration;
 
         #endregion
 
         #region Properties
 
-        public SpriteManager SpriteManager 
+        internal SpriteManager SpriteManager 
         {
             get { return _spriteManager; } 
-        }
+        }              
 
+        public Configuration Config
+        {
+            get { return _configuration; }
+            set { _configuration = value; }
+        }       
 
         #endregion
 
@@ -38,6 +44,7 @@ namespace JPEngine
         {
             _graphicsDevice = new GraphicsDevice();
             _spriteManager = new SpriteManager(_graphicsDevice);
+            _configuration = new Configuration(1280, 720);
         }
 
         public void LoadContent(ContentManager content)
