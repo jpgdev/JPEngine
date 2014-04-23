@@ -1,0 +1,10 @@
+﻿-Texture manager:
+
+	-Loader les textures juste quand on en a besoin:
+		ex: Entre dans une map, on load les textures d'après les strings (nom des texture). 
+
+
+
+-Generique :
+	
+	-Implanter des mutex pour toutes les classes statiques ?

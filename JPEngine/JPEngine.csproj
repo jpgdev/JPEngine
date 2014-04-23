@@ -40,15 +40,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Events\ItemEvents.cs" />
+    <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Managers\AudioManager.cs" />
-    <Compile Include="Managers\TexturesManager.cs" />
+    <Compile Include="Managers\MusicManager.cs" />
+    <Compile Include="Managers\SoundManager.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\ResourceManager.cs" />
+    <Compile Include="Managers\TextureManager.cs" />
+    <Compile Include="Managers\WindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\SpriteManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GameObject\" />
+    <Folder Include="AI\" />
+    <Folder Include="GameObjects\" />
+    <Folder Include="Map\" />
+    <Folder Include="Physics\" />
+    <Folder Include="Screens\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Analysis\Ideas.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Analysis\ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

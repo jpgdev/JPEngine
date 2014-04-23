@@ -6,20 +6,11 @@ using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
-    class AudioManager
+    public interface AudioManager 
     {
-        public AudioManager()
-        {
+        void Play(string name);
 
+        void Stop(string name);
 
-        }
-
-
-        
-
-        public void Update()
-        {
-
-        }
     }
 }

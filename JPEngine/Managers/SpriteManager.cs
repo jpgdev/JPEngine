@@ -10,23 +10,22 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public class SpriteManager
+    public class SpriteBatchManager : Manager
     {
         SpriteBatch _spriteBatch;
 
-        public SpriteManager(GraphicsDevice graphicsDevice)
+        internal SpriteBatchManager(GraphicsDevice graphicsDevice)
+            : base()
         {
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
-
-
-
-        public void Update(GameTime gameTime)
+        
+        internal void Update(GameTime gameTime)
         {
 
         }
 
-        public void Draw()
+        internal void Draw()
         {
 
         }

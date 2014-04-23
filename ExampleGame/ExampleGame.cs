@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+
 using JPEngine;
+using JPEngine.Managers;
 #endregion
 
 namespace ExampleGame
@@ -15,8 +17,7 @@ namespace ExampleGame
 
     public class ExampleGame : Game
     {
-        GraphicsDeviceManager graphics;        
-        Engine engine;
+        GraphicsDeviceManager graphics;  
 
         public ExampleGame()
             : base()
@@ -27,21 +28,16 @@ namespace ExampleGame
         
         protected override void Initialize()
         {
-            engine = new Engine();
-            engine.Initialize();
+            Engine.Initialize(graphics);
             
-
-
-
+            
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {           
-            engine.LoadContent(Content);
-
-
+            Engine.LoadContent(Content);
 
         }
 
@@ -49,7 +45,7 @@ namespace ExampleGame
 
         protected override void Update(GameTime gameTime)
         {
-            engine.Update(gameTime);
+            Engine.Update(gameTime);
 
 
 
@@ -60,8 +56,8 @@ namespace ExampleGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            engine.Draw();
+
+            Engine.Draw();
             
 
 
