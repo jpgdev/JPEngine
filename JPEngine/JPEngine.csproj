@@ -41,6 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
+    <Compile Include="Entity Component Pattern\Components\Component.cs" />
+    <Compile Include="Entity Component Pattern\Components\Flight.cs" />
+    <Compile Include="Entity Component Pattern\Components\Fuel.cs" />
+    <Compile Include="Entity Component Pattern\Components\GravitySensitive.cs" />
+    <Compile Include="Entity Component Pattern\Components\MapPosition.cs" />
+    <Compile Include="Entity Component Pattern\Components\SpatialState.cs" />
+    <Compile Include="Entity Component Pattern\EngineSystem.cs" />
+    <Compile Include="Entity Component Pattern\EntityManager.cs" />
+    <Compile Include="Entity Component Pattern\System.cs" />
     <Compile Include="Events\ItemEvents.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Managers\AudioManager.cs" />
