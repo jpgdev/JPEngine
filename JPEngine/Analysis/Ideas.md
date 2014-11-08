@@ -1,7 +1,29 @@
 ﻿
 # TODOS
 
-...
+- Entity/Components System
+	- Interesting link : http://gameprogrammingpatterns.com/component.html 	
+	- Interesting link2 : https://xnaentitycomponents.codeplex.com/	
+	- Basic components
+		- Collider (Circle and Rectangle)
+		- Moveable / player
+		
+	- GameObjects
+		- Use a Entity/Component system?
+		
+- Basic Physics for collisions, apply force, jump?, gravity etc..
+	- Check out :
+		- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
+		- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
+		- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
+	
+	- Usage example: Physics.IsColliding(gameObject1.collider, gameObject2.collider) or gameObject1.collider.IsColliding(gameObject2.collider)
+	
+	- Using a Collider/RigidBody component (à la Unity)?
+	- Circle Colliders and Rectangle Collider (Rectangle already exists, base it on that)
+		
+- Input Manager
+	- Manage all input calls and provides methods like IsClicked(button1), IsDown(button), etc.. 
 
 # Ideas
 
