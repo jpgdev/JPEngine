@@ -41,10 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
-    <Compile Include="ECS %28Tests%29\Components\Component.cs" />
-    <Compile Include="ECS %28Tests%29\Components\PositionComponent.cs" />
-    <Compile Include="ECS %28Tests%29\EntityManager.cs" />
-    <Compile Include="ECS %28Tests%29\Systems\System.cs" />
+    <Compile Include="_ECS %28Tests%29\Components\Component.cs" />
+    <Compile Include="_ECS %28Tests%29\Components\PositionComponent.cs" />
+    <Compile Include="_ECS %28Tests%29\EntityManager.cs" />
+    <Compile Include="_ECS %28Tests%29\Systems\System.cs" />
     <Compile Include="Events\ItemEvents.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Managers\IAudioManager.cs" />
@@ -60,12 +60,12 @@
   <ItemGroup>
     <Folder Include="AI\" />
     <Folder Include="GameObjects\" />
-    <Folder Include="Map\" />
+    <Folder Include="Mapping\" />
     <Folder Include="Physics\" />
     <Folder Include="Screens\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Analysis\Ideas.txt" />
+    <None Include="Analysis\Ideas.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
