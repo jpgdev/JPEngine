@@ -34,7 +34,8 @@
 
 
 #### Sprite manager
-    
+
+- <b>This may be replaced by a SpriteSystem handling the Drawable components with the ECS.</b>
 - Create a Layer system?
 	- Using the multiple sprites batches or a Z-index
   	- Handle the Z index depending of the Height, Y-position
@@ -49,6 +50,8 @@
 			- etc...
 - Keep a list of sprites to draw?
 	- Dict < string, Pair < Sprite, Layer > > => < name, < Sprite, Layer > >
+	
+
 
 
 #### Music & Sound Manager
