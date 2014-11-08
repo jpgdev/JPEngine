@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
-    public class SoundManager : ResourceManager<SoundEffect>, AudioManager
+    public class SoundManager : ResourceManager<SoundEffect>, IAudioManager
     {
 
 

@@ -14,7 +14,6 @@ using JPEngine.Managers;
 
 namespace ExampleGame
 {
-
     public class ExampleGame : Game
     {
         GraphicsDeviceManager graphics;  
@@ -29,8 +28,7 @@ namespace ExampleGame
         protected override void Initialize()
         {
             Engine.Initialize(graphics);
-            
-            
+
 
             base.Initialize();
         }
@@ -39,16 +37,21 @@ namespace ExampleGame
         {           
             Engine.LoadContent(Content);
 
+            Engine.TextureManager.Add("crate", "Sprites/crate", true);
+            Engine.TextureManager.Add("grass", "Tiles/grass", true);
+
+            Engine.SoundManager.Add("ammo_pickup", "Sounds/ammo_pickup", true);
         }
 
-        protected override void UnloadContent(){ }
+        protected override void UnloadContent()
+        {
+            Engine.UnloadContent();            
+        }
 
         protected override void Update(GameTime gameTime)
         {
             Engine.Update(gameTime);
-
-
-
+            
 
             base.Update(gameTime);
         }
@@ -56,10 +59,17 @@ namespace ExampleGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            Engine.Draw();
             
+            Engine.Draw();
 
+            //todo: Put in the SpriteManager
+            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
+            Texture2D text = Engine.TextureManager.GetResource("crate");//Engine.TextureManager.Load("crate");
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(text, new Vector2(10, 10), Color.White);
+            spriteBatch.End();
+            ////
 
             base.Draw(gameTime);
         }

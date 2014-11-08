@@ -5,7 +5,7 @@ using System;
 
 namespace JPEngine.Managers
 {
-    public class MusicManager : ResourceManager<Song>, AudioManager
+    public class MusicManager : ResourceManager<Song>, IAudioManager
     {
 
 
@@ -14,7 +14,6 @@ namespace JPEngine.Managers
         private SongCollection _songs;
 
 #endregion
-
 
         internal MusicManager(ContentManager content)
             : base(content)

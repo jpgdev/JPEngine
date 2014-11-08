@@ -41,18 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
-    <Compile Include="Entity Component Pattern\Components\Component.cs" />
-    <Compile Include="Entity Component Pattern\Components\Flight.cs" />
-    <Compile Include="Entity Component Pattern\Components\Fuel.cs" />
-    <Compile Include="Entity Component Pattern\Components\GravitySensitive.cs" />
-    <Compile Include="Entity Component Pattern\Components\MapPosition.cs" />
-    <Compile Include="Entity Component Pattern\Components\SpatialState.cs" />
-    <Compile Include="Entity Component Pattern\EngineSystem.cs" />
-    <Compile Include="Entity Component Pattern\EntityManager.cs" />
-    <Compile Include="Entity Component Pattern\System.cs" />
+    <Compile Include="ECS %28Tests%29\Components\Component.cs" />
+    <Compile Include="ECS %28Tests%29\Components\PositionComponent.cs" />
+    <Compile Include="ECS %28Tests%29\EntityManager.cs" />
+    <Compile Include="ECS %28Tests%29\Systems\System.cs" />
     <Compile Include="Events\ItemEvents.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
-    <Compile Include="Managers\AudioManager.cs" />
+    <Compile Include="Managers\IAudioManager.cs" />
     <Compile Include="Managers\MusicManager.cs" />
     <Compile Include="Managers\SoundManager.cs" />
     <Compile Include="Managers\Manager.cs" />
@@ -71,9 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analysis\Ideas.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Analysis\ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

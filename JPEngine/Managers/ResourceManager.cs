@@ -10,7 +10,7 @@ using JPEngine.Events;
 
 namespace JPEngine.Managers
 {
-    public abstract class ResourceManager<T> : Manager
+    public abstract class ResourceManager<T> : Manager where T : IDisposable
     {
 #region Attributes
 
@@ -86,12 +86,12 @@ namespace JPEngine.Managers
             get { return _paths.Keys.ToArray(); }
         }
 
-        public int NumberLoaded
+        public int AmountLoaded
         {
             get { return _resources.Count; }       
         }
 
-        public int NumberAdded
+        public int AmountAdded
         {
             get { return _paths.Count; }
         }
@@ -128,6 +128,9 @@ namespace JPEngine.Managers
                 _paths.Add(name, path);
                 OnResourceAdded(new ItemEventArgs<string>(path, ItemAction.Added));
                 added = true;
+
+                if (forceLoad) 
+                    Load(name); //added &= Load(name);
             }
 
             return added;
@@ -158,7 +161,7 @@ namespace JPEngine.Managers
             {                
                 //Will cause an error if the file does not exist
                 //TODO: Add a Try/Catch?
-                _resources.Add(name, _content.Load<T>(name));
+                _resources.Add(name, _content.Load<T>(_paths[name]));
 
                 OnResourceLoaded(new ItemEventArgs<T>(_resources[name], ItemAction.Added));
             }
@@ -168,15 +171,13 @@ namespace JPEngine.Managers
 
         public bool Load(params string[] names)
         {
-            bool allLoaded = true;
-            foreach(string n in names)
-            {
-                if(!Load(n)) 
-                {
-                    allLoaded = false;
-                }
-            }
-            return allLoaded;
+            //bool allLoaded = true;
+            //foreach(string n in names)
+            //{
+            //    allLoaded &= Load(n);
+            //}
+            //return allLoaded;
+            return names.All(n => Load(n));
         }
 
         public bool Unload(string name)
@@ -189,6 +190,7 @@ namespace JPEngine.Managers
                 if (_resources.Remove(name))
                 {
                     OnResourceUnloaded(new ItemEventArgs<T>(r, ItemAction.Removed));
+                    r.Dispose(); //TODO: May cause a problem because it may be Disposed when someone tries to access it in the EventHandler?
                     removed = true;
                 }
             }
@@ -198,15 +200,13 @@ namespace JPEngine.Managers
 
         public bool Unload(params string[] names)
         {
-            bool allUnloaded = true;
-            foreach(string n in names)
-            {
-                if(!Unload(n)) 
-                {
-                    allUnloaded = false;
-                }
-            }
-            return allUnloaded;
+            //bool allUnloaded = true;
+            //foreach(string n in names)
+            //{
+            //    allUnloaded &= Unload(n);
+            //}
+            //return allUnloaded;
+            return names.All(n => Unload(n));
         }
         
         public bool IsLoaded(string name)
@@ -220,26 +220,6 @@ namespace JPEngine.Managers
         }
 
 #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 
     }
 }

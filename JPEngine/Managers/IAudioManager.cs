@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
-    public interface AudioManager 
+    public interface IAudioManager 
     {
         void Play(string name);
 

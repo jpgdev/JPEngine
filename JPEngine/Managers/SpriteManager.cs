@@ -12,7 +12,7 @@ namespace JPEngine.Managers
 {
     public class SpriteBatchManager : Manager
     {
-        SpriteBatch _spriteBatch;
+        private SpriteBatch _spriteBatch;
 
         internal SpriteBatchManager(GraphicsDevice graphicsDevice)
             : base()
@@ -27,7 +27,12 @@ namespace JPEngine.Managers
 
         internal void Draw()
         {
+            _spriteBatch.Begin();
 
+
+
+
+            _spriteBatch.End();
         }
     }
 }

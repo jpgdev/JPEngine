@@ -10,8 +10,6 @@ namespace JPEngine.Managers
     public class WindowManager : Manager
     {
 
-
-
 #region Attributes
 
         private GraphicsDeviceManager _graphicsManager;
@@ -80,7 +78,5 @@ namespace JPEngine.Managers
         }
 
 #endregion
-
-
     }
 }

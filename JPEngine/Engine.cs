@@ -6,24 +6,23 @@ using Microsoft.Xna.Framework.Graphics;
 #endregion
 
 namespace JPEngine
-{
-    
+{   
 
-    public class Engine
+    public static class Engine
     {
 
 #region Attributes
 
-        private static Engine _instance;
+        //private static Engine _instance;
 
-        private GraphicsDevice _graphicsDevice;    
+        private static GraphicsDevice _graphicsDevice;    
 
         //Managers
-        private SpriteBatchManager _spriteBatchManager;
-        private TextureManager _textureManager;
-        private WindowManager _windowManager;
-        private MusicManager _musicManager;
-        private SoundManager _soundManager;        
+        private static SpriteBatchManager _spriteBatchManager;
+        private static TextureManager _textureManager;
+        private static WindowManager _windowManager;
+        private static MusicManager _musicManager;
+        private static SoundManager _soundManager;        
 
 #endregion
 
@@ -31,49 +30,40 @@ namespace JPEngine
 
         public static SpriteBatchManager SpriteManager 
         {
-            get { return _instance._spriteBatchManager; } 
+            get { return _spriteBatchManager; } 
         }
 
         public static WindowManager WindowManager
         {
-            get { return _instance._windowManager; }
+            get { return _windowManager; }
         }
 
         public static TextureManager TextureManager
         {
-            get { return _instance._textureManager; }
+            get { return _textureManager; }
         }
 
         public static MusicManager MusicManager
         {
-            get { return _instance._musicManager; }
+            get { return _musicManager; }
         }
 
         public static SoundManager SoundManager
         {
-            get { return _instance._soundManager; }
+            get { return _soundManager; }
         } 
 
 #endregion
-
-#region Constructor
-
-        private Engine()
-        {
-
-        }
-
-#endregion
-
+        
 #region Methods
 
         public static void Initialize(GraphicsDeviceManager graphDeviceManager)
         {
-            _instance = new Engine();
+            //_instance = new Engine();
 
-            _instance._graphicsDevice = new GraphicsDevice();
-            _instance._spriteBatchManager = new SpriteBatchManager(_instance._graphicsDevice);
-            _instance._windowManager = new WindowManager(graphDeviceManager);
+            _graphicsDevice = graphDeviceManager.GraphicsDevice;
+            _spriteBatchManager = new SpriteBatchManager(_graphicsDevice);
+            _windowManager = new WindowManager(graphDeviceManager);
             
         }
 
@@ -83,30 +73,30 @@ namespace JPEngine
         /// <param name="content"></param>
         public static void LoadContent(ContentManager content)
         {
-            _instance._musicManager = new MusicManager(content);
-            _instance._soundManager = new SoundManager(content); 
-            _instance._textureManager = new TextureManager(content);
+            _musicManager = new MusicManager(content);
+            _soundManager = new SoundManager(content); 
+            _textureManager = new TextureManager(content);
+        }
+
+        public static void UnloadContent()
+        {
+
         }
 
         public static void Update(GameTime gameTime)
         {
-            _instance._spriteBatchManager.Update(gameTime);
-            _instance._musicManager.Update(gameTime);
-            _instance._soundManager.Update(gameTime);
+            _spriteBatchManager.Update(gameTime);
+            _musicManager.Update(gameTime);
+            _soundManager.Update(gameTime);
         }
 
 
         public static void Draw()
         {
-            _instance._spriteBatchManager.Draw();
+            _spriteBatchManager.Draw();
         }
 
-
-
 #endregion
-  
-
-
-        
+       
     }
 }

@@ -8,9 +8,7 @@ namespace JPEngine.Managers
 {
     public abstract class Manager
     {
-#region Attributes
-
-        
+#region Attributes        
 
 #endregion
 
@@ -23,8 +21,6 @@ namespace JPEngine.Managers
         }
 
 #endregion
-
-
 
     }
 }
