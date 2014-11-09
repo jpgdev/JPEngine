@@ -5,35 +5,32 @@ using System;
 
 namespace JPEngine.Managers
 {
-    public class MusicManager : ResourceManager<Song>, IAudioManager
+    public class MusicManager : ResourceManager<Song>
     {
-
-
-#region Attributes
-
-        private SongCollection _songs;
-
-#endregion
-
         internal MusicManager(ContentManager content)
             : base(content)
         {
-            
         }        
 
-        public void Update(GameTime gameTime)
-        {
-            
+        public bool Play(string name, float volume = 1f)
+        {            
+            if (IsLoaded(name))
+            {
+                MediaPlayer.Volume = volume;
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(_resources[name]); 
+
+                return true;
+            }
+            else
+                throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
         }
 
-        public void Play(string name)
+        public bool Stop()
         {
-            throw new NotImplementedException();
-        }
+            MediaPlayer.Stop();
 
-        public void Stop(string name)
-        {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

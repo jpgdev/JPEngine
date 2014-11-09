@@ -12,6 +12,7 @@ namespace JPEngine.Managers
 {
     public abstract class ResourceManager<T> : Manager where T : IDisposable
     {
+
 #region Attributes
 
         protected Dictionary<string, string> _paths;
@@ -20,46 +21,37 @@ namespace JPEngine.Managers
 
 #endregion
 
-
 #region Events
                 
-        protected event EventHandler<ItemEventArgs<string>> ResourceAdded;
-        protected event EventHandler<ItemEventArgs<string>> ResourceRemoved;
+        protected event EventHandler<ListItemEventArgs<string>> ResourceAdded;
+        protected event EventHandler<ListItemEventArgs<string>> ResourceRemoved;
 
-        protected event EventHandler<ItemEventArgs<T>> ResourceLoaded;
-        protected event EventHandler<ItemEventArgs<T>> ResourceUnloaded;
+        protected event EventHandler<ListItemEventArgs<T>> ResourceLoaded;
+        protected event EventHandler<ListItemEventArgs<T>> ResourceUnloaded;
 
 
-        private void OnResourceAdded(ItemEventArgs<string> eventArgs)
+        private void OnResourceAdded(ListItemEventArgs<string> eventArgs)
         {
             if (ResourceAdded != null)
-            {
                 ResourceAdded(this, eventArgs);
-            }
         }
 
-        private void OnResourceRemoved(ItemEventArgs<string> eventArgs)
+        private void OnResourceRemoved(ListItemEventArgs<string> eventArgs)
         {
             if (ResourceRemoved != null)
-            {
                 ResourceRemoved(this, eventArgs);
-            }
         }
 
-        private void OnResourceLoaded(ItemEventArgs<T> eventArgs)
+        private void OnResourceLoaded(ListItemEventArgs<T> eventArgs)
         {
             if (ResourceLoaded != null)
-            {
                 ResourceLoaded(this, eventArgs);
-            }
         }
 
-        private void OnResourceUnloaded(ItemEventArgs<T> eventArgs)
+        private void OnResourceUnloaded(ListItemEventArgs<T> eventArgs)
         {
             if (ResourceUnloaded != null)
-            {
                 ResourceUnloaded(this, eventArgs);
-            }
         }
 
 #endregion
@@ -96,8 +88,16 @@ namespace JPEngine.Managers
             get { return _paths.Count; }
         }
 
-        public T GetResource(string name)
+        public T this[string name]
         {
+            get { return GetResource(name); }
+        }
+
+        public T GetResource(string name, bool forceLoad = false)
+        {
+            if (forceLoad && !_resources.ContainsKey(name))
+                Load(name);
+
             return _resources[name];
         }
 
@@ -116,9 +116,25 @@ namespace JPEngine.Managers
         
 #endregion
 
-
 #region Methods
 
+
+        public override void UnloadContent()
+        {
+            base.UnloadContent();
+
+            Dictionary<string, T> temp = new Dictionary<string, T>(_resources);
+            temp.All(r => Unload(r.Key));
+            _paths.Clear();
+        }
+
+        /// <summary>
+        /// Add a resource path to be loaded later.
+        /// </summary>
+        /// <param name="name">The name of the resource which will be the key used.</param>
+        /// <param name="path">The path of the resource file.</param>
+        /// <param name="forceLoad">Whether or not to load the resource immediatly.</param>
+        /// <returns>If the path was succesfully added. If <see cref="forceLoad"/> is set to true, it will also check if it was loaded correctly.</returns>
         public bool Add(string name, string path, bool forceLoad = false)
         {
             bool added = false;
@@ -126,16 +142,22 @@ namespace JPEngine.Managers
             if(!_paths.ContainsKey(name))
             {
                 _paths.Add(name, path);
-                OnResourceAdded(new ItemEventArgs<string>(path, ItemAction.Added));
+                OnResourceAdded(new ListItemEventArgs<string>(path, ListItemAction.Added));
                 added = true;
 
                 if (forceLoad) 
-                    Load(name); //added &= Load(name);
+                    added &= Load(name);
             }
 
             return added;
         }
 
+
+        /// <summary>
+        /// Remove and Unload a resource.
+        /// </summary>
+        /// <param name="name">The name of the resource which is the key.</param>
+        /// <returns>Whether or not the resource was correctly removed and unloaded.</returns>
         public bool Remove(string name)
         {
             bool removed = false;
@@ -145,41 +167,48 @@ namespace JPEngine.Managers
                 string p = _paths[name];
                 if (_paths.Remove(name))
                 {
-                    OnResourceRemoved(new ItemEventArgs<string>(p, ItemAction.Removed));
                     removed = true;
+                    OnResourceRemoved(new ListItemEventArgs<string>(p, ListItemAction.Removed));
+
+                    if (IsLoaded(name))
+                        removed = Unload(name);                    
                 }
             }
 
             return removed;
         }         
 
+        /// <summary>
+        /// Load a resource using the Path linked to the name.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
+        /// <returns>Whether or not the resource was succesfully loaded.</returns>
         public bool Load(string name)
         {
-            bool loaded = false;
+            if (!_resources.ContainsKey(name))
+            {
+                if (!_paths.ContainsKey(name))
+                    throw new ArgumentOutOfRangeException(string.Format("The resource path for '{0}' does not exist.", name));
 
-            if (!_resources.ContainsKey(name) && _paths.ContainsKey(name))
-            {                
-                //Will cause an error if the file does not exist
-                //TODO: Add a Try/Catch?
                 _resources.Add(name, _content.Load<T>(_paths[name]));
 
-                OnResourceLoaded(new ItemEventArgs<T>(_resources[name], ItemAction.Added));
+                OnResourceLoaded(new ListItemEventArgs<T>(_resources[name], ListItemAction.Added));
+                return true;
             }
             
-            return loaded;
+            return false;
         }
 
         public bool Load(params string[] names)
         {
-            //bool allLoaded = true;
-            //foreach(string n in names)
-            //{
-            //    allLoaded &= Load(n);
-            //}
-            //return allLoaded;
             return names.All(n => Load(n));
         }
 
+        /// <summary>
+        /// Unload a resource and dispose of it.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
+        /// <returns>Whether of not the resource was succesfully unloaded.</returns>
         public bool Unload(string name)
         {
             bool removed = false;
@@ -189,31 +218,34 @@ namespace JPEngine.Managers
                 T r = _resources[name];
                 if (_resources.Remove(name))
                 {
-                    OnResourceUnloaded(new ItemEventArgs<T>(r, ItemAction.Removed));
+                    OnResourceUnloaded(new ListItemEventArgs<T>(r, ListItemAction.Removed));
                     r.Dispose(); //TODO: May cause a problem because it may be Disposed when someone tries to access it in the EventHandler?
                     removed = true;
                 }
             }
-
             return removed;
         }
 
         public bool Unload(params string[] names)
         {
-            //bool allUnloaded = true;
-            //foreach(string n in names)
-            //{
-            //    allUnloaded &= Unload(n);
-            //}
-            //return allUnloaded;
             return names.All(n => Unload(n));
         }
-        
+       
+        /// <summary>
+        /// Check if the resource with the name is already loaded.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool IsLoaded(string name)
         {
             return _resources.ContainsKey(name);
         }
       
+        /// <summary>
+        /// Check if there is already a resource path with the name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool IsAdded(string name)
         {
             return _paths.ContainsKey(name);

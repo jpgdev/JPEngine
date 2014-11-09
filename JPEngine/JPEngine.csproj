@@ -31,6 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,16 +44,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECS\Components\DrawableComponent.cs" />
+    <Compile Include="ECS\Components\EntityComponent.cs" />
+    <Compile Include="ECS\Components\IEntityComponent.cs" />
+    <Compile Include="ECS\Components\IEntityDrawable.cs" />
+    <Compile Include="ECS\Components\IEntityUpdateable.cs" />
+    <Compile Include="ECS\Components\TransformComponent.cs" />
+    <Compile Include="ECS\EntityManager.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="_ECS %28Tests%29\Components\Component.cs" />
-    <Compile Include="_ECS %28Tests%29\Components\PositionComponent.cs" />
-    <Compile Include="_ECS %28Tests%29\EntityManager.cs" />
-    <Compile Include="_ECS %28Tests%29\Systems\System.cs" />
-    <Compile Include="Events\ItemEvents.cs" />
+    <Compile Include="ECS\Entity.cs" />
+    <Compile Include="Events\ValueChangedEvent.cs" />
+    <Compile Include="Events\ListItemEvents.cs" />
+    <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\Settings.cs" />
+    <Compile Include="Managers\SettingsManager.cs" />
+    <Compile Include="Utils\JsonSerializer.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
-    <Compile Include="Managers\IAudioManager.cs" />
+    <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\MusicManager.cs" />
-    <Compile Include="Managers\SoundManager.cs" />
+    <Compile Include="Managers\SoundFXManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\ResourceManager.cs" />
     <Compile Include="Managers\TextureManager.cs" />
@@ -59,13 +72,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AI\" />
-    <Folder Include="GameObjects\" />
     <Folder Include="Mapping\" />
     <Folder Include="Physics\" />
     <Folder Include="Screens\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Analysis\Ideas.md" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

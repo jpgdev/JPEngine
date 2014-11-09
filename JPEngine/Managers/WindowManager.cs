@@ -26,9 +26,9 @@ namespace JPEngine.Managers
         {
             get { return _screenWidth; }
             set 
-            {
-                UpdateWindow();
-                _screenWidth = value; 
+            {               
+                _screenWidth = value;
+                //ApplySettings();
             }
         }
 
@@ -36,9 +36,9 @@ namespace JPEngine.Managers
         {
             get{ return _screenHeight; }
             set 
-            {
-                UpdateWindow();
-                _screenHeight = value; 
+            {               
+                _screenHeight = value;
+                //ApplySettings();
             }
         }
 
@@ -46,9 +46,9 @@ namespace JPEngine.Managers
         {
             get { return _isFullScreen; }
             set 
-            {
-                UpdateWindow();
-                _isFullScreen = value; 
+            {                
+                _isFullScreen = value;
+                //ApplySettings();
             }
         }
 
@@ -66,9 +66,25 @@ namespace JPEngine.Managers
 
 #region Methods
 
-        public void Initialize() { }
+        protected override bool InitializeCore()
+        {
+            _screenHeight = _graphicsManager.GraphicsDevice.Viewport.Height;
+            _screenWidth = _graphicsManager.GraphicsDevice.Viewport.Width;
+            _isFullScreen = _graphicsManager.IsFullScreen;
 
-        public void UpdateWindow()
+            return true;
+        }
+
+        public void SetScreenDimensions(int width, int height, bool isFullscreen = false)
+        {
+            _screenWidth = width;
+            _screenHeight = height;
+            _isFullScreen = isFullscreen;
+
+            ApplySettings();
+        }
+        
+        public void ApplySettings()
         {
             _graphicsManager.IsFullScreen = _isFullScreen;
             _graphicsManager.PreferredBackBufferHeight = _screenHeight;
