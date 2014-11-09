@@ -57,7 +57,7 @@
     <Compile Include="Events\ValueChangedEvent.cs" />
     <Compile Include="Events\ListItemEvents.cs" />
     <Compile Include="Managers\InputManager.cs" />
-    <Compile Include="Managers\Settings.cs" />
+    <Compile Include="Managers\Setting.cs" />
     <Compile Include="Managers\SettingsManager.cs" />
     <Compile Include="Utils\JsonSerializer.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />

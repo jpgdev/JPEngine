@@ -1,11 +1,9 @@
-﻿using JPEngine.ECS.Components;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JPEngine.ECS.Components;
 using JPEngine.Events;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS
@@ -13,32 +11,44 @@ namespace JPEngine.ECS
     //Inspired from : https://xnaentitycomponents.codeplex.com/
 
     public class Entity
-    {        
-        private bool _isInitialized = false;
-        private TransformComponent _transform;
-        private string _tag = string.Empty;
-        
-        private List<IEntityComponent> _components = new List<IEntityComponent>();
-        private List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
-        private List<IEntityDrawable> _drawableComponents = new List<IEntityDrawable>();
+    {
+        private readonly List<IEntityComponent> _components = new List<IEntityComponent>();
+        private readonly List<IEntityDrawable> _drawableComponents = new List<IEntityDrawable>();
+
+        private readonly Dictionary<string, IEntityComponent> _sortedByNameComponents =
+            new Dictionary<string, IEntityComponent>();
 
         //The components on which the Drawing and Updating is performed on
-        private List<IEntityComponent> _tempComponents = new List<IEntityComponent>();
-        private List<IEntityUpdateable> _tempUpdateableComponents = new List<IEntityUpdateable>();
-        private List<IEntityDrawable> _tempDrawableComponents = new List<IEntityDrawable>();
+        private readonly List<IEntityComponent> _tempComponents = new List<IEntityComponent>();
+        private readonly List<IEntityDrawable> _tempDrawableComponents = new List<IEntityDrawable>();
+        private readonly List<IEntityUpdateable> _tempUpdateableComponents = new List<IEntityUpdateable>();
+        private readonly TransformComponent _transform;
+        private readonly List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
+        private bool _isInitialized;
+        private string _tag = string.Empty;
 
-        private Dictionary<string, IEntityComponent> _sortedByNameComponents = new Dictionary<string, IEntityComponent>();
-        
-        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
+        public Entity(string tag = "", bool autoAdd = false)
+        {
+            _transform = new TransformComponent(this);
+            AddComponent(_transform);
 
-        public bool IsInitialized { get { return _isInitialized; } }
+            _tag = tag;
+
+            if (autoAdd)
+                Engine.Entities.AddEntity(this);
+        }
+
+        public bool IsInitialized
+        {
+            get { return _isInitialized; }
+        }
 
         public string Tag
         {
             get { return _tag; }
             set
             {
-                if(_tag != value)
+                if (_tag != value)
                 {
                     //TODO: Validate that this works
                     string oldValue = _tag;
@@ -47,29 +57,24 @@ namespace JPEngine.ECS
                         TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
                 }
             }
-        }       
-
-        public TransformComponent Transform { get { return _transform; } }
-        
-        public Entity(string tag = "", bool autoAdd = false)
-        {
-            _transform = new TransformComponent(this);
-            AddComponent(_transform);
-
-            _tag = tag;
-
-            if (autoAdd) 
-                Engine.Entities.AddEntity(this);
         }
+
+        public TransformComponent Transform
+        {
+            get { return _transform; }
+        }
+
+        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
 
         public void Initialize()
         {
-            if (_isInitialized)  return;
-            
+            if (_isInitialized) return;
+
             _tempComponents.Clear();
             _tempComponents.AddRange(_components);
 
             _tempComponents.ForEach(c => c.Initialize());
+
             //TODO: Check if they are enabled before starting?
             _tempComponents.ForEach(c => c.Start());
 
@@ -81,7 +86,7 @@ namespace JPEngine.ECS
             _tempUpdateableComponents.Clear();
             _tempUpdateableComponents.AddRange(_updateableComponents);
 
-            foreach (IEntityUpdateable c in _tempUpdateableComponents.Where(c => c.Enabled)) 
+            foreach (IEntityUpdateable c in _tempUpdateableComponents.Where(c => c.Enabled))
                 c.Update(gameTime);
         }
 
@@ -94,8 +99,7 @@ namespace JPEngine.ECS
                 c.Draw(spriteBatch, gameTime);
         }
 
-
-#region Components Handling
+        #region Components Handling
 
         public void AddComponent(IEntityComponent component)
         {
@@ -111,18 +115,21 @@ namespace JPEngine.ECS
 
             if (!string.IsNullOrEmpty(component.Name))
             {
-                try {
+                try
+                {
                     _sortedByNameComponents.Add(component.Name, component);
                 }
-                catch (ArgumentException e) {
-                    throw new ArgumentException(string.Format("There is already a Component with the name {0} in this entity.", component.Name));
+                catch (ArgumentException e)
+                {
+                    throw new ArgumentException(
+                        string.Format("There is already a Component with the name {0} in this entity.", component.Name));
                 }
             }
 
             _components.Add(component);
             //_sortedByNameComponents.Add(component.Name, component);
 
-            IEntityUpdateable updateable = component as IEntityUpdateable;
+            var updateable = component as IEntityUpdateable;
             if (updateable != null)
             {
                 _updateableComponents.Add(updateable);
@@ -130,7 +137,7 @@ namespace JPEngine.ECS
                 OnComponentUpdateOrderChanged(this, EventArgs.Empty);
             }
 
-            IEntityDrawable drawable = component as IEntityDrawable;
+            var drawable = component as IEntityDrawable;
             if (drawable != null)
             {
                 _drawableComponents.Add(drawable);
@@ -161,18 +168,18 @@ namespace JPEngine.ECS
         public bool RemoveComponent(IEntityComponent component)
         {
             if (component == null)
-                  throw new ArgumentNullException("The component cannot be null.");
+                throw new ArgumentNullException("The component cannot be null.");
 
             if (_components.Remove(component))
             {
-                IEntityUpdateable updateable = component as IEntityUpdateable;
+                var updateable = component as IEntityUpdateable;
                 if (updateable != null)
                 {
                     _updateableComponents.Remove(updateable);
                     updateable.UpdateOrderChanged -= OnComponentUpdateOrderChanged;
                 }
 
-                IEntityDrawable drawable = component as IEntityDrawable;
+                var drawable = component as IEntityDrawable;
                 if (drawable != null)
                 {
                     _drawableComponents.Remove(drawable);
@@ -188,23 +195,22 @@ namespace JPEngine.ECS
             return GetComponents<T>().FirstOrDefault();
         }
 
-        public IEnumerable<T>GetComponents<T>() where T : class, IEntityComponent
+        public IEnumerable<T> GetComponents<T>() where T : class, IEntityComponent
         {
-            return _sortedByNameComponents.Values.OfType<T>();
+            return _components.OfType<T>();
         }
 
         public IEntityComponent GetComponent(string name)
         {
             if (!_sortedByNameComponents.ContainsKey(name))
-                return null;//throw new ArgumentOutOfRangeException(name);
+                return null; //throw new ArgumentOutOfRangeException(name);
 
             return _sortedByNameComponents[name] as EntityComponent;
         }
 
-#endregion
+        #endregion
 
-#region Order Changing Event handling
-
+        #region Order Changing Event handling
 
         private void OnComponentUpdateOrderChanged(object sender, EventArgs e)
         {
@@ -217,7 +223,7 @@ namespace JPEngine.ECS
         }
 
         /// <summary>
-        /// Helper used in the sorting process
+        ///     Helper used in the sorting process
         /// </summary>
         /// <param name="entityA">first entity in question</param>
         /// <param name="entityB">second entity in question</param>
@@ -228,7 +234,7 @@ namespace JPEngine.ECS
         }
 
         /// <summary>
-        /// Helper used in the sorting process
+        ///     Helper used in the sorting process
         /// </summary>
         /// <param name="entityA">first entity in question</param>
         /// <param name="entityB">second entity in question</param>
@@ -238,7 +244,6 @@ namespace JPEngine.ECS
             return entityA.DrawOrder.CompareTo(entityB.DrawOrder);
         }
 
-#endregion
-
+        #endregion
     }
 }

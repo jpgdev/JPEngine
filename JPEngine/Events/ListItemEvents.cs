@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JPEngine.Events
 {
@@ -15,8 +11,8 @@ namespace JPEngine.Events
 
     public class ListItemEventArgs<T> : EventArgs
     {
-        public T ListItemChanged;
         public ListItemAction ListItemAction;
+        public T ListItemChanged;
 
         public ListItemEventArgs(T itemChanged, ListItemAction action)
         {
@@ -27,8 +23,8 @@ namespace JPEngine.Events
 
     public class ListItemsEventArgs<T> : EventArgs
     {
-        public T[] ListItemsChanged;
         public ListItemAction ListItemAction;
+        public T[] ListItemsChanged;
 
         public ListItemsEventArgs(T[] itemsChanged, ListItemAction action)
         {

@@ -1,24 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
     public class InputManager : Manager
     {
         private KeyboardState newKBState;
+        private MouseState newMouseState;
         private KeyboardState oldKBState;
         private MouseState oldMouseState;
-        private MouseState newMouseState;
-        
+
         internal InputManager()
         {
         }
-        
+
+        public Vector2 MousePosition
+        {
+            get { return new Vector2(newMouseState.X, newMouseState.Y); }
+        }
+
         internal override void Update(GameTime gameTime)
         {
             oldKBState = newKBState;
@@ -28,11 +28,6 @@ namespace JPEngine.Managers
             newMouseState = Mouse.GetState();
         }
 
-        public Vector2 MousePosition
-        {
-            get { return new Vector2(newMouseState.X, newMouseState.Y); }
-        }
-        
         public bool IsKeyClicked(Keys key)
         {
             return (newKBState.IsKeyDown(key) && oldKBState.IsKeyUp(key));
@@ -60,12 +55,13 @@ namespace JPEngine.Managers
 
         public bool RightMouseButtonClicked()
         {
-            return (newMouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released);
+            return (newMouseState.RightButton == ButtonState.Pressed &&
+                    oldMouseState.RightButton == ButtonState.Released);
         }
+
         public bool RightMouseButtonDown()
         {
             return (newMouseState.RightButton == ButtonState.Pressed);
         }
     }
 }
-

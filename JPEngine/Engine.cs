@@ -1,20 +1,20 @@
 ﻿#region Include Statements
+
 using JPEngine.ECS;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 #endregion
 
 namespace JPEngine
-{   
-
+{
     public static class Engine
     {
+        #region Attributes
 
-#region Attributes
-
-        private static GraphicsDevice _graphicsDevice;    
+        private static GraphicsDevice _graphicsDevice;
 
         //Managers
         private static SpriteBatchManager _spriteBatchManager;
@@ -28,9 +28,9 @@ namespace JPEngine
         private static MusicManager _musicManager;
         private static SoundFXManager _soundManager;
 
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
 
         public static SpriteBatchManager SpriteManager
         {
@@ -70,12 +70,16 @@ namespace JPEngine
         public static EntityManager Entities
         {
             get { return _entityManager; }
-        } 
+        }
 
-#endregion
-        
-#region Methods
+        #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Initialize the managers that don't require the ContentManager
+        /// </summary>
+        /// <param name="graphDeviceManager"></param>
         public static void Initialize(GraphicsDeviceManager graphDeviceManager)
         {
             //_instance = new Engine();
@@ -99,7 +103,7 @@ namespace JPEngine
         }
 
         /// <summary>
-        /// Initialize the resource managers.
+        ///     Initialize the resources managers.
         /// </summary>
         /// <param name="content"></param>
         public static void LoadContent(ContentManager content)
@@ -113,7 +117,7 @@ namespace JPEngine
             _textureManager = new TextureManager(content);
             _textureManager.Initialize();
         }
-        
+
         public static void UnloadContent()
         {
             _musicManager.UnloadContent();
@@ -132,14 +136,16 @@ namespace JPEngine
 
         public static void Draw(GameTime gameTime)
         {
-            //TODO: Better version that wraps and manage the layers, z-index etc...
-            SpriteBatch _spriteBatch = _spriteBatchManager.Begin();
+            _graphicsDevice.Clear(Color.CornflowerBlue);
 
-            _entityManager.Draw(_spriteBatch, gameTime);
+            //TODO: Better version that wraps and manage the layers, z-index etc...
+            SpriteBatch spriteBatch = _spriteBatchManager.Begin();
+
+            _entityManager.Draw(spriteBatch, gameTime);
 
             _spriteBatchManager.End();
         }
-#endregion
-       
+
+        #endregion
     }
 }

@@ -1,35 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
     public class WindowManager : Manager
     {
+        #region Attributes
 
+        private readonly GraphicsDeviceManager _graphicsManager;
 
-        //TODO: Delete this Manager and make the GraphicsDeviceManager public in the Engine directly
-
-#region Attributes
-
-        private GraphicsDeviceManager _graphicsManager;
-
-        private int _screenWidth;
-        private int _screenHeight;
         private bool _isFullScreen;
+        private int _screenHeight;
+        private int _screenWidth;
 
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
 
         public int ScreenWidth
         {
             get { return _screenWidth; }
-            set 
-            {               
+            set
+            {
                 _screenWidth = value;
                 //ApplySettings();
             }
@@ -37,9 +28,9 @@ namespace JPEngine.Managers
 
         public int ScreenHeight
         {
-            get{ return _screenHeight; }
-            set 
-            {               
+            get { return _screenHeight; }
+            set
+            {
                 _screenHeight = value;
                 //ApplySettings();
             }
@@ -48,26 +39,25 @@ namespace JPEngine.Managers
         public bool IsFullScreen
         {
             get { return _isFullScreen; }
-            set 
-            {                
+            set
+            {
                 _isFullScreen = value;
                 //ApplySettings();
             }
         }
 
-#endregion
+        #endregion
 
-#region Constructors
+        #region Constructors
 
         internal WindowManager(GraphicsDeviceManager graphicsManager)
-            : base()
         {
             _graphicsManager = graphicsManager;
         }
 
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
 
         protected override bool InitializeCore()
         {
@@ -86,7 +76,7 @@ namespace JPEngine.Managers
 
             ApplySettings();
         }
-        
+
         public void ApplySettings()
         {
             _graphicsManager.IsFullScreen = _isFullScreen;
@@ -96,6 +86,8 @@ namespace JPEngine.Managers
             _graphicsManager.ApplyChanges();
         }
 
-#endregion
+        #endregion
+
+        //TODO: Delete this Manager and make the GraphicsDeviceManager public in the Engine directly
     }
 }

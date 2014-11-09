@@ -17,10 +17,9 @@ namespace ExampleGame
 {
     public class ExampleGame : Game
     {
-        GraphicsDeviceManager graphics;  
+        readonly GraphicsDeviceManager graphics;  
 
         public ExampleGame()
-            : base()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -30,20 +29,44 @@ namespace ExampleGame
         {
             Engine.Initialize(graphics);
 
-            Entity e = new Entity("player");
-            DrawableSpriteComponent testDrawableComponent = new DrawableSpriteComponent(e)
+            {
+                var e = new Entity("player");
+                var testDrawableComponent = new DrawableSpriteComponent(e)
+                {
+                    TextureName = "crate",
+                    Width = 32,
+                    Height = 32
+                };
+
+                testDrawableComponent.Origin = new Vector2((float)testDrawableComponent.Width / 2, (float)testDrawableComponent.Height / 2);
+                testDrawableComponent.DrawOrder = 0;
+
+                e.AddComponent(testDrawableComponent);
+                e.AddComponent(new PlayerInput(e));
+
+                Engine.Entities.AddEntity(e);
+            }
+
+
+            {
+                var e2 = new Entity("player");
+                var testDrawableComponent2 = new DrawableSpriteComponent(e2)
                 {
                     TextureName = "crate",
                     Width = 64,
-                    Height = 64     
+                    Height = 64
                 };
+                testDrawableComponent2.Origin = new Vector2((float) testDrawableComponent2.Width/2,
+                    (float) testDrawableComponent2.Height/2);
+                testDrawableComponent2.DrawOrder = 5;
 
-            testDrawableComponent.Origin =  new Vector2(testDrawableComponent.Width/2, testDrawableComponent.Height/2);            
-            e.AddComponent(testDrawableComponent);
-            e.AddComponent(new PlayerInput(e));
-            Engine.Entities.AddEntity(e);
-            
-            //Engine.WindowManager.SetScreenDimensions(1280, 720, false);
+                e2.AddComponent(testDrawableComponent2);
+                e2.Transform.Position.X = 100;
+                e2.Transform.Position.Y = 100;
+
+                Engine.Entities.AddEntity(e2);
+            }
+
 
             base.Initialize();
         }
@@ -55,7 +78,7 @@ namespace ExampleGame
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
 
-            Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);            
+            Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
             
             Engine.Settings.Add(new Setting<string>("test", "value!!!"));
             Engine.Settings.Add(new Setting<double>("test2", 0.5));
@@ -68,12 +91,12 @@ namespace ExampleGame
             Engine.Settings.Add(new Setting<Keys>("DOWN", Keys.Down));
 
             Engine.Settings.Add(new Setting<Keys>("PageUp", Keys.PageUp));
-            Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));            
+            Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));
         }
 
         protected override void UnloadContent()
         {
-            Engine.UnloadContent();            
+            Engine.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -82,41 +105,28 @@ namespace ExampleGame
             
             if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["BtnF"].Value))
             {
-                //Engine.Settings.SaveSettings();
-                //Engine.Settings.LoadSettings();
+                Engine.Settings.SaveSettings();
+                Engine.Settings.LoadSettings();
                 Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
+
             }
 
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
-            {
-                Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth + 32, Engine.WindowManager.ScreenHeight + 24);
-            }
+            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
+            //{
+            //    Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth + 32, Engine.WindowManager.ScreenHeight + 24);
+            //}
 
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageDown"].Value))
-            {
-                Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth - 32, Engine.WindowManager.ScreenHeight - 24);
-            }
+            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageDown"].Value))
+            //{
+            //    Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth - 32, Engine.WindowManager.ScreenHeight - 24);
+            //}
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             Engine.Draw(gameTime);
-
-            ////todo: Put in the SpriteManager
-            //SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //spriteBatch.Begin();
-            //spriteBatch.Draw(Engine.Textures["crate"], new Vector2(10, 10), Color.White);
-            //spriteBatch.Draw(Engine.Textures["crate"], new Vector2(100, 110), Color.White);
-            //spriteBatch.Draw(Engine.Textures["crate"], new Vector2(200, 210), Color.White);
-
-
-            //spriteBatch.End();
-            //////
 
             base.Draw(gameTime);
         }

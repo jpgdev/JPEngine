@@ -8,27 +8,41 @@ using System.Runtime.Serialization;
 namespace JPEngine.Utils
 {
     [Serializable]
-    public partial class ObservableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
+    public class ObservableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, INotifyCollectionChanged,
+        INotifyPropertyChanged
     {
-        public ObservableDictionary() : base() { }
-        public ObservableDictionary(int capacity) : base(capacity) { }
-        public ObservableDictionary(IEqualityComparer<TKey> comparer) : base(comparer) { }
-        public ObservableDictionary(IDictionary<TKey, TValue> dictionary) : base(dictionary) { }
-        public ObservableDictionary(int capacity, IEqualityComparer<TKey> comparer) : base(capacity, comparer) { }
-        public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) : base(dictionary, comparer) { }
-        public ObservableDictionary(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public ObservableDictionary()
+        {
+        }
 
-        [field: NonSerialized]
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableDictionary(int capacity) : base(capacity)
+        {
+        }
+
+        public ObservableDictionary(IEqualityComparer<TKey> comparer) : base(comparer)
+        {
+        }
+
+        public ObservableDictionary(IDictionary<TKey, TValue> dictionary) : base(dictionary)
+        {
+        }
+
+        public ObservableDictionary(int capacity, IEqualityComparer<TKey> comparer) : base(capacity, comparer)
+        {
+        }
+
+        public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+            : base(dictionary, comparer)
+        {
+        }
+
+        public ObservableDictionary(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
 
         public new TValue this[TKey key]
         {
-            get
-            {
-                return base[key];
-            }
+            get { return base[key]; }
             set
             {
                 TValue oldValue;
@@ -38,15 +52,23 @@ namespace JPEngine.Utils
                 var newItem = new KeyValuePair<TKey, TValue>(key, value);
                 if (exist)
                 {
-                    this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, base.Keys.ToList().IndexOf(key)));
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                        newItem, oldItem, base.Keys.ToList().IndexOf(key)));
                 }
                 else
                 {
-                    this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItem, base.Keys.ToList().IndexOf(key)));
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItem,
+                        base.Keys.ToList().IndexOf(key)));
+                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
                 }
             }
         }
+
+        [field: NonSerialized]
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public new void Add(TKey key, TValue value)
         {
@@ -54,8 +76,9 @@ namespace JPEngine.Utils
             {
                 var item = new KeyValuePair<TKey, TValue>(key, value);
                 base.Add(key, value);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, base.Keys.ToList().IndexOf(key)));
-                this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item,
+                    base.Keys.ToList().IndexOf(key)));
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             }
         }
 
@@ -66,8 +89,9 @@ namespace JPEngine.Utils
             {
                 var item = new KeyValuePair<TKey, TValue>(key, base[key]);
                 bool result = base.Remove(key);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, base.Keys.ToList().IndexOf(key)));
-                this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item,
+                    base.Keys.ToList().IndexOf(key)));
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
                 return result;
             }
             return false;
@@ -76,23 +100,23 @@ namespace JPEngine.Utils
         public new void Clear()
         {
             base.Clear();
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
         }
 
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (this.CollectionChanged != null)
+            if (CollectionChanged != null)
             {
-                this.CollectionChanged(this, e);
+                CollectionChanged(this, e);
             }
         }
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
             {
-                this.PropertyChanged(this, e);
+                PropertyChanged(this, e);
             }
         }
     }

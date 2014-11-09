@@ -1,34 +1,67 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using JPEngine.ECS.Components;
+using Microsoft.Xna.Framework;
 
 namespace JPEngine.ECS
 {
     public abstract class EntityComponent : IEntityComponent, IEntityUpdateable
     {
-        private string _name = string.Empty;
+        private readonly Entity _gameObject;
         private bool _enabled = true;
-        private Entity _gameObject;
+        private string _name = string.Empty;
         private int _updateOrder;
+
+        public EntityComponent(Entity entity)
+        {
+            _gameObject = entity;
+
+            EnabledChanged += OnEnabledChanged;
+            UpdateOrderChanged += OnUpdateOrderChanged;
+        }
+
+        public virtual void Initialize()
+        {
+        }
+
+        public virtual void Start()
+        {
+        }
 
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
 
-#region Properties
+        //TODO: Fixed update?
+        public virtual void Update(GameTime gameTime)
+        {
+        }
 
-        public Entity GameObject { get { return _gameObject; } }
+        #region Event Handler Methods
 
-        public string Name 
-        { 
+        protected virtual void OnEnabledChanged(object sender, EventArgs e)
+        {
+        }
+
+        protected virtual void OnUpdateOrderChanged(object sender, EventArgs e)
+        {
+        }
+
+        #endregion
+
+        #region Properties
+
+        public Entity GameObject
+        {
+            get { return _gameObject; }
+        }
+
+        public string Name
+        {
             get { return _name; }
             protected set { _name = value; }
         }
 
-        public bool Enabled 
-        { 
+        public bool Enabled
+        {
             get { return _enabled; }
             set
             {
@@ -42,9 +75,10 @@ namespace JPEngine.ECS
         }
 
         /// <summary>
-        /// The order in which the component will be updated. 0 = first, Int.MaxValue = last.
+        ///     The order in which the component will be updated. 0 = first, Int.MaxValue = last.
         /// </summary>
-        public int UpdateOrder {
+        public int UpdateOrder
+        {
             get { return _updateOrder; }
             set
             {
@@ -57,30 +91,6 @@ namespace JPEngine.ECS
             }
         }
 
-#endregion
-
-        public EntityComponent (Entity entity)
-        {
-            this._gameObject = entity;
-
-            EnabledChanged += OnEnabledChanged;
-            UpdateOrderChanged += OnUpdateOrderChanged;
-        }
-
-        public virtual void Initialize() { }
-
-        public virtual void Start() { }
-
-        //TODO: Fixed update?
-        public virtual void Update(GameTime gameTime) { }
-
-#region Event Handler Methods
-
-        protected virtual void OnEnabledChanged(object sender, EventArgs e) { }
-
-        protected virtual void OnUpdateOrderChanged(object sender, EventArgs e) { }
-
-#endregion
-        
+        #endregion
     }
 }

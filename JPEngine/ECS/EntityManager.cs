@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using JPEngine.Events;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
-using JPEngine.Events;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS
 {
-
     public class EntityManager : Manager
     {
-        private List<Entity> _masterList = new List<Entity>();
-        private List<Entity> _currentList = new List<Entity>();
-        private Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
-        
+        private readonly List<Entity> _currentList = new List<Entity>();
+        private readonly List<Entity> _masterList = new List<Entity>();
+        private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
+
         internal EntityManager()
         {
         }
-        
+
         protected override bool InitializeCore()
         {
             _currentList.Clear();
@@ -47,13 +42,13 @@ namespace JPEngine.ECS
             //TODO: Call SpriteManager which will be handling the layers? Or do it here?
             _currentList.ForEach(e => e.Draw(spriteBatch, gameTime));
         }
-        
+
         public void AddEntity(Entity entity)
         {
-            entity.Initialize();            
-            
+            entity.Initialize();
+
             _masterList.Add(entity);
-            AddTaggedEntity(entity);           
+            AddTaggedEntity(entity);
         }
 
         private void AddTaggedEntity(Entity entity)
@@ -61,12 +56,12 @@ namespace JPEngine.ECS
             if (!string.IsNullOrEmpty(entity.Tag))
             {
                 entity.TagChanged += OnEntityTagChanged;
-                           
+
                 //If the list does not already exist, create it
-                if(!_taggedEntities.ContainsKey(entity.Tag))
+                if (!_taggedEntities.ContainsKey(entity.Tag))
                     _taggedEntities.Add(entity.Tag, new List<Entity>());
 
-                _taggedEntities[entity.Tag].Add(entity);  
+                _taggedEntities[entity.Tag].Add(entity);
             }
         }
 
@@ -84,10 +79,10 @@ namespace JPEngine.ECS
             _currentList.Clear();
             _taggedEntities.Clear();
         }
-        
+
         private void OnEntityTagChanged(object sender, ValueChangedEventArgs<string> e)
         {
-            Entity entity = sender as Entity;
+            var entity = sender as Entity;
 
             if (_taggedEntities.ContainsKey(e.OldValue))
             {

@@ -1,15 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
     public abstract class Manager
-    {    
-        private bool _isInitialized = false;
+    {
+        private bool _isInitialized;
 
         public bool IsInitialized
         {
@@ -24,19 +20,22 @@ namespace JPEngine.Managers
 
         public event EventHandler<EventArgs> Initialized;
 
-        public Manager()
+        internal void Initialize()
         {
-        }
-
-        internal void Initialize() 
-        { 
             _isInitialized = InitializeCore();
         }
 
-        protected virtual bool InitializeCore() { return true; }
+        protected virtual bool InitializeCore()
+        {
+            return true;
+        }
 
-        internal virtual void Update(GameTime gameTime) { }
+        internal virtual void Update(GameTime gameTime)
+        {
+        }
 
-        public virtual void UnloadContent() { }
+        public virtual void UnloadContent()
+        {
+        }
     }
 }

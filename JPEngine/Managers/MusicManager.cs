@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using System;
 
 namespace JPEngine.Managers
 {
@@ -10,20 +9,19 @@ namespace JPEngine.Managers
         internal MusicManager(ContentManager content)
             : base(content)
         {
-        }        
+        }
 
         public bool Play(string name, float volume = 1f)
-        {            
+        {
             if (IsResourceLoaded(name))
             {
                 MediaPlayer.Volume = volume;
                 MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(_resources[name]); 
+                MediaPlayer.Play(_resources[name]);
 
                 return true;
             }
-            else
-                throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
+            throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
         }
 
         public bool Stop()

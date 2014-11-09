@@ -1,11 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JPEngine.Managers
 {
@@ -14,7 +10,7 @@ namespace JPEngine.Managers
         //TODO: Enable a way to have multiple instances of the same sound
         // Maybe return the SoundInstance in the Play method?
 
-        private Dictionary<string, SoundEffectInstance> _soundInstances;
+        private readonly Dictionary<string, SoundEffectInstance> _soundInstances;
 
         internal SoundFXManager(ContentManager content)
             : base(content)
@@ -32,13 +28,12 @@ namespace JPEngine.Managers
 
                 return true;
             }
-            else
-                throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
+            throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
         }
 
         public bool Stop(string name)
         {
-            if(_soundInstances.ContainsKey(name))
+            if (_soundInstances.ContainsKey(name))
             {
                 _soundInstances[name].Stop(true);
                 _soundInstances.Remove(name);

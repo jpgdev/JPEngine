@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using JPEngine.ECS.Components;
-
 
 namespace JPEngine.Managers
 {
     public class SpriteBatchManager : Manager
     {
-        private SpriteBatch _spriteBatch;
+        private readonly SpriteBatch _spriteBatch;
 
         internal SpriteBatchManager(GraphicsDevice graphicsDevice)
-            : base()
         {
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
         internal void Update(GameTime gameTime)
         {
-
         }
 
         //internal void Draw(GameTime gameTime)
@@ -52,7 +42,11 @@ namespace JPEngine.Managers
         internal SpriteBatch Begin()
         {
             //todo: Validation that it has not already Began
-            _spriteBatch.Begin();
+
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, null);
+            //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
+            //Not implemented : Layer use this with the Camera Matrix
+            //_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, DepthStencilState.Default, null, null, new Matrix());
 
             return _spriteBatch;
         }

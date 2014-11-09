@@ -1,29 +1,28 @@
-﻿using JPEngine.Events;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace JPEngine.Managers
 {
-
     public abstract class Setting
     {
-        private string _name;
+        private readonly string _name;
         private object _value;
 
-        public event EventHandler<EventArgs> ValueChanged;
+        protected Setting(string name, object value)
+        {
+            _name = name;
+            _value = value;
+        }
 
         public string Name
         {
             get { return _name; }
         }
 
-        public virtual Type ValueType 
-        { 
-            get { return typeof(object); }
+        [JsonIgnore]
+        public virtual Type ValueType
+        {
+            get { return typeof (object); }
         }
 
         public object Value
@@ -37,11 +36,7 @@ namespace JPEngine.Managers
             }
         }
 
-        public Setting(string name, object value)
-        {
-            _name = name;
-            _value = value;
-        }
+        public event EventHandler<EventArgs> ValueChanged;
     }
 
 
@@ -53,14 +48,14 @@ namespace JPEngine.Managers
         //    set { base.Value = value; }
         //}
 
-        public override Type ValueType
-        {
-            get { return typeof(T); }
-        }
-
         public Setting(string name, T value)
             : base(name, value)
         {
+        }
+
+        public override Type ValueType
+        {
+            get { return typeof (T); }
         }
     }
 }
