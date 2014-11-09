@@ -2,26 +2,28 @@
 # TODOS
 
 - Entity/Components System
-	- Interesting link : http://gameprogrammingpatterns.com/component.html 	
-	- Interesting link2 : https://xnaentitycomponents.codeplex.com/	
-	- Basic components
+	- [Interesting link about ECS](http://gameprogrammingpatterns.com/component.html)
+	- [XNA ECS Implementation Example](https://xnaentitycomponents.codeplex.com/)	
+	- Make Basic components
 		- Collider (Circle and Rectangle)
 		- Moveable / player
+	- <b>Finish a basic version of SpriteManager or Drawable something in EntityManager which manages the layers & etc...</b>
+	- Implements multiples Systems handled by the EntityManager
+		- PhysicsSystem 	
 		
-	- GameObjects
-		- Use a Entity/Component system?
-		
-- Basic Physics for collisions, apply force, jump?, gravity etc..
-	- Check out :
-		- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
-		- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
-		- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
+			- Basic Physics for collisions, apply force, jump?, gravity etc..
+				- Check out :
+					- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
+					- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
+					- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
 	
-	- Usage example: Physics.IsColliding(gameObject1.collider, gameObject2.collider) or gameObject1.collider.IsColliding(gameObject2.collider)
+			- Usage example: Physics.IsColliding(gameObject1.collider, gameObject2.collider) or gameObject1.collider.IsColliding(gameObject2.collider)
 	
-	- Using a Collider/RigidBody component (à la Unity)?
-	- Circle Colliders and Rectangle Collider (Rectangle already exists, base it on that)
-		
+				- Using a Collider/RigidBody component (à la Unity)?
+				- Circle Colliders and Rectangle Collider (Rectangle already exists, base it on that)
+				
+		- Manage the order of the system are Updated/Drawn: 
+			- Ex: Inputs, then Movement, then Physics
 - Input Manager
 	- Manage all input calls and provides methods like IsClicked(button1), IsDown(button), etc.. 
 
@@ -31,7 +33,6 @@
 
 -Loader les textures juste quand on en a besoin:
 	- ex: Entre dans une map, on load les textures d'après les strings (nom des texture). 
-
 
 #### Sprite manager
 
