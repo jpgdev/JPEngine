@@ -29,6 +29,7 @@
 
 	- Transform Component
 		- Use a Vector3D for the position to add a Z value? Which the DrawableComponent use?
+		- Add an Origin property for the rotation and etc.. instead of having it in DrawableSpriteComponent which makes no sense if we want to use it outside of drawing?
 		
 #### Systems
 
