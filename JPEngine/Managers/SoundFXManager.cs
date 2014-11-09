@@ -24,12 +24,8 @@ namespace JPEngine.Managers
 
         public bool Play(string name, float volume = 1f)
         {
-            if (IsLoaded(name))
+            if (IsResourceLoaded(name))
             {
-                //TODO: For now
-                if(_soundInstances.ContainsKey(name))
-                    _soundInstances[name].Stop(true);
-
                 _soundInstances[name] = _resources[name].CreateInstance();
                 _soundInstances[name].Volume = volume;
                 _soundInstances[name].Play();

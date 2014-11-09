@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
 using JPEngine.Events;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS
 {
@@ -38,20 +39,21 @@ namespace JPEngine.ECS
             _currentList.ForEach(e => e.Update(gameTime));
         }
 
-        internal void Draw()
+        internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             _currentList.Clear();
             _currentList.AddRange(_masterList);
 
             //TODO: Call SpriteManager which will be handling the layers? Or do it here?
-            _currentList.ForEach(e => e.Draw());
+            _currentList.ForEach(e => e.Draw(spriteBatch, gameTime));
         }
         
         public void AddEntity(Entity entity)
         {
+            entity.Initialize();            
+            
             _masterList.Add(entity);
-
-            AddTaggedEntity(entity);
+            AddTaggedEntity(entity);           
         }
 
         private void AddTaggedEntity(Entity entity)

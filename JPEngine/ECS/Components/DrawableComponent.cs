@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,7 +58,8 @@ namespace JPEngine.ECS.Components
         }
         
         //TODO: Remove the NotImplementedException
-        public virtual void Draw() { throw new NotImplementedException(); }
+        //public virtual void Draw() { throw new NotImplementedException(); }
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime) { }
 
 #region  Event Handler methods
 

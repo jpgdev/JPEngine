@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JPEngine.Events;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS
 {
@@ -16,7 +17,7 @@ namespace JPEngine.ECS
         private bool _isInitialized = false;
         private TransformComponent _transform;
         private string _tag = string.Empty;
-
+        
         private List<IEntityComponent> _components = new List<IEntityComponent>();
         private List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
         private List<IEntityDrawable> _drawableComponents = new List<IEntityDrawable>();
@@ -46,16 +47,19 @@ namespace JPEngine.ECS
                         TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
                 }
             }
-        }
+        }       
 
         public TransformComponent Transform { get { return _transform; } }
         
-        public Entity(string tag = "")
+        public Entity(string tag = "", bool autoAdd = false)
         {
             _transform = new TransformComponent(this);
             AddComponent(_transform);
 
             _tag = tag;
+
+            if (autoAdd) 
+                Engine.Entities.AddEntity(this);
         }
 
         public void Initialize()
@@ -81,13 +85,13 @@ namespace JPEngine.ECS
                 c.Update(gameTime);
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             _tempDrawableComponents.Clear();
             _tempDrawableComponents.AddRange(_drawableComponents);
 
             foreach (IEntityDrawable c in _tempDrawableComponents.Where(c => c.Visible))
-                c.Draw();
+                c.Draw(spriteBatch, gameTime);
         }
 
 
@@ -100,11 +104,23 @@ namespace JPEngine.ECS
 
             //Type componentType = entityComponent.GetType();
             //if (GetComponent<componentType>())
-            if(GetComponent(component.Name) != null)
-                throw new ArgumentException(string.Format("There is already a Component of the type {0}.", component.GetType().Name));
+
+            //TODO: Test if there is already a component of the same Type ?????
+            //if(GetComponent<T>() != null)
+            //    throw new ArgumentException(string.Format("There is already a Component of this type in this entity.", component.Name));
+
+            if (!string.IsNullOrEmpty(component.Name))
+            {
+                try {
+                    _sortedByNameComponents.Add(component.Name, component);
+                }
+                catch (ArgumentException e) {
+                    throw new ArgumentException(string.Format("There is already a Component with the name {0} in this entity.", component.Name));
+                }
+            }
 
             _components.Add(component);
-            _sortedByNameComponents.Add(component.Name, component);
+            //_sortedByNameComponents.Add(component.Name, component);
 
             IEntityUpdateable updateable = component as IEntityUpdateable;
             if (updateable != null)
@@ -129,13 +145,9 @@ namespace JPEngine.ECS
             }
         }
 
-        public bool RemoveComponent<T>() where T : class, IEntityComponent
+        public bool RemoveComponents<T>() where T : class, IEntityComponent
         {
-            T component = GetComponent<T>();
-            if (component != null)
-                return RemoveComponent(component);
-
-            return false;
+            return GetComponents<T>().All(c => RemoveComponent(c));
         }
 
         public bool RemoveComponent(string name)
@@ -173,23 +185,18 @@ namespace JPEngine.ECS
 
         public T GetComponent<T>() where T : class, IEntityComponent
         {
-            //T component = null;
-            //try
-            //{
-            //    component = (T)_sortedByNameComponents.Values.OfType<T>().First();
-            //    //component = (T)_sortedByNameComponents.Values.First(c => c.GetType() == typeof(T));
-            //}
-            //catch { }
+            return GetComponents<T>().FirstOrDefault();
+        }
 
-            //return component;
-
-            return (T)_sortedByNameComponents.Values.OfType<T>().FirstOrDefault();
+        public IEnumerable<T>GetComponents<T>() where T : class, IEntityComponent
+        {
+            return _sortedByNameComponents.Values.OfType<T>();
         }
 
         public IEntityComponent GetComponent(string name)
         {
             if (!_sortedByNameComponents.ContainsKey(name))
-                throw new ArgumentOutOfRangeException(name);
+                return null;//throw new ArgumentOutOfRangeException(name);
 
             return _sortedByNameComponents[name] as EntityComponent;
         }

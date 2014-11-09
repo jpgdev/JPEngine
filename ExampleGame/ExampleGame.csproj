@@ -39,7 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Content\CustomComponents\TestDrawableComponent.cs" />
+    <Compile Include="CustomComponents\PlayerInput.cs" />
     <Compile Include="ExampleGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

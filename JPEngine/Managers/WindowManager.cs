@@ -10,6 +10,9 @@ namespace JPEngine.Managers
     public class WindowManager : Manager
     {
 
+
+        //TODO: Delete this Manager and make the GraphicsDeviceManager public in the Engine directly
+
 #region Attributes
 
         private GraphicsDeviceManager _graphicsManager;

@@ -1,74 +1,83 @@
 ﻿
 # TODOS
 
-- Entity/Components System
-	- [Interesting link about ECS](http://gameprogrammingpatterns.com/component.html)
-	- [XNA ECS Implementation Example](https://xnaentitycomponents.codeplex.com/)	
-	- Make Basic components
-		- Collider (Circle and Rectangle)
-		- Moveable / player
-	- <b>Finish a basic version of SpriteManager or Drawable something in EntityManager which manages the layers & etc...</b>
-		- Use the Sprite class as an example.
-		- Who will manage the layers/z-index?
+###  Entity/Components System
+
+- [Interesting link about ECS](http://gameprogrammingpatterns.com/component.html)
+
+- [XNA ECS Implementation Example](https://xnaentitycomponents.codeplex.com/)	
+
+- Entity & Components
+	- Add a Clone() Method for Entity & Components
+
+- Make Basic components
+
+	- CircleCollider &  BoxCollider (Base class -> abstract Collider?)
+
+		- example usage : gameObject1.collider.IsColliding(gameObject2.collider)	
+			- Override for each type of collider?
+
+		- Handle basic physics
+			- Collision
+			- Collision Response
+			- IsSolid? -> Only trigger an event
+
+		- Maybe a RigidBody?
+
+	- Moveable 
+		- Tie it to the Physics? Apply velocity? OR Leave the chose to Move it with Transform.Position or with the Physics.
+
+	- Transform Component
+		- Use a Vector3D for the position to add a Z value? Which the DrawableComponent use?
 		
-	- Implements multiples Systems handled by the EntityManager
-		- PhysicsSystem 	
+#### Systems
+
+- Implements multiples Systems handled by the EntityManager
+	- Physics System 	
 		
-			- Basic Physics for collisions, apply force, jump?, gravity etc..
-				- Check out :
-					- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
-					- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
-					- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
-	
-			- Usage example: Physics.IsColliding(gameObject1.collider, gameObject2.collider) or gameObject1.collider.IsColliding(gameObject2.collider)
-	
-				- Using a Collider/RigidBody component (à la Unity)?
-				- Circle Colliders and Rectangle Collider (Rectangle already exists, base it on that)
+		- Basic Physics for collisions, apply force, jump?, gravity (y-direction pull force) etc..
+			- Check out :
+				- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
+				- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
+				- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
 				
-		- Manage the order of the system are Updated/Drawn: 
-			- Ex: Inputs, then Movement, then Physics
+- Manage the order of the system are Updated/Drawn: 
+	- Replace the OrderUpdate value?
+	- Ex: Inputs, then Movement, then Physics
 			
-- Input Manager
-	- Manage all input calls and provides methods like IsClicked(button1), IsDown(button), etc.. 
 
-# Ideas
+### Sprite manager
 
-#### Texture manager:
+- Manage the layers and z-index. Z-index depends on the object position & size.
+	- This may be replaced by a SpriteSystem handling the Drawable components with the ECS.
 
--Loader les textures juste quand on en a besoin:
-	- ex: Entre dans une map, on load les textures d'après les strings (nom des texture). 
+- Keep a list of sprites to draw?
+	- A Dictionnary with a Name as Key, and a Pair of Sprite & Layer as Value.
 
-#### Sprite manager
-
-- <b>This may be replaced by a SpriteSystem handling the Drawable components with the ECS.</b>
 - Create a Layer system?
+
 	- Using the multiple sprites batches or a Z-index
+
   	- Handle the Z index depending of the Height, Y-position
 		- ex. 
 			- Layer 0 = GUI 
 		    	- Layer 1...n = GameObjects 
 		    	- Layer n+1 = Ground
+
 	- The layers occupy brackets of the z-index
 		- ex: 
 			- Layer 0: Z-index [0-255]
 			- Layer 0: Z-index [256-512]
 			- etc...
-- Keep a list of sprites to draw?
-	- Dict < string, Pair < Sprite, Layer > > => < name, < Sprite, Layer > >
-	
-#### Screen Manager
+
+### Screen Manager / Scenes (à la Unity)
 
 - Create a Screen/Scene manager
-	- Game Screen
-	- Menu Screen
-	- Pause Screen
-	- Defaults screen?
+	- Create a SceneManager and the abstract Scene class
+
+	- Use one EntityManager per scene/screen?
+		- Or split the entities in the EntityManager per scene?
 
 - void OnUnload & OnLoad
 	- list of names of Textures, Sounds etc.. to load/unload when changing Screen
 	- Same for the mapping engine?
-
-#### Generique :
-	
-- Implanter des mutex pour toutes les classes statiques ?
-	- Va juste être utile si je multi Thread le tout though

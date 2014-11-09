@@ -14,7 +14,7 @@ namespace JPEngine.Managers
 
         public bool Play(string name, float volume = 1f)
         {            
-            if (IsLoaded(name))
+            if (IsResourceLoaded(name))
             {
                 MediaPlayer.Volume = volume;
                 MediaPlayer.IsRepeating = true;

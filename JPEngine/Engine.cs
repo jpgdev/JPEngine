@@ -17,9 +17,9 @@ namespace JPEngine
         private static GraphicsDevice _graphicsDevice;    
 
         //Managers
-        //private static SpriteBatchManager _spriteBatchManager;
+        private static SpriteBatchManager _spriteBatchManager;
         private static WindowManager _windowManager;
-        private static EntityManager _entitymanager;
+        private static EntityManager _entityManager;
         private static InputManager _inputManager;
         private static SettingsManager _settingsManager;
 
@@ -32,10 +32,10 @@ namespace JPEngine
 
 #region Properties
 
-        //public static SpriteBatchManager SpriteManager 
-        //{
-        //    get { return _spriteBatchManager; } 
-        //}
+        public static SpriteBatchManager SpriteManager
+        {
+            get { return _spriteBatchManager; }
+        }
 
         public static WindowManager WindowManager
         {
@@ -65,6 +65,11 @@ namespace JPEngine
         public static InputManager Input
         {
             get { return _inputManager; }
+        }
+
+        public static EntityManager Entities
+        {
+            get { return _entityManager; }
         } 
 
 #endregion
@@ -77,14 +82,14 @@ namespace JPEngine
 
             _graphicsDevice = graphDeviceManager.GraphicsDevice;
 
-            //_spriteBatchManager = new SpriteBatchManager(_graphicsDevice);
-            //_spriteBatchManager.Initialize();
+            _spriteBatchManager = new SpriteBatchManager(_graphicsDevice);
+            _spriteBatchManager.Initialize();
 
             _windowManager = new WindowManager(graphDeviceManager);
             _windowManager.Initialize();
 
-            _entitymanager = new EntityManager();
-            _entitymanager.Initialize();
+            _entityManager = new EntityManager();
+            _entityManager.Initialize();
 
             _settingsManager = new SettingsManager();
             _settingsManager.Initialize();
@@ -118,19 +123,22 @@ namespace JPEngine
 
         public static void Update(GameTime gameTime)
         {
-            //_spriteBatchManager.Update(gameTime);
+            _spriteBatchManager.Update(gameTime);
             //_musicManager.Update(gameTime);
             //_soundManager.Update(gameTime);
-            _entitymanager.Update(gameTime);
+            _entityManager.Update(gameTime);
             _inputManager.Update(gameTime);
         }
 
-        public static void Draw()
+        public static void Draw(GameTime gameTime)
         {
-            //_spriteBatchManager.Draw();
-            _entitymanager.Draw();
-        }
+            //TODO: Better version that wraps and manage the layers, z-index etc...
+            SpriteBatch _spriteBatch = _spriteBatchManager.Begin();
 
+            _entityManager.Draw(_spriteBatch, gameTime);
+
+            _spriteBatchManager.End();
+        }
 #endregion
        
     }

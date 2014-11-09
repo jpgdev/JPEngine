@@ -41,6 +41,9 @@ namespace JPEngine.ECS
             }
         }
 
+        /// <summary>
+        /// The order in which the component will be updated. 0 = first, Int.MaxValue = last.
+        /// </summary>
         public int UpdateOrder {
             get { return _updateOrder; }
             set

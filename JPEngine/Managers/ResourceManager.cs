@@ -170,7 +170,7 @@ namespace JPEngine.Managers
                     removed = true;
                     OnResourceRemoved(new ListItemEventArgs<string>(p, ListItemAction.Removed));
 
-                    if (IsLoaded(name))
+                    if (IsResourceLoaded(name))
                         removed = Unload(name);                    
                 }
             }
@@ -236,9 +236,9 @@ namespace JPEngine.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool IsLoaded(string name)
+        public bool IsResourceLoaded(string name)
         {
-            return _resources.ContainsKey(name);
+            return _resources.ContainsKey(name) && _resources[name] != null;
         }
       
         /// <summary>
@@ -246,7 +246,7 @@ namespace JPEngine.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool IsAdded(string name)
+        public bool IsResourcePathAdded(string name)
         {
             return _paths.ContainsKey(name);
         }

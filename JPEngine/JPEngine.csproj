@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ECS\Components\DrawableComponent.cs" />
+    <Compile Include="ECS\Components\DrawableSpriteComponent.cs" />
     <Compile Include="ECS\Components\EntityComponent.cs" />
     <Compile Include="ECS\Components\IEntityComponent.cs" />
     <Compile Include="ECS\Components\IEntityDrawable.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="Managers\SettingsManager.cs" />
     <Compile Include="Utils\JsonSerializer.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
-    <Compile Include="Managers\AudioManager.cs" />
     <Compile Include="Managers\MusicManager.cs" />
     <Compile Include="Managers\SoundFXManager.cs" />
     <Compile Include="Managers\Manager.cs" />

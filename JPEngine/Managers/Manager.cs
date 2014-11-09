@@ -28,7 +28,7 @@ namespace JPEngine.Managers
         {
         }
 
-        public void Initialize() 
+        internal void Initialize() 
         { 
             _isInitialized = InitializeCore();
         }
