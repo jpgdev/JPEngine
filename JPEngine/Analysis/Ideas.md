@@ -8,6 +8,9 @@
 		- Collider (Circle and Rectangle)
 		- Moveable / player
 	- <b>Finish a basic version of SpriteManager or Drawable something in EntityManager which manages the layers & etc...</b>
+		- Use the Sprite class as an example.
+		- Who will manage the layers/z-index?
+		
 	- Implements multiples Systems handled by the EntityManager
 		- PhysicsSystem 	
 		
