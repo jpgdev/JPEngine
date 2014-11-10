@@ -15,7 +15,7 @@ namespace JPEngine.ECS
         private readonly List<IEntityComponent> _components = new List<IEntityComponent>();
         private readonly List<IEntityDrawable> _drawableComponents = new List<IEntityDrawable>();
 
-        private readonly Dictionary<string, IEntityComponent> _sortedByNameComponents =
+        private readonly Dictionary<string, IEntityComponent> _taggedComponents =
             new Dictionary<string, IEntityComponent>();
 
         //The components on which the Drawing and Updating is performed on
@@ -30,7 +30,7 @@ namespace JPEngine.ECS
         public Entity(string tag = "", bool autoAdd = false)
         {
             _transform = new TransformComponent(this);
-            AddComponent(_transform);
+            //AddComponent(_transform);
 
             _tag = tag;
 
@@ -117,7 +117,7 @@ namespace JPEngine.ECS
             {
                 try
                 {
-                    _sortedByNameComponents.Add(component.Name, component);
+                    _taggedComponents.Add(component.Name, component);
                 }
                 catch (ArgumentException e)
                 {
@@ -141,7 +141,7 @@ namespace JPEngine.ECS
             if (drawable != null)
             {
                 _drawableComponents.Add(drawable);
-                drawable.DrawOrderChanged += OnComponentDrawOrderChanged;
+                drawable.LayerChanged += OnComponentDrawOrderChanged;
                 OnComponentDrawOrderChanged(this, EventArgs.Empty);
             }
 
@@ -154,13 +154,13 @@ namespace JPEngine.ECS
 
         public bool RemoveComponents<T>() where T : class, IEntityComponent
         {
-            return GetComponents<T>().All(c => RemoveComponent(c));
+            return GetComponents<T>().All(RemoveComponent);
         }
 
         public bool RemoveComponent(string name)
         {
-            if (_sortedByNameComponents.ContainsKey(name))
-                return RemoveComponent(_sortedByNameComponents[name]);
+            if (_taggedComponents.ContainsKey(name))
+                return RemoveComponent(_taggedComponents[name]) && _taggedComponents.Remove(name);
 
             return false;
         }
@@ -183,7 +183,7 @@ namespace JPEngine.ECS
                 if (drawable != null)
                 {
                     _drawableComponents.Remove(drawable);
-                    drawable.DrawOrderChanged -= OnComponentDrawOrderChanged;
+                    drawable.LayerChanged -= OnComponentDrawOrderChanged;
                 }
                 return true;
             }
@@ -202,10 +202,10 @@ namespace JPEngine.ECS
 
         public IEntityComponent GetComponent(string name)
         {
-            if (!_sortedByNameComponents.ContainsKey(name))
+            if (!_taggedComponents.ContainsKey(name))
                 return null; //throw new ArgumentOutOfRangeException(name);
 
-            return _sortedByNameComponents[name] as EntityComponent;
+            return _taggedComponents[name] as EntityComponent;
         }
 
         #endregion
@@ -241,7 +241,7 @@ namespace JPEngine.ECS
         /// <returns>the component's update order</returns>
         private static int DrawableSort(IEntityDrawable entityA, IEntityDrawable entityB)
         {
-            return entityA.DrawOrder.CompareTo(entityB.DrawOrder);
+            return entityA.Layer.CompareTo(entityB.Layer);
         }
 
         #endregion

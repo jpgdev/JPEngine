@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECS\Components\CameraComponent.cs" />
     <Compile Include="ECS\Components\DrawableComponent.cs" />
     <Compile Include="ECS\Components\DrawableSpriteComponent.cs" />
     <Compile Include="ECS\Components\EntityComponent.cs" />
@@ -54,8 +55,10 @@
     <Compile Include="ECS\EntityManager.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="ECS\Entity.cs" />
+    <Compile Include="Enums\DrawingLayer.cs" />
     <Compile Include="Events\ValueChangedEvent.cs" />
     <Compile Include="Events\ListItemEvents.cs" />
+    <Compile Include="Managers\CameraManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\Setting.cs" />
     <Compile Include="Managers\SettingsManager.cs" />

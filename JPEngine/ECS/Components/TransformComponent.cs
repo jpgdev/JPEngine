@@ -4,9 +4,10 @@ namespace JPEngine.ECS
 {
     public class TransformComponent : EntityComponent
     {
-        public Vector2 Position = Vector2.Zero; //TODO: Use a Vector3 for the Z ? Helps with the Z-indexing
+        //public Vector2 Position = Vector2.Zero;
+        public Vector3 Position = Vector3.Zero;
         public float Rotation = 0f;
-        public float Scale = 1f;
+        public Vector2 Scale = new Vector2(1f, 1f);
 
         public TransformComponent(Entity gameObject)
             : base(gameObject)

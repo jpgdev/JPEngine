@@ -8,7 +8,11 @@
 - [XNA ECS Implementation Example](https://xnaentitycomponents.codeplex.com/)	
 
 - Entity & Components
-	- Add a Clone() Method for Entity & Components
+	- Add a Clone() for Entity & Components
+		- Useful to simulate Prefabs (à la Unity).
+
+- Camera
+	- [Nice link](http://gamedev.stackexchange.com/questions/59301/xna-2d-camera-scrolling-why-use-matrix-transform)
 
 - Make Basic components
 
@@ -49,21 +53,18 @@
 
 ### Sprite manager
 
-- Manage the layers and z-index. Z-index depends on the object position & size.
-	- This may be replaced by a SpriteSystem handling the Drawable components with the ECS.
+- <b>Take the Transform.Position.Y + Height (+ HANLE ROTATION & SCALING!) into account for Z-Index correctly</b>
 
 - Keep a list of sprites to draw?
 	- A Dictionnary with a Name as Key, and a Pair of Sprite & Layer as Value.
 
-- Create a Layer system?
+- Create a Layer system
 
-	- Using the multiple sprites batches or a Z-index
-
-  	- Handle the Z index depending of the Height, Y-position
+	- Using the Z-index
 		- ex. 
 			- Layer 0 = GUI 
-		    	- Layer 1...n = GameObjects 
-		    	- Layer n+1 = Ground
+				- Layer 1...n = GameObjects 
+				- Layer n+1 = Ground
 
 	- The layers occupy brackets of the z-index
 		- ex: 

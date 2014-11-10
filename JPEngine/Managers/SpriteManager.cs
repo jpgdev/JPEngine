@@ -1,10 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JPEngine.ECS.Components;
+using JPEngine.Enums;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace JPEngine.Managers
 {
     public class SpriteBatchManager : Manager
     {
+        private const int STEPS_PER_LAYER = 2048;
+        private int _numberOfLayers;
         private readonly SpriteBatch _spriteBatch;
 
         internal SpriteBatchManager(GraphicsDevice graphicsDevice)
@@ -12,48 +17,62 @@ namespace JPEngine.Managers
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        internal void Update(GameTime gameTime)
+        protected override bool InitializeCore()
         {
+            _numberOfLayers = Enum.GetNames(typeof(DrawingLayer)).Length;
+
+            return true;
         }
 
-        //internal void Draw(GameTime gameTime)
-        //{
-        //    _spriteBatch.Begin();
+        public float GetZIndex(DrawableSpriteComponent drawableSprite)
+        {
+            //TODO: make this work with the Z, Y axis and the Layers
 
-        //    DrawCore(_spriteBatch, gameTime);
+            //float lowestPosition = (drawableSprite.Transform.Position.Y +
+            //                        drawableSprite.Texture.Height * drawableSprite.Transform.Scale.Y);
+            ////Math.Max(drawableSprite.Texture.Width * drawableSprite.Transform.Scale.X, drawableSprite.Texture.Height * drawableSprite.Transform.Scale.Y)); //TODO: Update this with the rotation and scale...
+            //float zIndex = MathHelper.Clamp(1f, 0f, 1.0f - (lowestPosition - Engine.Cameras.Current.Transform.Position.Y) / Engine.WindowManager.ScreenHeight);
 
-        //    _spriteBatch.End();
-        //}
+            //float min = (MathHelper.Max(0, (int)drawableSprite.Layer - 1) * STEPS_PER_LAYER);
+            //float max = (int)drawableSprite.Layer * STEPS_PER_LAYER;
+            //////float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
+            //zIndex +=  MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
 
-        //private void DrawCore(SpriteBatch _spriteBatch, GameTime gameTime)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
-        //public void Draw(DrawableComponent component, Texture2D texture, Vector2 position)
-        //{
-        //    //TODO: Create a list of Sprites to draw and go trhough them all in the Draw call?
+            float min = (MathHelper.Max(0, (int)drawableSprite.Layer - 1) * STEPS_PER_LAYER);
+            float max = (int)drawableSprite.Layer * STEPS_PER_LAYER;
+            ////float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
+            float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
 
-        //    //TODO: Get correct z-index etc...
-        //    float z_index = 1f;
 
-        //}
+
+
+            return MathHelper.Clamp(1f, 0f, zIndex);
+        }
+
 
         internal SpriteBatch Begin()
         {
-            //todo: Validation that it has not already Began
+            //TODO: Add a calidation that it can be started
+            //TODO : Use the Camera Matrix, like Engine.CurrentCamera.TransformMatrix ?
 
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, null);
             //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
-            //Not implemented : Layer use this with the Camera Matrix
-            //_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, DepthStencilState.Default, null, null, new Matrix());
+            //_spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
+            //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
+
+            CameraComponent camera = Engine.Cameras.Current;
+            if(camera == null)
+                throw new NullReferenceException("The Engine current camera has not been set.");
+
+            //_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, DepthStencilState.Default, null, null, camera.TransformMatrix);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);
 
             return _spriteBatch;
         }
 
         internal void End()
         {
-            //todo: Validation that it has already bagan
+            //TODO: Add a calidation that it can be ended
             _spriteBatch.End();
         }
     }

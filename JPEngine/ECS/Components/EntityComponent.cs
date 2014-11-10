@@ -11,7 +11,9 @@ namespace JPEngine.ECS
         private string _name = string.Empty;
         private int _updateOrder;
 
-        public EntityComponent(Entity entity)
+        
+
+        protected EntityComponent(Entity entity)
         {
             _gameObject = entity;
 
@@ -19,21 +21,23 @@ namespace JPEngine.ECS
             UpdateOrderChanged += OnUpdateOrderChanged;
         }
 
-        public virtual void Initialize()
-        {
-        }
+        public virtual void Initialize() { }
 
-        public virtual void Start()
-        {
-        }
+        public virtual void Start() { }
 
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
 
-        //TODO: Fixed update?
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime) { }
+
+        #region GameObject methods Wrapper
+
+        public TransformComponent Transform
         {
+            get { return _gameObject.Transform; }
         }
+
+        #endregion
 
         #region Event Handler Methods
 

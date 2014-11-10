@@ -1,4 +1,5 @@
 ﻿using System;
+using JPEngine.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,13 +9,14 @@ namespace JPEngine.ECS.Components
     {
         bool Visible { get; }
 
-        int DrawOrder { get; }
+        DrawingLayer Layer { get; }
 
         event EventHandler<EventArgs> VisibleChanged;
 
-        event EventHandler<EventArgs> DrawOrderChanged;
+        event EventHandler<EventArgs> LayerChanged;
 
         void Draw(SpriteBatch spriteBatch, GameTime gameTime);
         //void Draw();
+
     }
 }

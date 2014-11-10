@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Managers
 {
@@ -7,41 +9,54 @@ namespace JPEngine.Managers
         #region Attributes
 
         private readonly GraphicsDeviceManager _graphicsManager;
-
-        private bool _isFullScreen;
-        private int _screenHeight;
-        private int _screenWidth;
-
+        
         #endregion
 
         #region Properties
 
+        public Viewport Viewport
+        {
+            get { return _graphicsManager.GraphicsDevice.Viewport; }
+        }
+
         public int ScreenWidth
         {
-            get { return _screenWidth; }
+            get { return _graphicsManager.GraphicsDevice.Viewport.Width; }
             set
             {
-                _screenWidth = value;
+                _graphicsManager.GraphicsDevice.Viewport = 
+                    new Viewport(
+                        _graphicsManager.GraphicsDevice.Viewport.X,
+                        _graphicsManager.GraphicsDevice.Viewport.Y,
+                        value,
+                        _graphicsManager.GraphicsDevice.Viewport.Height);
+                //_graphicsManager.GraphicsDevice.Viewport.Width = value;
                 //ApplySettings();
             }
         }
 
         public int ScreenHeight
         {
-            get { return _screenHeight; }
+            get { return _graphicsManager.GraphicsDevice.Viewport.Height; }
             set
             {
-                _screenHeight = value;
+                _graphicsManager.GraphicsDevice.Viewport =
+                   new Viewport(
+                       _graphicsManager.GraphicsDevice.Viewport.X,
+                       _graphicsManager.GraphicsDevice.Viewport.Y,
+                       _graphicsManager.GraphicsDevice.Viewport.Width,
+                       value);
+
                 //ApplySettings();
             }
         }
 
         public bool IsFullScreen
         {
-            get { return _isFullScreen; }
+            get { return _graphicsManager.IsFullScreen; }
             set
             {
-                _isFullScreen = value;
+                _graphicsManager.IsFullScreen = value;
                 //ApplySettings();
             }
         }
@@ -52,6 +67,9 @@ namespace JPEngine.Managers
 
         internal WindowManager(GraphicsDeviceManager graphicsManager)
         {
+            if (graphicsManager == null)
+                throw new ArgumentNullException("The GraphicsDeviceManager cannot be null.");
+
             _graphicsManager = graphicsManager;
         }
 
@@ -59,35 +77,11 @@ namespace JPEngine.Managers
 
         #region Methods
 
-        protected override bool InitializeCore()
-        {
-            _screenHeight = _graphicsManager.GraphicsDevice.Viewport.Height;
-            _screenWidth = _graphicsManager.GraphicsDevice.Viewport.Width;
-            _isFullScreen = _graphicsManager.IsFullScreen;
-
-            return true;
-        }
-
-        public void SetScreenDimensions(int width, int height, bool isFullscreen = false)
-        {
-            _screenWidth = width;
-            _screenHeight = height;
-            _isFullScreen = isFullscreen;
-
-            ApplySettings();
-        }
-
         public void ApplySettings()
         {
-            _graphicsManager.IsFullScreen = _isFullScreen;
-            _graphicsManager.PreferredBackBufferHeight = _screenHeight;
-            _graphicsManager.PreferredBackBufferWidth = _screenWidth;
-
             _graphicsManager.ApplyChanges();
         }
 
         #endregion
-
-        //TODO: Delete this Manager and make the GraphicsDeviceManager public in the Engine directly
     }
 }

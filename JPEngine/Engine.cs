@@ -22,6 +22,7 @@ namespace JPEngine
         private static EntityManager _entityManager;
         private static InputManager _inputManager;
         private static SettingsManager _settingsManager;
+        private static CameraManager _cameraManager;
 
         //Resources managers
         private static TextureManager _textureManager;
@@ -72,18 +73,22 @@ namespace JPEngine
             get { return _entityManager; }
         }
 
+        public static CameraManager Cameras
+        {
+            get { return _cameraManager; }
+        }
+
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Initialize the managers that don't require the ContentManager
+        /// Initialize the managers.
         /// </summary>
         /// <param name="graphDeviceManager"></param>
-        public static void Initialize(GraphicsDeviceManager graphDeviceManager)
+        /// <param name="content"></param>
+        public static void Initialize(GraphicsDeviceManager graphDeviceManager, ContentManager content)
         {
-            //_instance = new Engine();
-
             _graphicsDevice = graphDeviceManager.GraphicsDevice;
 
             _spriteBatchManager = new SpriteBatchManager(_graphicsDevice);
@@ -100,14 +105,11 @@ namespace JPEngine
 
             _inputManager = new InputManager();
             _inputManager.Initialize();
-        }
 
-        /// <summary>
-        ///     Initialize the resources managers.
-        /// </summary>
-        /// <param name="content"></param>
-        public static void LoadContent(ContentManager content)
-        {
+            _cameraManager = new CameraManager();
+            _cameraManager.Initialize();
+            
+            //Resources managers
             _musicManager = new MusicManager(content);
             _musicManager.Initialize();
 
@@ -117,6 +119,22 @@ namespace JPEngine
             _textureManager = new TextureManager(content);
             _textureManager.Initialize();
         }
+
+        ///// <summary>
+        /////     Initialize the resources managers.
+        ///// </summary>
+        ///// <param name="content"></param>
+        //public static void LoadContent(ContentManager content)
+        //{
+        //    //_musicManager = new MusicManager(content);
+        //    //_musicManager.Initialize();
+
+        //    //_soundManager = new SoundFXManager(content);
+        //    //_soundManager.Initialize();
+
+        //    //_textureManager = new TextureManager(content);
+        //    //_textureManager.Initialize();
+        //}
 
         public static void UnloadContent()
         {

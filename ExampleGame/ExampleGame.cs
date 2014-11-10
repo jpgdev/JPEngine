@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JPEngine.Enums;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.GamerServices;
 
 using JPEngine;
 using JPEngine.Managers;
@@ -27,21 +23,73 @@ namespace ExampleGame
         
         protected override void Initialize()
         {
-            Engine.Initialize(graphics);
+            Engine.Initialize(graphics, Content);
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {           
+            Engine.Textures.Add("crate", "Sprites/crate", true);
+            Engine.Textures.Add("grass", "Tiles/grass", true);
+
+            Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
+            
+            Engine.Settings.Add(new Setting<Keys>("UP", Keys.Up));
+            Engine.Settings.Add(new Setting<Keys>("LEFT", Keys.Left));
+            Engine.Settings.Add(new Setting<Keys>("RIGHT", Keys.Right));
+            Engine.Settings.Add(new Setting<Keys>("DOWN", Keys.Down));
+
+            Engine.Settings.Add(new Setting<Keys>("W", Keys.W));
+            Engine.Settings.Add(new Setting<Keys>("A", Keys.A));
+            Engine.Settings.Add(new Setting<Keys>("D", Keys.D));
+            Engine.Settings.Add(new Setting<Keys>("S", Keys.S));
+
+            Engine.Settings.Add(new Setting<Keys>("Q", Keys.Q));
+            Engine.Settings.Add(new Setting<Keys>("E", Keys.E));
+
+            Engine.Settings.Add(new Setting<Keys>("SpaceBar", Keys.Space));
+            Engine.Settings.Add(new Setting<Keys>("C", Keys.C));
+
+            Engine.Settings.Add(new Setting<Keys>("R", Keys.R));
+
+            Engine.Settings.Add(new Setting<Keys>("PageUp", Keys.PageUp));
+            Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));
+            
+            LoadTestsEntities();
+        }
+
+        private void LoadTestsEntities()
+        {
+            //Setup & Add the base Camera entity
+            Entity mainCamera = new Entity("_MainCamera", true);
+
+            mainCamera.AddComponent(new CameraComponent(mainCamera));
+            mainCamera.AddComponent(new CameraInput(mainCamera));
+            Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
+
+
+            {
+                Texture2D texture = Engine.Textures["grass"];
+                var e = new Entity("ground");
+
+                //testDrawableComponent.Origin = new Vector2((float)testDrawableComponent.Width / 2, (float)testDrawableComponent.Height / 2);
+
+                e.AddComponent(new DrawableSpriteComponent(e, texture)
+                {
+                    Layer = DrawingLayer.Background1
+                });
+
+                Engine.Entities.AddEntity(e);
+            }
+
+
 
             {
                 var e = new Entity("player");
-                var testDrawableComponent = new DrawableSpriteComponent(e)
-                {
-                    TextureName = "crate",
-                    Width = 32,
-                    Height = 32
-                };
-
-                testDrawableComponent.Origin = new Vector2((float)testDrawableComponent.Width / 2, (float)testDrawableComponent.Height / 2);
-                testDrawableComponent.DrawOrder = 0;
-
-                e.AddComponent(testDrawableComponent);
+                e.Transform.Scale = new Vector2(0.5f, 0.5f);
+                
+                e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
                 e.AddComponent(new PlayerInput(e));
 
                 Engine.Entities.AddEntity(e);
@@ -49,49 +97,15 @@ namespace ExampleGame
 
 
             {
-                var e2 = new Entity("player");
-                var testDrawableComponent2 = new DrawableSpriteComponent(e2)
-                {
-                    TextureName = "crate",
-                    Width = 64,
-                    Height = 64
-                };
-                testDrawableComponent2.Origin = new Vector2((float) testDrawableComponent2.Width/2,
-                    (float) testDrawableComponent2.Height/2);
-                testDrawableComponent2.DrawOrder = 5;
-
-                e2.AddComponent(testDrawableComponent2);
+                var e2 = new Entity();
                 e2.Transform.Position.X = 100;
                 e2.Transform.Position.Y = 100;
+
+                e2.AddComponent(new DrawableSpriteComponent(e2, Engine.Textures["crate"]));
 
                 Engine.Entities.AddEntity(e2);
             }
 
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {           
-            Engine.LoadContent(Content);
-
-            Engine.Textures.Add("crate", "Sprites/crate", true);
-            Engine.Textures.Add("grass", "Tiles/grass", true);
-
-            Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
-            
-            Engine.Settings.Add(new Setting<string>("test", "value!!!"));
-            Engine.Settings.Add(new Setting<double>("test2", 0.5));
-            Engine.Settings.Add(new Setting<Keys>("BtnQ", Keys.Q));
-            Engine.Settings.Add(new Setting<Keys>("BtnF", Keys.F));
-
-            Engine.Settings.Add(new Setting<Keys>("UP", Keys.Up));
-            Engine.Settings.Add(new Setting<Keys>("LEFT", Keys.Left));
-            Engine.Settings.Add(new Setting<Keys>("RIGHT", Keys.Right));
-            Engine.Settings.Add(new Setting<Keys>("DOWN", Keys.Down));
-
-            Engine.Settings.Add(new Setting<Keys>("PageUp", Keys.PageUp));
-            Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));
         }
 
         protected override void UnloadContent()
@@ -103,13 +117,12 @@ namespace ExampleGame
         {
             Engine.Update(gameTime);
             
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["BtnF"].Value))
-            {
-                Engine.Settings.SaveSettings();
-                Engine.Settings.LoadSettings();
-                Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
-
-            }
+            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["BtnF"].Value))
+            //{
+            //    Engine.Settings.SaveSettings();
+            //    Engine.Settings.LoadSettings();
+            //    Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
+            //}
 
             //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
             //{

@@ -39,6 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CustomComponents\CameraInput.cs" />
     <Compile Include="CustomComponents\PlayerInput.cs" />
     <Compile Include="ExampleGame.cs" />
     <Compile Include="Program.cs" />
