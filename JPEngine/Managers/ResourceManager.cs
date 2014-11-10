@@ -119,6 +119,7 @@ namespace JPEngine.Managers
             var temp = new Dictionary<string, T>(_resources);
             temp.All(r => Unload(r.Key));
             _paths.Clear();
+            _resources.Clear();
         }
 
         /// <summary>
@@ -198,7 +199,7 @@ namespace JPEngine.Managers
 
         public bool Load(params string[] names)
         {
-            return names.All(n => Load(n));
+            return names.All(Load);
         }
 
         /// <summary>
@@ -217,7 +218,7 @@ namespace JPEngine.Managers
                 {
                     OnResourceUnloaded(new ListItemEventArgs<T>(r, ListItemAction.Removed));
                     r.Dispose();
-                        //TODO: May cause a problem because it may be Disposed when someone tries to access it in the EventHandler?
+                    //TODO: May cause a problem because it may be Disposed when someone tries to access it in the EventHandler?
                     removed = true;
                 }
             }
@@ -226,7 +227,7 @@ namespace JPEngine.Managers
 
         public bool Unload(params string[] names)
         {
-            return names.All(n => Unload(n));
+            return names.All(Unload);
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace ExampleGame
         
         protected override void Initialize()
         {
-            Engine.Initialize(graphics, Content);
+            Engine.Initialize(this);
 
             base.Initialize();
         }

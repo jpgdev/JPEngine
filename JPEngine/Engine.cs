@@ -1,5 +1,6 @@
 ﻿#region Include Statements
 
+using System;
 using JPEngine.ECS;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
@@ -14,7 +15,8 @@ namespace JPEngine
     {
         #region Attributes
 
-        private static GraphicsDevice _graphicsDevice;
+        private static GraphicsDeviceManager _graphicsDeviceManager;
+        private static Game _game;
 
         //Managers
         private static SpriteBatchManager _spriteBatchManager;
@@ -38,7 +40,7 @@ namespace JPEngine
             get { return _spriteBatchManager; }
         }
 
-        public static WindowManager WindowManager
+        public static WindowManager Window
         {
             get { return _windowManager; }
         }
@@ -85,16 +87,22 @@ namespace JPEngine
         /// <summary>
         /// Initialize the managers.
         /// </summary>
-        /// <param name="graphDeviceManager"></param>
-        /// <param name="content"></param>
-        public static void Initialize(GraphicsDeviceManager graphDeviceManager, ContentManager content)
+        /// <param name="game"></param>
+        public static void Initialize(Game game)
         {
-            _graphicsDevice = graphDeviceManager.GraphicsDevice;
+            if(game == null)
+                throw new NullReferenceException("The game cannot be null.");
 
-            _spriteBatchManager = new SpriteBatchManager(_graphicsDevice);
+            _game = game;
+
+            //Setup the GraphicsDeviceManager
+            var graphicsService = (IGraphicsDeviceService) game.Services.GetService(typeof(IGraphicsDeviceService));
+            _graphicsDeviceManager = graphicsService as GraphicsDeviceManager ?? new GraphicsDeviceManager(_game);
+            
+            _spriteBatchManager = new SpriteBatchManager(_graphicsDeviceManager.GraphicsDevice);
             _spriteBatchManager.Initialize();
 
-            _windowManager = new WindowManager(graphDeviceManager);
+            _windowManager = new WindowManager(_graphicsDeviceManager);
             _windowManager.Initialize();
 
             _entityManager = new EntityManager();
@@ -110,13 +118,13 @@ namespace JPEngine
             _cameraManager.Initialize();
             
             //Resources managers
-            _musicManager = new MusicManager(content);
+            _musicManager = new MusicManager(game.Content);
             _musicManager.Initialize();
 
-            _soundManager = new SoundFXManager(content);
+            _soundManager = new SoundFXManager(game.Content);
             _soundManager.Initialize();
 
-            _textureManager = new TextureManager(content);
+            _textureManager = new TextureManager(game.Content);
             _textureManager.Initialize();
         }
 
@@ -154,7 +162,7 @@ namespace JPEngine
 
         public static void Draw(GameTime gameTime)
         {
-            _graphicsDevice.Clear(Color.CornflowerBlue);
+            _graphicsDeviceManager.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
             SpriteBatch spriteBatch = _spriteBatchManager.Begin();

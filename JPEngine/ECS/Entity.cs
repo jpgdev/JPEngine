@@ -22,8 +22,9 @@ namespace JPEngine.ECS
         private readonly List<IEntityComponent> _tempComponents = new List<IEntityComponent>();
         private readonly List<IEntityDrawable> _tempDrawableComponents = new List<IEntityDrawable>();
         private readonly List<IEntityUpdateable> _tempUpdateableComponents = new List<IEntityUpdateable>();
-        private readonly TransformComponent _transform;
         private readonly List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
+        
+        private readonly TransformComponent _transform;
         private bool _isInitialized;
         private string _tag = string.Empty;
 

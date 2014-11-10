@@ -53,7 +53,7 @@ namespace JPEngine.Managers
 
         public void LoadSettings()
         {
-            _settings.Clear();
+            //_settings.Clear();
             _settings = Utils.JsonHelper.LoadFromFile<Dictionary<string, Setting>>(@"C:\Users\JP\Desktop\test\settings.txt");
         }       
     }
