@@ -16,7 +16,7 @@
 
 - Make Basic components
 
-	- CircleCollider &  BoxCollider (Base class -> abstract Collider?)
+	- CircleCollider &  BoxCollider (Base class -> Abstract/Interface Collider?)
 
 		- example usage : gameObject1.collider.IsColliding(gameObject2.collider)	
 			- Override for each type of collider?
@@ -34,7 +34,7 @@
 	- Transform Component
 		- Use a Vector3D for the position to add a Z value? Which the DrawableComponent use?
 		- Add an Origin property for the rotation and etc.. instead of having it in DrawableSpriteComponent which makes no sense if we want to use it outside of drawing?
-		
+	
 #### Systems
 
 - Implements multiples Systems handled by the EntityManager
@@ -49,7 +49,15 @@
 - Manage the order of the system are Updated/Drawn: 
 	- Replace the OrderUpdate value?
 	- Ex: Inputs, then Movement, then Physics
-			
+
+
+### Console & Lua interpretter
+
+- [How to: Lua + XNA](http://xnacoding.blogspot.ca/2010/07/how-to-lua-xna.html)		
+- [Console in XNA](http://gamedev.stackexchange.com/questions/45107/input-output-console-window-in-xna)
+- [Console implementation in XNA](https://code.google.com/r/jameswalkoski-xnagameconsole-xna4/source/browse)
+- [Use LUA with XNA as events](http://www.gamedev.net/topic/612571-using-lua-with-xna-as-events/)
+- [Scripting with LUA in c#](http://www.godpatterns.com/2006/05/scripting-with-lua-in-c.html)
 
 ### Sprite manager
 
