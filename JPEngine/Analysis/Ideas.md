@@ -60,6 +60,10 @@
 - [Use LUA with XNA as events](http://www.gamedev.net/topic/612571-using-lua-with-xna-as-events/)
 - [Scripting with LUA in c#](http://www.godpatterns.com/2006/05/scripting-with-lua-in-c.html)
 
+### SpriteFont Manager
+
+- Add it
+
 ### Sprite manager
 
 - <b>Take the Transform.Position.Y + Height (+ HANLE ROTATION & SCALING!) into account for Z-Index correctly</b>
