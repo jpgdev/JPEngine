@@ -1,5 +1,4 @@
 ﻿using System;
-using JPEngine.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -57,7 +56,7 @@ namespace JPEngine.ECS.Components
                 throw new ArgumentNullException("The texture cannot be null.");
 
             Texture = texture;
-            _origin = new Vector2(((float)texture.Width) / 2, ((float)texture.Height) / 2);
+            _origin = new Vector2((float)texture.Width / 2, (float)texture.Height / 2);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)

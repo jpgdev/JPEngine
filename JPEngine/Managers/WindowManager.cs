@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Managers
 {
+    //TODO: Rename this to Renderer? or something like that
     public class WindowManager : Manager
     {
         #region Attributes
 
+        //TODO: Make the GraphicsDevice accessible?
         private readonly GraphicsDeviceManager _graphicsManager;
         
         #endregion
@@ -19,7 +21,7 @@ namespace JPEngine.Managers
             get { return _graphicsManager.GraphicsDevice.Viewport; }
         }
 
-        public int ScreenWidth
+        public int Width
         {
             get { return _graphicsManager.GraphicsDevice.Viewport.Width; }
             set
@@ -31,11 +33,11 @@ namespace JPEngine.Managers
                         value,
                         _graphicsManager.GraphicsDevice.Viewport.Height);
                 //_graphicsManager.GraphicsDevice.Viewport.Width = value;
-                //ApplySettings();
+                ApplySettings();
             }
         }
 
-        public int ScreenHeight
+        public int Height
         {
             get { return _graphicsManager.GraphicsDevice.Viewport.Height; }
             set
@@ -47,7 +49,7 @@ namespace JPEngine.Managers
                        _graphicsManager.GraphicsDevice.Viewport.Width,
                        value);
 
-                //ApplySettings();
+                ApplySettings();
             }
         }
 
@@ -57,7 +59,7 @@ namespace JPEngine.Managers
             set
             {
                 _graphicsManager.IsFullScreen = value;
-                //ApplySettings();
+                ApplySettings();
             }
         }
 
@@ -79,7 +81,18 @@ namespace JPEngine.Managers
 
         public void ApplySettings()
         {
+            
+            _graphicsManager.PreferredBackBufferHeight = Height;
+            _graphicsManager.PreferredBackBufferWidth = Width;
+
             _graphicsManager.ApplyChanges();
+        }
+
+        //TODO: May be dangerous since they may never be disposed of?
+        //TODO: Find another place to access this?
+        public Texture2D CreateTexture(int width, int height)
+        {
+            return new Texture2D(_graphicsManager.GraphicsDevice, width, height);
         }
 
         #endregion

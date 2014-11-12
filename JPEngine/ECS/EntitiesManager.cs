@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JPEngine.Events;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
@@ -6,13 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS
 {
-    public class EntityManager : Manager
+    public class EntitiesManager : Manager
     {
         private readonly List<Entity> _currentList = new List<Entity>();
         private readonly List<Entity> _masterList = new List<Entity>();
         private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
 
-        internal EntityManager()
+        internal EntitiesManager()
         {
         }
 
@@ -63,6 +64,11 @@ namespace JPEngine.ECS
 
                 _taggedEntities[entity.Tag].Add(entity);
             }
+        }
+
+        public Entity GetEntityByTag(string tag)
+        {
+            return GetEntitiesByTag(tag).FirstOrDefault();
         }
 
         public List<Entity> GetEntitiesByTag(string tag)

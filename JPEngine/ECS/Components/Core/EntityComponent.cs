@@ -4,17 +4,18 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.ECS
 {
-    public abstract class EntityComponent : IEntityComponent, IEntityUpdateable
+    public class EntityComponent : IEntityComponent, IEntityUpdateable, ICloneable
     {
         private readonly Entity _gameObject;
         private bool _enabled = true;
-        private string _name = string.Empty;
+        private string _tag = string.Empty;
         private int _updateOrder;
-
-        
 
         protected EntityComponent(Entity entity)
         {
+            if(entity == null)
+                throw new ArgumentNullException("The entity cannot be null.");
+
             _gameObject = entity;
 
             EnabledChanged += OnEnabledChanged;
@@ -39,7 +40,7 @@ namespace JPEngine.ECS
 
         #endregion
 
-        #region Event Handler Methods
+        #region Event Handlers
 
         protected virtual void OnEnabledChanged(object sender, EventArgs e)
         {
@@ -58,10 +59,10 @@ namespace JPEngine.ECS
             get { return _gameObject; }
         }
 
-        public string Name
+        public string Tag
         {
-            get { return _name; }
-            protected set { _name = value; }
+            get { return _tag; }
+            protected set { _tag = value; }
         }
 
         public bool Enabled
@@ -96,5 +97,10 @@ namespace JPEngine.ECS
         }
 
         #endregion
+
+        public virtual object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

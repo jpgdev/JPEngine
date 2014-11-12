@@ -1,7 +1,5 @@
-﻿using System;
-using JPEngine;
+﻿using JPEngine;
 using JPEngine.ECS;
-using JPEngine.ECS.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,20 +7,10 @@ namespace ExampleGame.CustomComponents
 {
     public class PlayerInput : EntityComponent
     {
-
-        private DrawableSpriteComponent _drawableSpriteComponent;
-
         public PlayerInput(Entity entity)
             : base(entity)
         {
             UpdateOrder = 0;
-        }
-
-        public override void Start()
-        {
-            _drawableSpriteComponent = GameObject.GetComponent<DrawableSpriteComponent>();
-
-            base.Start();
         }
 
         public override void Update(GameTime gameTime)
@@ -41,25 +29,25 @@ namespace ExampleGame.CustomComponents
             //        Engine.Settings["BtnQ"].ValueType);
             //}
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["SpaceBar"].Value))
+            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["SpaceBar"].Value))
             {
                 Transform.Position.Z += 1;
             }
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["C"].Value))
+            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["C"].Value))
             {
                 Transform.Position.Z -= 1;
             }
 
-            //if (Engine.Input.IsKeyDown((Keys)Engine.Settings["Q"].Value))
-            //{
-            //    Transform.Rotation -= MathHelper.ToRadians(10f);
-            //}
+            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["Q"].Value))
+            {
+                Transform.Rotation -= MathHelper.ToRadians(10f);
+            }
 
-            //if (Engine.Input.IsKeyDown((Keys)Engine.Settings["E"].Value))
-            //{
-            //    Transform.Rotation += MathHelper.ToRadians(10f);
-            //}
+            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["E"].Value))
+            {
+                Transform.Rotation += MathHelper.ToRadians(10f);
+            }
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["UP"].Value))
             {
@@ -80,7 +68,6 @@ namespace ExampleGame.CustomComponents
             {
                 Transform.Position.X -= speed*delta;
             }
-
 
 
             base.Update(gameTime);

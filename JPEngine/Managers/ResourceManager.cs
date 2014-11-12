@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Content;
 
 namespace JPEngine.Managers
 {
+    //TODO: Launch exceptions instead of returning false? (for Add & Load)
+
     public abstract class ResourceManager<T> : Manager where T : IDisposable
     {
         #region Attributes

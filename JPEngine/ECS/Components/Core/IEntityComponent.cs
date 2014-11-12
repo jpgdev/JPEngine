@@ -2,7 +2,7 @@
 {
     public interface IEntityComponent
     {
-        string Name { get; }
+        string Tag { get; }
 
         void Initialize();
 

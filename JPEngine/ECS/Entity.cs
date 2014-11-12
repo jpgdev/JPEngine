@@ -10,33 +10,31 @@ namespace JPEngine.ECS
 {
     //Inspired from : https://xnaentitycomponents.codeplex.com/
 
-    public class Entity
+    public class Entity : ICloneable
     {
+        private readonly Dictionary<string, IEntityComponent> _taggedComponents =
+           new Dictionary<string, IEntityComponent>();
+
         private readonly List<IEntityComponent> _components = new List<IEntityComponent>();
         private readonly List<IEntityDrawable> _drawableComponents = new List<IEntityDrawable>();
-
-        private readonly Dictionary<string, IEntityComponent> _taggedComponents =
-            new Dictionary<string, IEntityComponent>();
+        private readonly List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
 
         //The components on which the Drawing and Updating is performed on
         private readonly List<IEntityComponent> _tempComponents = new List<IEntityComponent>();
         private readonly List<IEntityDrawable> _tempDrawableComponents = new List<IEntityDrawable>();
         private readonly List<IEntityUpdateable> _tempUpdateableComponents = new List<IEntityUpdateable>();
-        private readonly List<IEntityUpdateable> _updateableComponents = new List<IEntityUpdateable>();
         
         private readonly TransformComponent _transform;
         private bool _isInitialized;
         private string _tag = string.Empty;
+        
+        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
 
-        public Entity(string tag = "", bool autoAdd = false)
+        #region Properties
+
+        public TransformComponent Transform
         {
-            _transform = new TransformComponent(this);
-            //AddComponent(_transform);
-
-            _tag = tag;
-
-            if (autoAdd)
-                Engine.Entities.AddEntity(this);
+            get { return _transform; }
         }
 
         public bool IsInitialized
@@ -49,27 +47,43 @@ namespace JPEngine.ECS
             get { return _tag; }
             set
             {
-                if (_tag != value)
-                {
-                    //TODO: Validate that this works
-                    string oldValue = _tag;
-                    _tag = value;
-                    if (TagChanged != null)
-                        TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
-                }
+                if (_tag == value)
+                    return;
+
+                //TODO: Validate that this works
+                string oldValue = _tag;
+                _tag = value;
+                if (TagChanged != null)
+                    TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
             }
         }
 
-        public TransformComponent Transform
+        /// <summary>
+        /// Get a copy of the list of all the components.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IEntityComponent> Components
         {
-            get { return _transform; }
+            get { return _components.ToList(); }
         }
 
-        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
+        #endregion
+        
+        public Entity(string tag = "", bool autoAdd = false)
+        {
+            _transform = new TransformComponent(this);
+            //AddComponent(_transform);
 
+            _tag = tag;
+
+            if (autoAdd)
+                Engine.Entities.AddEntity(this);
+        }
+        
         public void Initialize()
         {
-            if (_isInitialized) return;
+            if (_isInitialized) 
+                return;
 
             _tempComponents.Clear();
             _tempComponents.AddRange(_components);
@@ -114,16 +128,16 @@ namespace JPEngine.ECS
             //if(GetComponent<T>() != null)
             //    throw new ArgumentException(string.Format("There is already a Component of this type in this entity.", component.Name));
 
-            if (!string.IsNullOrEmpty(component.Name))
+            if (!string.IsNullOrEmpty(component.Tag))
             {
                 try
                 {
-                    _taggedComponents.Add(component.Name, component);
+                    _taggedComponents.Add(component.Tag, component);
                 }
                 catch (ArgumentException e)
                 {
                     throw new ArgumentException(
-                        string.Format("There is already a Component with the name {0} in this entity.", component.Name));
+                        string.Format("There is already a Component with the name {0} in this entity.", component.Tag));
                 }
             }
 
@@ -191,22 +205,37 @@ namespace JPEngine.ECS
             return false;
         }
 
+        /// <summary>
+        /// Returns the first component of the selected type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetComponent<T>() where T : class, IEntityComponent
         {
             return GetComponents<T>().FirstOrDefault();
         }
 
+        /// <summary>
+        /// Returns all the components of the selected type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IEnumerable<T> GetComponents<T>() where T : class, IEntityComponent
         {
             return _components.OfType<T>();
         }
 
-        public IEntityComponent GetComponent(string name)
+        /// <summary>
+        /// Returns a component with the tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public IEntityComponent GetComponent(string tag)
         {
-            if (!_taggedComponents.ContainsKey(name))
+            if (!_taggedComponents.ContainsKey(tag))
                 return null; //throw new ArgumentOutOfRangeException(name);
 
-            return _taggedComponents[name] as EntityComponent;
+            return _taggedComponents[tag] as EntityComponent;
         }
 
         #endregion
@@ -246,5 +275,17 @@ namespace JPEngine.ECS
         }
 
         #endregion
+
+        public object Clone()
+        {
+            Entity e = new Entity();
+
+            //TODO: Get a copy of each of the components (implement IClonable)
+            //TODO: Set the GameObject to the new one.
+            //TODO: Call AddComponent
+
+
+            throw new NotImplementedException();
+        }
     }
 }

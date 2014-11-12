@@ -12,7 +12,7 @@ namespace JPEngine.ECS.Components
     {
         public Vector2 Origin
         {
-            get { return new Vector2(Engine.Window.ScreenWidth/2f, Engine.Window.ScreenHeight/2f); }
+            get { return new Vector2(Engine.Window.Width/2f, Engine.Window.Height/2f); }
         }
 
         public Matrix TransformMatrix

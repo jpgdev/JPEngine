@@ -3,29 +3,36 @@
 using System;
 using JPEngine.ECS;
 using JPEngine.Managers;
+using JPEngine.Utils;
+using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 #endregion
 
 namespace JPEngine
 {
+    //TODO: Inherit from DrawableGameComponent to be sure we will be called?
+
+
     public static class Engine
     {
         #region Attributes
 
         private static GraphicsDeviceManager _graphicsDeviceManager;
         private static Game _game;
+        private static ScriptConsole _console;
 
         //Managers
         private static SpriteBatchManager _spriteBatchManager;
         private static WindowManager _windowManager;
-        private static EntityManager _entityManager;
+        private static EntitiesManager _entityManager;
         private static InputManager _inputManager;
         private static SettingsManager _settingsManager;
         private static CameraManager _cameraManager;
-
+        
         //Resources managers
         private static TextureManager _textureManager;
         private static MusicManager _musicManager;
@@ -70,7 +77,7 @@ namespace JPEngine
             get { return _inputManager; }
         }
 
-        public static EntityManager Entities
+        public static EntitiesManager Entities
         {
             get { return _entityManager; }
         }
@@ -98,51 +105,40 @@ namespace JPEngine
             //Setup the GraphicsDeviceManager
             var graphicsService = (IGraphicsDeviceService) game.Services.GetService(typeof(IGraphicsDeviceService));
             _graphicsDeviceManager = graphicsService as GraphicsDeviceManager ?? new GraphicsDeviceManager(_game);
-            
+
+            //SpriteBatch spriteBatch = new SpriteBatch(_graphicsDeviceManager.GraphicsDevice);
+
             _spriteBatchManager = new SpriteBatchManager(_graphicsDeviceManager.GraphicsDevice);
-            _spriteBatchManager.Initialize();
-
             _windowManager = new WindowManager(_graphicsDeviceManager);
-            _windowManager.Initialize();
-
-            _entityManager = new EntityManager();
-            _entityManager.Initialize();
-
+            _entityManager = new EntitiesManager();
             _settingsManager = new SettingsManager();
-            _settingsManager.Initialize();
-
             _inputManager = new InputManager();
-            _inputManager.Initialize();
-
             _cameraManager = new CameraManager();
-            _cameraManager.Initialize();
-            
-            //Resources managers
             _musicManager = new MusicManager(game.Content);
-            _musicManager.Initialize();
-
             _soundManager = new SoundFXManager(game.Content);
-            _soundManager.Initialize();
-
             _textureManager = new TextureManager(game.Content);
+            
+            _spriteBatchManager.Initialize();
+            _windowManager.Initialize();
+            _entityManager.Initialize();
+            _settingsManager.Initialize();
+            _inputManager.Initialize();
+            _cameraManager.Initialize();
+            _musicManager.Initialize();
+            _soundManager.Initialize();
             _textureManager.Initialize();
+
+
+
+            //TODO: Add a way to load the resource directly from the Engine NOT the game
+            //TODO: Implement a BitmapFont?
+            _console = new ScriptConsole(game, game.Content.Load<SpriteFont>("Fonts/ConsoleFont"))
+            {
+                ToggleKey = Keys.F1
+            };
+
+            _console.Initialize();
         }
-
-        ///// <summary>
-        /////     Initialize the resources managers.
-        ///// </summary>
-        ///// <param name="content"></param>
-        //public static void LoadContent(ContentManager content)
-        //{
-        //    //_musicManager = new MusicManager(content);
-        //    //_musicManager.Initialize();
-
-        //    //_soundManager = new SoundFXManager(content);
-        //    //_soundManager.Initialize();
-
-        //    //_textureManager = new TextureManager(content);
-        //    //_textureManager.Initialize();
-        //}
 
         public static void UnloadContent()
         {
@@ -154,9 +150,10 @@ namespace JPEngine
         public static void Update(GameTime gameTime)
         {
             _spriteBatchManager.Update(gameTime);
-            //_musicManager.Update(gameTime);
-            //_soundManager.Update(gameTime);
-            _entityManager.Update(gameTime);
+
+            if(!_console.IsActive)
+                _entityManager.Update(gameTime);
+
             _inputManager.Update(gameTime);
         }
 
@@ -170,6 +167,8 @@ namespace JPEngine
             _entityManager.Draw(spriteBatch, gameTime);
 
             _spriteBatchManager.End();
+
+            _console.Draw(spriteBatch, gameTime);
         }
 
         #endregion

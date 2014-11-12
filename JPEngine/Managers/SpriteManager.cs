@@ -14,6 +14,9 @@ namespace JPEngine.Managers
 
         internal SpriteBatchManager(GraphicsDevice graphicsDevice)
         {
+            if (graphicsDevice == null)
+                throw new NullReferenceException("The graphicsDevice cannot be null.");
+
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
@@ -53,7 +56,7 @@ namespace JPEngine.Managers
 
         internal SpriteBatch Begin()
         {
-            //TODO: Add a calidation that it can be started
+            //TODO: Add a validation that it can be started
             //TODO : Use the Camera Matrix, like Engine.CurrentCamera.TransformMatrix ?
 
             //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
@@ -72,7 +75,7 @@ namespace JPEngine.Managers
 
         internal void End()
         {
-            //TODO: Add a calidation that it can be ended
+            //TODO: Add a validation that it can be ended
             _spriteBatch.End();
         }
     }

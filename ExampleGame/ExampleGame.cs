@@ -32,6 +32,7 @@ namespace ExampleGame
         {           
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
+            Engine.Textures.Add("background", "Tiles/background", true);
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
             
@@ -69,28 +70,36 @@ namespace ExampleGame
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
 
 
+            //{
+            //    Texture2D texture = Engine.Textures["grass"];
+            //    var e = new Entity("ground");
+            //    e.AddComponent(new DrawableSpriteComponent(e, texture)
+            //    {
+            //        Layer = DrawingLayer.Background1
+            //    });
+
+            //    Engine.Entities.AddEntity(e);
+            //}
+
             {
-                Texture2D texture = Engine.Textures["grass"];
-                var e = new Entity("ground");
-
-                //testDrawableComponent.Origin = new Vector2((float)testDrawableComponent.Width / 2, (float)testDrawableComponent.Height / 2);
-
-                e.AddComponent(new DrawableSpriteComponent(e, texture)
+                var e = new Entity("background");
+                e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["background"])
                 {
                     Layer = DrawingLayer.Background1
                 });
+                e.Transform.Scale *= 1/4f;
 
                 Engine.Entities.AddEntity(e);
             }
 
-
-
             {
                 var e = new Entity("player");
-                e.Transform.Scale = new Vector2(0.5f, 0.5f);
+                //e.Transform.Scale = new Vector2(0.5f, 0.5f);
                 
                 e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
                 e.AddComponent(new PlayerInput(e));
+                e.AddComponent(new RectCollider(e) { Width = 96, Height = 96 });
+                e.AddComponent(new RectRenderer(e, Rectangle.Empty, Engine.Window.CreateTexture(1, 1)));
 
                 Engine.Entities.AddEntity(e);
             }
@@ -124,14 +133,18 @@ namespace ExampleGame
             //    Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
             //}
 
-            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
+            //if (Engine.Input.IsKeyClicked(Keys.P))
             //{
-            //    Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth + 32, Engine.WindowManager.ScreenHeight + 24);
+            //    Engine.Window.ScreenWidth += 32;
+            //    Engine.Window.ScreenHeight += 24;
+            //    Engine.Window.ApplySettings();
             //}
 
-            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageDown"].Value))
+            //if (Engine.Input.IsKeyClicked(Keys.M))
             //{
-            //    Engine.WindowManager.SetScreenDimensions(Engine.WindowManager.ScreenWidth - 32, Engine.WindowManager.ScreenHeight - 24);
+            //    Engine.Window.ScreenWidth -= 32;
+            //    Engine.Window.ScreenHeight -= 24;
+            //    Engine.Window.ApplySettings();
             //}
 
             base.Update(gameTime);
