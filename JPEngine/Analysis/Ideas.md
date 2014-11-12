@@ -53,6 +53,15 @@
 
 ### Console & Lua interpretter
 
+- Split up the ScriptConsole.cs
+	- ConsoleRenderer
+	- ConsoleInputProcessor
+	- and keep ScriptConsole as a main.
+	
+- Enable an easier way to setup the options (ConsoleOptions object?)
+
+- Add a way to load the SpriteFont in the Engine, not from the game.Content
+
 - [LUA in C# -> NLua](https://github.com/NLua/NLua)
 - [How to: Lua + XNA](http://xnacoding.blogspot.ca/2010/07/how-to-lua-xna.html)		
 - [Console in XNA](http://gamedev.stackexchange.com/questions/45107/input-output-console-window-in-xna)
