@@ -5,6 +5,8 @@
 - [Link1](http://stackoverflow.com/questions/32835/xna-unit-testing)
 - [Scurvy test Unit testing](http://scurvytest.codeplex.com/)
 - [Link2](http://stackoverflow.com/questions/14087/automated-testing-a-game#14136)
+- Have a TestGame that create Game instance for each test/group of tests?
+	- Will take a while, but will work ...
 
 ###  Entity/Components System
 
