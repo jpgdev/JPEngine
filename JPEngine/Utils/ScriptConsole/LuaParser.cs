@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using JPEngine.ECS;
 using NLua;
 
@@ -51,5 +52,26 @@ namespace JPEngine.Utils.ScriptConsole
                 //"cameras = Engine.Cameras\n" +
                 "player = entities:GetEntitiesByTag('player')[0]");
         }
+
+
+        //public void AddCommand(string name, object behavior)
+        //{
+        //    MethodBase method = behavior as MethodBase;
+
+        //    if (method == null)
+        //        throw new ArgumentException("The behavior should be of type MethodBase.");
+
+        //    _luaParser.RegisterFunction(name, method);
+        //}
+
+        //public void AddCommand(string name, object target, object behavior)
+        //{
+        //    MethodBase method = behavior as MethodBase;
+
+        //    if(method  == null)
+        //        throw new ArgumentException("The behavior should be of type MethodBase.");
+
+        //    _luaParser.RegisterFunction(name, target, method);
+        //}
     }
 }

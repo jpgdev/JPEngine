@@ -13,5 +13,10 @@ namespace JPEngine.Utils.ScriptConsole
         object[] ParseScript(string script);
 
         object[] ParseFile(string path);
+
+        ////TODO: Overkill?
+        //void AddCommand(string name, object behavior);
+        ////TODO: Overkill?
+        //void AddCommand(string name, object target, object behavior);
     }
 }

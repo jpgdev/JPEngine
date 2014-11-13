@@ -10,58 +10,116 @@ using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Utils.ScriptConsole
 {
+    //TODO: Check if null on each?
+    public class ConsoleOptions
+    {
+        public SpriteFont Font { get; set; }
+        public Keys ToggleKey { get; set; }
+
+        public bool OpenOnWrite { get; set; }
+        public bool PauseGameWhenOpened { get; set; }
+
+
+        public float CursorBlinkSpeed { get; set; }
+
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Padding { get; set; }
+        public int Margin { get; set; }
+        
+
+        public string Cursor { get; set; }
+        public string Prompt { get; set; }
+
+
+        public Color PromptColor { get; set; }
+        public Color BackgroundColor { get; set; }
+        public Color BufferColor { get; set; }
+        public Color CursorColor { get; set; }
+        public Color PastCommandColor { get; set; }
+        public Color PastCommandOutputColor { get; set; }
+
+
+
+        public ConsoleOptions(SpriteFont font)
+        {
+            if (font == null)
+                throw new ArgumentNullException("The font cannot be null.");
+
+            Font = font;
+
+            OpenOnWrite = true;
+            PauseGameWhenOpened = true;
+
+            Width = 500;
+            Height = 300;
+
+            Padding = 20;
+            Margin = 20;
+
+            CursorBlinkSpeed = 0.5f;
+
+            Prompt = ">";
+            Cursor = "_";
+
+            PromptColor = Color.White;
+            BufferColor = Color.Gold;
+            CursorColor = Color.OrangeRed;
+            PastCommandColor = Color.Aqua;
+            PastCommandOutputColor = Color.Violet;
+            BackgroundColor = new Color(0, 0, 0, 175);
+        }
+
+
+    }
+
+
     public class ScriptConsole
     {
         private bool _isActive;
         //private bool _isHandled;
-        //private Lua _luaParser;
-        private readonly IScriptParser _scriptParser;
+
+        private IScriptParser _scriptParser;
+
+        public ConsoleOptions Options { get; private set; }
 
         public event EventHandler Open;
         public event EventHandler Close;
 
-        public Keys ToggleKey { get; set; }
+        //public Keys ToggleKey { get; set; }
         public bool IsActive { get { return _isActive; } }
         public CommandHistory History { get; private set; }
         public OutputLine Buffer { get; private set; }
         public List<OutputLine> Out { get; set; }
 
-        public bool OpenOnWrite { get; set; }
-
-        public bool PauseGameWhenOpened { get; set; }
+        public IScriptParser ScriptParser
+        {
+            get { return _scriptParser; }
+            set
+            {
+                if(value != null )
+                    _scriptParser = value;
+            }
+        }
 
 
         #region Rendering Variables
 
         //TODO: Refactor out of here
-
-        private readonly SpriteFont _font;
+        
         private Texture2D _pixel;
         private float _oneCharacterWidth;
         private int _maxCharactersPerLine;
         private Vector2 _position;
-        private int _width;
-        private int _height;
         private Vector2 _firstCommandPositionOffset = Vector2.Zero;
 
-        private string _prompt = ">";
-        private Color _promptColor = Color.White;
-
-        private Color _bufferColor = Color.Gold;
-
-        private string _cursor = "_";
-        private Color _cursorColor = Color.OrangeRed;
-        private float _cursorBlinkSpeed = 0.5f;
-
-        private Color _pastCommandColor = Color.Aqua;
-        private Color _pastCommandOutputColor = Color.Violet;
 
 
         Rectangle Bounds
         {
             get
             {
-                return new Rectangle((int)_position.X, (int)_position.Y, _width - (Margin * 2), _height);
+                return new Rectangle((int)_position.X, (int)_position.Y, Options.Width - (Options.Margin * 2), Options.Height);
             }
         }
 
@@ -69,7 +127,7 @@ namespace JPEngine.Utils.ScriptConsole
         {
             get
             {
-                return new Rectangle(Bounds.X + Padding, Bounds.Y + Padding, Bounds.Width - Padding, Bounds.Height);
+                return new Rectangle(Bounds.X + Options.Padding, Bounds.Y + Options.Padding, Bounds.Width - Options.Padding, Bounds.Height);
             }
         }
 
@@ -81,45 +139,36 @@ namespace JPEngine.Utils.ScriptConsole
             }
         }
 
-        public Color BackgroundColor { get; set; }
-
-        public int Padding { get; set; }
-
-        public int Margin { get; set; }
-
         #endregion
 
-        
 
-        //[DllImport("kernel32")]
-        //static extern bool AllocConsole();
-
-        internal ScriptConsole(Game game, SpriteFont font) //  SpriteBatch spriteBatch, 
+        internal ScriptConsole(Game game, ConsoleOptions options) //  SpriteBatch spriteBatch, 
         {
-            _font = font;
+
+            if(game == null)
+                throw new ArgumentNullException("The game cannot be null.");
+
+            if (options == null)
+                throw new ArgumentNullException("The options cannot be null.");
+
+            Options = options;
 
             _scriptParser = new LuaParser();
 
             History = new CommandHistory();
             Out = new List<OutputLine>();
             Buffer = new OutputLine("", OutputLineType.Command);
-            OpenOnWrite = true;
-            PauseGameWhenOpened = true;
 
             //Renderer
             _pixel = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             _pixel.SetData(new[] { Color.White });
+            
+            //_width = game.GraphicsDevice.Viewport.Width;
+            //_height = 300;
+            _position = new Vector2(Options.Margin, 0);
 
-            BackgroundColor = new Color(0, 0, 0, 175); //new Color(0, 0, 0, 125);
-            Padding = 20;
-            Margin = 20;
-
-            _width = game.GraphicsDevice.Viewport.Width;
-            _height = 300;
-            _position = new Vector2(Margin, 0);
-
-            _oneCharacterWidth = _font.MeasureString("x").X;
-            _maxCharactersPerLine = (int)((Bounds.Width - Padding * 2) / _oneCharacterWidth);
+            _oneCharacterWidth = Options.Font.MeasureString("x").X;
+            _maxCharactersPerLine = (int)((Bounds.Width - Options.Padding * 2) / _oneCharacterWidth);
             //
         }
 
@@ -156,7 +205,7 @@ namespace JPEngine.Utils.ScriptConsole
 
         public void AddToOutput(string text)
         {
-            if (OpenOnWrite)
+            if (Options.OpenOnWrite)
             {
                 _isActive = true;
                 if(Open != null)
@@ -172,7 +221,7 @@ namespace JPEngine.Utils.ScriptConsole
 
         private bool IsPrintable(char letter)
         {
-            return _font.Characters.Contains(letter);
+            return Options.Font.Characters.Contains(letter);
         }
 
         private void ExecuteBuffer()
@@ -223,7 +272,7 @@ namespace JPEngine.Utils.ScriptConsole
 
         private void EventInput_KeyClicked(object sender, KeyEventArgs e)
         {
-            if (e.Key == ToggleKey)
+            if (e.Key == Options.ToggleKey)
             {
                 ToggleConsole();
                 return;
@@ -293,11 +342,11 @@ namespace JPEngine.Utils.ScriptConsole
             if (!_isActive) return;
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_pixel, Bounds, BackgroundColor);
+            spriteBatch.Draw(_pixel, Bounds, Options.BackgroundColor);
 
             Vector2 nextCommandPosition = DrawCommands(spriteBatch, Out, FirstCommandPosition);
             nextCommandPosition = DrawPrompt(spriteBatch, nextCommandPosition);
-            var bufferPosition = DrawCommand(spriteBatch, Buffer.Output, nextCommandPosition, _bufferColor); //Draw the buffer
+            var bufferPosition = DrawCommand(spriteBatch, Buffer.Output, nextCommandPosition, Options.BufferColor); //Draw the buffer
             DrawCursor(spriteBatch, bufferPosition, gameTime);
 
             spriteBatch.End();
@@ -305,8 +354,8 @@ namespace JPEngine.Utils.ScriptConsole
 
         private Vector2 DrawPrompt(SpriteBatch spriteBatch, Vector2 pos)
         {
-            spriteBatch.DrawString(_font, _prompt, pos, _promptColor);
-            pos.X += _oneCharacterWidth*_prompt.Length + _oneCharacterWidth;
+            spriteBatch.DrawString(Options.Font, Options.Prompt, pos, Options.PromptColor);
+            pos.X += _oneCharacterWidth * Options.Prompt.Length + _oneCharacterWidth;
             return pos;
         }
 
@@ -317,10 +366,10 @@ namespace JPEngine.Utils.ScriptConsole
             {
                 if (IsInBounds(pos.Y))
                 {
-                    spriteBatch.DrawString(_font, line, pos, color);
+                    spriteBatch.DrawString(Options.Font, line, pos, color);
                 }
-                ValidateFirstCommandPosition(pos.Y + _font.LineSpacing);
-                pos.Y += _font.LineSpacing;
+                ValidateFirstCommandPosition(pos.Y + Options.Font.LineSpacing);
+                pos.Y += Options.Font.LineSpacing;
             }
             return pos;
         }
@@ -341,7 +390,7 @@ namespace JPEngine.Utils.ScriptConsole
                     pos = DrawPrompt(spriteBatch, pos);
                 }
                 //position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
-                pos.Y = DrawCommand(spriteBatch, command.ToString(), pos, command.Type == OutputLineType.Command ? _pastCommandColor : _pastCommandOutputColor).Y;
+                pos.Y = DrawCommand(spriteBatch, command.ToString(), pos, command.Type == OutputLineType.Command ? Options.PastCommandColor : Options.PastCommandOutputColor).Y;
                 pos.X = originalX;
             }
             return pos;
@@ -357,12 +406,12 @@ namespace JPEngine.Utils.ScriptConsole
             }
             
             var split = SplitCommand(Buffer.ToString(), _maxCharactersPerLine).Last();
-            pos.X += _font.MeasureString(split).X;
-            pos.Y -= _font.LineSpacing;
-            spriteBatch.DrawString(_font,
-                (int) (gameTime.TotalGameTime.TotalSeconds/_cursorBlinkSpeed)%2 == 0
-                    ? _cursor
-                    : "", pos, Color.OrangeRed);
+            pos.X += Options.Font.MeasureString(split).X;
+            pos.Y -= Options.Font.LineSpacing;
+            spriteBatch.DrawString(Options.Font,
+                (int)(gameTime.TotalGameTime.TotalSeconds / Options.CursorBlinkSpeed) % 2 == 0
+                    ? Options.Cursor
+                    : "", pos, Options.CursorColor);
         }
 
 
@@ -383,13 +432,13 @@ namespace JPEngine.Utils.ScriptConsole
         {
             if (!IsInBounds(nextCommandY))
             {
-                _firstCommandPositionOffset.Y -= _font.LineSpacing;
+                _firstCommandPositionOffset.Y -= Options.Font.LineSpacing;
             }
         }
 
         bool IsInBounds(float yPosition)
         {
-            return yPosition < _height;
+            return yPosition < Options.Height;
         }
 
 

@@ -23,6 +23,7 @@ namespace JPEngine
 
         private static GraphicsDeviceManager _graphicsDeviceManager;
         private static Game _game;
+
         private static ScriptConsole _console;
 
         //Managers
@@ -42,6 +43,10 @@ namespace JPEngine
 
         #region Properties
 
+        public static ScriptConsole Console
+        {
+            get { return _console; }
+        }
         public static SpriteBatchManager SpriteManager
         {
             get { return _spriteBatchManager; }
@@ -131,12 +136,13 @@ namespace JPEngine
 
             //TODO: Add a way to load the resource directly from the Engine NOT the game
             //TODO: Implement a BitmapFont?
-            //_console = new ScriptConsole(game, game.Content.Load<SpriteFont>("Fonts/ConsoleFont"))
-            //{
-            //    ToggleKey = Keys.F1
-            //};
+            _console = new ScriptConsole(game, new ConsoleOptions(game.Content.Load<SpriteFont>("Fonts/ConsoleFont"))
+            {
+                ToggleKey = Keys.F1,
+                 Width = game.GraphicsDevice.Viewport.Width
+            });
 
-            //_console.Initialize();
+            _console.Initialize();
         }
 
         public static void UnloadContent()
@@ -151,7 +157,7 @@ namespace JPEngine
             _spriteBatchManager.Update(gameTime);
             _inputManager.Update(gameTime);
 
-            //if (!(_console.IsActive && _console.PauseGameWhenOpened)) 
+            if (!(_console.IsActive && _console.Options.PauseGameWhenOpened)) 
                 _entityManager.Update(gameTime);
         }
 
@@ -166,7 +172,7 @@ namespace JPEngine
 
             _spriteBatchManager.End();
 
-            //_console.Draw(spriteBatch, gameTime);
+            _console.Draw(spriteBatch, gameTime);
         }
 
         #endregion

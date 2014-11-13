@@ -1,4 +1,5 @@
-﻿using JPEngine.Enums;
+﻿using System;
+using JPEngine.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -57,6 +58,8 @@ namespace ExampleGame
             Engine.Settings.Add(new Setting<Keys>("PageUp", Keys.PageUp));
             Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));
             
+            
+
             LoadTestsEntities();
         }
 
