@@ -45,16 +45,17 @@
 #### Systems
 
 - Implements multiples Systems handled by the EntityManager
-	- Physics System 	
+	##### Physics System 	
 		
-		- Basic Physics for collisions, apply force, jump?, gravity (y-direction pull force) etc..
-			- Check out :
-				- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
-				- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
-				- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
+	- Basic Physics for collisions, apply force, jump?, gravity (y-direction pull force) etc..
+		- Check out :
+			- [Game physics 101](http://www.rodedev.com/tutorials/gamephysics/) 	
+			- [How to Create a Custom 2D Physics Engine: The Basics and Impulse  Resolution](http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331 )
+			- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
 				
 		- Implement Box2D / [Farseer Physics](https://farseerphysics.codeplex.com/)
 		- Make a wrapper ?
+		
 - Manage the order of the system are Updated/Drawn: 
 	- Replace the OrderUpdate value?
 	- Ex: Inputs, then Movement, then Physics
