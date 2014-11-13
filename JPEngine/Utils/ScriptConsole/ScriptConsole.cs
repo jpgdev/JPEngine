@@ -28,6 +28,8 @@ namespace JPEngine.Utils.ScriptConsole
 
         public bool OpenOnWrite { get; set; }
 
+        public bool PauseGameWhenOpened { get; set; }
+
 
         #region Rendering Variables
 
@@ -102,6 +104,7 @@ namespace JPEngine.Utils.ScriptConsole
             Out = new List<OutputLine>();
             Buffer = new OutputLine("", OutputLineType.Command);
             OpenOnWrite = true;
+            PauseGameWhenOpened = true;
 
             //Renderer
             _pixel = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);

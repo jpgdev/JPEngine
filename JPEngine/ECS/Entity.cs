@@ -284,7 +284,6 @@ namespace JPEngine.ECS
             //TODO: Set the GameObject to the new one.
             //TODO: Call AddComponent
 
-
             throw new NotImplementedException();
         }
     }

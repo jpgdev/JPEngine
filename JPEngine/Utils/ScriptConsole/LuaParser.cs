@@ -8,6 +8,11 @@ namespace JPEngine.Utils.ScriptConsole
     {
         private readonly Lua _luaParser;
 
+        public Lua Parser
+        {
+            get { return _luaParser; }
+        }
+
         public LuaParser()
         {
             _luaParser = new Lua();
