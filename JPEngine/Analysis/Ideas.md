@@ -1,5 +1,5 @@
 ﻿
-# TODOS
+# Ideas & Notes
 
 ### Implement TDD (with Unit Tests)
 - Continue adding tests for already implemented features
