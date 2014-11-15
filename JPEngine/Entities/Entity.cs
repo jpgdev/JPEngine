@@ -14,19 +14,59 @@ namespace JPEngine.Entities
     {
         private readonly List<IComponent> _components = new List<IComponent>();
         private readonly List<IDrawableComponent> _drawableComponents = new List<IDrawableComponent>();
+        private readonly List<IUpdateableComponent> _updateableComponents = new List<IUpdateableComponent>();
 
-        private readonly Dictionary<string, IComponent> _taggedComponents =
-            new Dictionary<string, IComponent>();
+        private readonly Dictionary<string, IComponent> _taggedComponents = new Dictionary<string, IComponent>();
 
         //The components on which the Drawing and Updating is performed on
+        //TODO: Is it better to clear the lists before they are used, or simply create new ones each time we use them (ex. _tempComponents = _components.ToList();)?
         private readonly List<IComponent> _tempComponents = new List<IComponent>();
         private readonly List<IDrawableComponent> _tempDrawableComponents = new List<IDrawableComponent>();
         private readonly List<IUpdateableComponent> _tempUpdateableComponents = new List<IUpdateableComponent>();
 
         private readonly TransformComponent _transform;
-        private readonly List<IUpdateableComponent> _updateableComponents = new List<IUpdateableComponent>();
-        private bool _isInitialized;
+
+        private bool _initialized;
         private string _tag = string.Empty;
+
+        #region Properties
+
+        public TransformComponent Transform
+        {
+            get { return _transform; }
+        }
+
+        public bool Initialized
+        {
+            get { return _initialized; }
+        }
+
+        public string Tag
+        {
+            get { return _tag; }
+            set
+            {
+                if (_tag == value)
+                    return;
+
+                //TODO: Validate that this works
+                string oldValue = _tag;
+                _tag = value;
+                if (TagChanged != null)
+                    TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
+            }
+        }
+
+        /// <summary>
+        ///     Get a copy of the list of all the components.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IComponent> Components
+        {
+            get { return _components.ToList(); }
+        }
+
+        #endregion
 
         public Entity(string tag = "", bool autoAdd = false)
         {
@@ -34,7 +74,7 @@ namespace JPEngine.Entities
             //AddComponent(_transform);
 
             _tag = tag;
-
+            
             if (autoAdd)
                 Engine.Entities.AddEntity(this);
         }
@@ -54,7 +94,7 @@ namespace JPEngine.Entities
 
         public void Initialize()
         {
-            if (_isInitialized)
+            if (_initialized)
                 return;
 
             _tempComponents.Clear();
@@ -65,7 +105,7 @@ namespace JPEngine.Entities
             //TODO: Check if they are enabled before starting?
             _tempComponents.ForEach(c => c.Start());
 
-            _isInitialized = true;
+            _initialized = true;
         }
 
         public void Update(GameTime gameTime)
@@ -132,7 +172,7 @@ namespace JPEngine.Entities
                 OnComponentDrawOrderChanged(this, EventArgs.Empty);
             }
 
-            if (_isInitialized)
+            if (_initialized)
             {
                 component.Initialize();
                 component.Start();
@@ -269,45 +309,6 @@ namespace JPEngine.Entities
         private static int DrawableSort(IDrawableComponent entityA, IDrawableComponent entityB)
         {
             return entityA.Layer.CompareTo(entityB.Layer);
-        }
-
-        #endregion
-
-        #region Properties
-
-        public TransformComponent Transform
-        {
-            get { return _transform; }
-        }
-
-        public bool IsInitialized
-        {
-            get { return _isInitialized; }
-        }
-
-        public string Tag
-        {
-            get { return _tag; }
-            set
-            {
-                if (_tag == value)
-                    return;
-
-                //TODO: Validate that this works
-                string oldValue = _tag;
-                _tag = value;
-                if (TagChanged != null)
-                    TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
-            }
-        }
-
-        /// <summary>
-        ///     Get a copy of the list of all the components.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<IComponent> Components
-        {
-            get { return _components.ToList(); }
         }
 
         #endregion

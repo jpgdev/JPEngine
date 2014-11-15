@@ -51,34 +51,37 @@ namespace JPEngine.Managers
             float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
 
 
-
-
             return MathHelper.Clamp(1f, 0f, zIndex);
         }
 
+        //TODO: Draw Backlayer, MidLayer then FrontLayer
+        //TODO: GUILayer = another Begin, Draw, End loop, can be the same batch, but does not follow the camera
 
         internal SpriteBatch Begin()
         {
-            //TODO: Add a validation that it can be started
-            //TODO : Use the Camera Matrix, like Engine.CurrentCamera.TransformMatrix ?
-
-            //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
-            //_spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
-            //_spriteBatch.Begin(SpriteSortMode.BackToFront, null);
-
+            //TODO: Add a validation that it can be started (begin has not been called already this frame)
+            
             CameraComponent camera = Engine.Cameras.Current;
-            if(camera == null)
-                throw new NullReferenceException("The Engine current camera has not been set.");
-
+            if (camera != null)
+            {
+                _spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);
+                //throw new NullReferenceException("The Engine current camera has not been set.");
+            }
+            else
+            {
+                _spriteBatch.Begin(SpriteSortMode.BackToFront, null);
+            }
+                
+                
             //_spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, DepthStencilState.Default, null, null, camera.TransformMatrix);
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);
+            //_spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);
 
             return _spriteBatch;
         }
 
         internal void End()
         {
-            //TODO: Add a validation that it can be ended
+            //TODO: If I want to sort them manually it would be either here or when they are added
             _spriteBatch.End();
         }
     }

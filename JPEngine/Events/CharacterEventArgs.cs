@@ -3,7 +3,7 @@
 namespace JPEngine.Events
 {
     //source : https://code.google.com/r/jameswalkoski-xnagameconsole-xna4/source/
-
+    //TODO: Not used anymore, remove it?
     public class CharacterEventArgs : EventArgs
     {
         private readonly char _character;

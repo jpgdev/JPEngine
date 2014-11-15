@@ -11,9 +11,27 @@ namespace JPEngine.Entities
 {
     public class EntitiesManager : Manager
     {
+        /* TODO: Scenes
+         * 
+         * Split the entities by scenes => contains a list of entities
+         * 
+         * Put the Scene in the Entity construtor directly? Since we won't be using only one huge list in THIS class
+         *  OR EntitiesManager.GetEntity(name) => _scenes.GetEntity(name) ..... Too slow?
+         *  
+         * Do we want to keep Entities in the Scene object OR keep a dictionnary here with the Scene as a key?
+         * 
+         * If we keep a dictonnary HERE, we would need to change the way Entities work to keep the components here too, 
+         * so that they share the same Architecture mindset.         * 
+         */
+
         private readonly List<Entity> _tempEntities = new List<Entity>(); //The list used to work with
         private readonly List<Entity> _entities = new List<Entity>();   //The core list of entities
         private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
+
+
+        public event EventHandler<ListItemEventArgs<Entity>> EntityAdded;
+        //TODO: Implement a Remove? Maybe only usefull when Scenes will be implented to move an Entity to another scene?
+        //public event EventHandler<ListItemEventArgs<Entity>> EntityRemoved;
 
         internal EntitiesManager()
         {
@@ -48,10 +66,14 @@ namespace JPEngine.Entities
 
         public void AddEntity(Entity entity)
         {
-            entity.Initialize();
+            if(!entity.Initialized)
+                entity.Initialize();
 
             _entities.Add(entity);
             AddTaggedEntity(entity);
+
+            if(EntityAdded != null)
+                EntityAdded(this, new ListItemEventArgs<Entity>(entity, ListItemAction.Added));
         }
 
         private void AddTaggedEntity(Entity entity)
@@ -99,6 +121,7 @@ namespace JPEngine.Entities
 
         public void ClearEntities()
         {
+            //TODO: Use the RemoveEntity instead? So it will call the EntityRemoved event?
             _entities.Clear();
             _tempEntities.Clear();
             _taggedEntities.Clear();
