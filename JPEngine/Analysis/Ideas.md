@@ -14,8 +14,15 @@
 - [XNA ECS Implementation Example](https://xnaentitycomponents.codeplex.com/)	
 
 - Entity & Components
-	- Add a Clone() for Entity & Components
+	- Add a <b>Clone()</b> for Entity & Components
 		- Useful to simulate Prefabs (à la Unity).
+		
+	- Implement events :
+		- <b>Entity</b> 
+			- OnComponentAdded, OnComponentRemoved
+		- <b>EntityManager</b> 
+			- OnComponentAdded, OnComponentRemoved 
+			- OnEntityAdded, OnEntityRemoved
 
 - Make Basic components
  
@@ -52,6 +59,7 @@
 				
 		- Implement Box2D / [Farseer Physics](https://farseerphysics.codeplex.com/)
 			- [Artemis + Box2d](http://blog.gemserk.com/2012/02/02/how-we-use-box2d-with-artemis/)
+			- [Another try at implementing in ECS](http://www.aymericlamboley.fr/blog/an-entity-component-systems-attempt-using-box2d/)
 		- Make a wrapper ?
 		
 - Manage the order of the system are Updated/Drawn: 
