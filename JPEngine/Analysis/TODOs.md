@@ -54,6 +54,3 @@
 		-  and handle multiples layers of GUI too
 
 -  Implement a Lighting engine ([Krypton XNA](https://krypton.codeplex.com/))
-	  
-
-
