@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FE8E5CF1-8B3A-4FA4-BDF6-BEF22F07D730}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTestProject</RootNamespace>
     <AssemblyName>UnitTestProject</AssemblyName>
@@ -40,23 +40,24 @@
     </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>UnitTestProject.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers\AssemblyUtilities.cs" />
     <Compile Include="Helpers\DeviceType.cs" />
     <Compile Include="Helpers\MockedGraphicsDeviceService.cs" />
+    <Compile Include="ManualTests\ManualTestsCore.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Entities\EntitiesTests.cs" />
-    <Compile Include="Tests\Entities\ComponentsTests.cs" />
-    <Compile Include="Tests\Entities\EntitiesManagerTests.cs" />
-    <Compile Include="Tests\ResourcesManagers\FontsManagerTests.cs" />
-    <Compile Include="Tests\ResourcesManagers\MusicManagerTests.cs" />
-    <Compile Include="Tests\ResourcesManagers\AudioFXManagerTests.cs" />
-    <Compile Include="Tests\WindowManagerTests.cs" />
-    <Compile Include="Tests\EngineTests.cs" />
-    <Compile Include="Tests\ResourcesManagers\TextureManagerTests.cs" />
+    <Compile Include="UnitTests\Entities\EntitiesTests.cs" />
+    <Compile Include="UnitTests\Entities\ComponentsTests.cs" />
+    <Compile Include="UnitTests\Entities\EntitiesManagerTests.cs" />
+    <Compile Include="UnitTests\ResourcesManagers\FontsManagerTests.cs" />
+    <Compile Include="UnitTests\ResourcesManagers\MusicManagerTests.cs" />
+    <Compile Include="UnitTests\ResourcesManagers\AudioFXManagerTests.cs" />
+    <Compile Include="UnitTests\WindowManagerTests.cs" />
+    <Compile Include="UnitTests\EngineTests.cs" />
+    <Compile Include="UnitTests\ResourcesManagers\TextureManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
