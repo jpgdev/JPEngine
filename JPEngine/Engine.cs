@@ -95,8 +95,21 @@ namespace JPEngine
         }
 
         #endregion
+        
+        #region Initialization
 
-        #region Methods
+        /// <summary>
+        /// Initialize the engine.
+        /// </summary>
+        /// <param name="graphicsDeviceManager"></param>
+        /// <param name="game">The Form containing the game handle.</param>
+        //public static void Initialize(Game game)
+        public static void Initialize(GraphicsDeviceManager graphicsDeviceManager, Game game)
+        {
+            _windowManager = WindowManager.Create(graphicsDeviceManager, game);
+
+            InitializeCore(graphicsDeviceManager);
+        }
 
         /// <summary>
         /// Initialize the engine.
@@ -136,7 +149,7 @@ namespace JPEngine
             //TODO: Enable the user to change the RootDirectory
             //TODO: EngineSettings object?
             _contentManager = new ContentManager(services, "Content");
-            
+
             _spriteBatchManager = new SpriteBatchManager(_windowManager.GraphicsDevice);
 
             _entityManager = new EntitiesManager();
@@ -159,6 +172,13 @@ namespace JPEngine
             _textureManager.Initialize();
             _fontsManager.Initialize();
         }
+
+        #endregion
+
+
+
+
+        #region Methods
 
         public static void UnloadContent()
         {

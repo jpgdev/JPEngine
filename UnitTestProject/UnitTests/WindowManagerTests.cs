@@ -36,11 +36,25 @@ namespace UnitTestProject.Tests
             
             Engine.Window.Width = width;
             Assert.AreEqual(Engine.Window.Width , width);
-            
+        }
+
+        [Test]
+        public void WindowFullScreenTest()
+        {
             Engine.Window.IsFullScreen = true;
             Assert.True(Engine.Window.IsFullScreen);
+
+            //TODO: Test for non-Form WindowManager...
+
             Assert.AreEqual(_form.WindowState, FormWindowState.Maximized);
         }
+
+        //[Test]
+        //public void WindowIsMouseVisibleTest()
+        //{
+        //    //TODO: Test for all possible WindowManager
+        //    //Engine.Window.IsMouseVisible = true;
+        //}
 
         [TestFixtureTearDown]
         public void Finished()

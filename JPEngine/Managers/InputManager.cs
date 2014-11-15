@@ -10,6 +10,8 @@ namespace JPEngine.Managers
     //TODO: Make a IInputManager to enable multiple implementations of this class
     //TODO: MonoInputManager = this version, WindowsInputManager = listen to window messages to get the correct input
 
+    //TODO: Check the Microsoft.Xna.Framework.GameWindow.TextInput event?
+
     public class InputManager : Manager
     {
         #region Attributes

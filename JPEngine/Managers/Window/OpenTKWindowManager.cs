@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenTK;
+using GameWindow = OpenTK.GameWindow;
 
 namespace JPEngine.Managers
 {
@@ -17,6 +19,24 @@ namespace JPEngine.Managers
             {
                 _gameWindow.WindowState = value ? WindowState.Fullscreen : WindowState.Normal;
                 ApplySettings();
+            }
+        }
+
+        public override bool IsMouseVisible
+        {
+            get { return _gameWindow.CursorVisible; }
+            set { _gameWindow.CursorVisible = value; }
+        }
+
+        public override Rectangle Bounds
+        {
+            get
+            {
+                return new Rectangle(
+                    _gameWindow.Bounds.X,
+                    _gameWindow.Bounds.Y, 
+                    _gameWindow.Bounds.Width,
+                    _gameWindow.Bounds.Height);
             }
         }
 

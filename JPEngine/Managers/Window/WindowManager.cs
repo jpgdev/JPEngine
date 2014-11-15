@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using JPEngine.Graphics;
 using JPEngine.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace JPEngine.Managers
 {
-    //TODO: Rename this to Renderer? or something like that
     public abstract class WindowManager : Manager, IWindowManager
     {
         #region Attributes
@@ -22,12 +24,10 @@ namespace JPEngine.Managers
         {
             get { return GraphicsDeviceService.GraphicsDevice; }
         }
-
         public Viewport Viewport
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport; }
         }
-
         public virtual int Width
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Width; }
@@ -43,7 +43,6 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
-
         public virtual int Height
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Height; }
@@ -59,8 +58,9 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
-
         public abstract bool IsFullScreen{ get; set; }
+        public abstract bool IsMouseVisible{ get; set; }
+        public abstract Rectangle Bounds { get; }
 
         #endregion
 
@@ -72,43 +72,59 @@ namespace JPEngine.Managers
             GraphicsDeviceService = graphicsDeviceService;
         }
 
+
+        #region Abstract Methods
+
         public abstract void ApplySettings();
+
+        #endregion
+
 
         #region WindowManager Factory
 
         internal static WindowManager Create(IGraphicsDeviceService graphicsDeviceService, GameWindow gameWindow)
         {
             if (graphicsDeviceService is GraphicsDeviceManager)
-                return Create(graphicsDeviceService as GraphicsDeviceManager);
+                throw new NotImplementedException("This is not implemented. You need to use the Game instead of the GameWindow.");
+            
+            //Get a OpenTKGameWindow
+            var form = gameWindow.GetForm();  
+            if (form != null)
+                return new OpenTKWindowManager(graphicsDeviceService as GraphicsDeviceService, form);
+            
+            //Get a Windows.Form
+            try
+            {
+                return Create(graphicsDeviceService, gameWindow.Handle);
+            }
+            catch (ArgumentException ae) { }
 
-            var form = gameWindow.GetForm();
-            if (form == null)
-                throw new ArgumentException("The game window could not be found.");
-
-            return new OpenTKWindowManager(graphicsDeviceService as GraphicsDeviceService, form);
+            //Could not find a window...
+            throw new ArgumentException("The game window could not be found."); //TODO: Add a more meaningful message?
         }
 
         internal static WindowManager Create(IGraphicsDeviceService graphicsDeviceService, IntPtr windowHandle)
         {
             if (graphicsDeviceService is GraphicsDeviceManager)
-                return Create(graphicsDeviceService as GraphicsDeviceManager);
+                throw new NotImplementedException("This is not implemented. You need to use the Game instead of the GameWindow.Handle.");
 
-            var ctrl = Control.FromHandle(windowHandle);
-            var window = ctrl as Form;
+            //Get a Windows.Form
+            var window = Control.FromHandle(windowHandle) as Form;
             if (window == null)
-                throw new ArgumentException("The windowHandle is not a valid Form handle.");
+                throw new ArgumentException("The windowHandle is not a valid Windows.Form handle.");
 
             return new FormWindowManager(graphicsDeviceService, window);
         }
 
         /// <summary>
-        /// Will create the basic WindowManager using the XNA's out-of-the-box GraphicsDeviceManager.
+        /// Will create the basic WindowManager using the XNA's out-of-the-box GraphicsDeviceManager and Game.
         /// </summary>
-        /// <param name="graphicsDeviceService"></param>
+        /// <param name="graphicsDeviceManager"></param>
+        /// <param name="game"></param>
         /// <returns></returns>
-        internal static WindowManager Create(GraphicsDeviceManager graphicsDeviceService)
+        internal static WindowManager Create(GraphicsDeviceManager graphicsDeviceManager, Game game)
         {
-            return new BasicWindowManager(graphicsDeviceService);
+            return new BasicWindowManager(graphicsDeviceManager, game);
         }
 
         #endregion

@@ -24,18 +24,19 @@ namespace ExampleGame
         
         protected override void Initialize()
         {
-            Engine.Initialize(graphics, Window);
+            Engine.Initialize(graphics, this);
             Engine.Console = new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
             {
                 Width = GraphicsDevice.Viewport.Width
             });
+
+            Engine.Window.IsMouseVisible = true;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
             Engine.Textures.Add("background", "Tiles/background", true);
@@ -70,12 +71,10 @@ namespace ExampleGame
         {
             //Setup & Add the base Camera entity
             Entity mainCamera = new Entity("_MainCamera", true);
-
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
-
-
+            
             //{
             //    Texture2D texture = Engine.Textures["grass"];
             //    var e = new Entity("ground");
@@ -109,8 +108,7 @@ namespace ExampleGame
 
                 Engine.Entities.AddEntity(e);
             }
-
-
+            
             {
                 var e2 = new Entity();
                 e2.Transform.Position.X = 100;
@@ -120,7 +118,6 @@ namespace ExampleGame
 
                 Engine.Entities.AddEntity(e2);
             }
-
         }
 
         protected override void UnloadContent()

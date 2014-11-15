@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Managers
@@ -23,6 +24,24 @@ namespace JPEngine.Managers
                 _windowForm.FormBorderStyle = value ? FormBorderStyle.None : _defaultBorderStyle;
                 _windowForm.WindowState = value ? FormWindowState.Maximized : FormWindowState.Normal;
                 ApplySettings();
+            }
+        }
+
+        public override bool IsMouseVisible
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public override Rectangle Bounds
+        {
+            get 
+            { 
+                return new Rectangle(
+                    _windowForm.Bounds.X, 
+                    _windowForm.Bounds.Y, 
+                    _windowForm.Bounds.Width, 
+                    _windowForm.Bounds.Height); 
             }
         }
 
