@@ -43,7 +43,6 @@
 
 - Implement PhysicsSystem
 	- Make a FarseersEngine wrapper, but keep an interface so we can implement our own?
-	- 
 
 - Find a way to load Resources (Fonts, Textures etc..) directly in the engine, without relying on the game and its ContentManager
 
