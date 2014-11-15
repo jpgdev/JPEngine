@@ -29,6 +29,11 @@
 		
 - Entity & Component IClonable (or Copy Constructor?)
 
+- Implement a IsActive/IsEnabled for:
+	- Entity
+	- Components
+	- Systems
+
 - Add Events in Entity
 	- OnComponentAdded
 	- OnComponentRemoved
@@ -54,4 +59,3 @@
 		-  and handle multiples layers of GUI too
 
 -  Implement a Lighting engine ([Krypton XNA](https://krypton.codeplex.com/))
--  
