@@ -51,6 +51,7 @@
 			- [Physics Engine Tutorial](http://physics.gac.edu/~miller/jterm_2013/physics_engine_tutorial.html)
 				
 		- Implement Box2D / [Farseer Physics](https://farseerphysics.codeplex.com/)
+			- [Artemis + Box2d](http://blog.gemserk.com/2012/02/02/how-we-use-box2d-with-artemis/)
 		- Make a wrapper ?
 		
 - Manage the order of the system are Updated/Drawn: 
