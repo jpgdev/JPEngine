@@ -29,6 +29,11 @@
 		
 - Entity & Component IClonable (or Copy Constructor?)
 
+- Implement a IsActive/IsEnabled for:
+	- Entity
+	- Components
+	- Systems
+
 - Add Events in Entity
 	- OnComponentAdded
 	- OnComponentRemoved
@@ -49,8 +54,8 @@
 - SpriteManager
 	- Make a wrapper for all the SpriteBatch.Draw calls, do not return the _spriteBatch instance.
 	
-	- Handle a HUD/GUI (maybe another SpriteBatch.Begin(), ..Draw(), ..End() when the layer in DrawingLayer.GUI ?)
+	- Handle a HUD/GUI (maybe another SpriteBatch.Begin(), ..Draw(), ..End() when the layer is DrawingLayer.GUI ?)
 	
 		-  and handle multiples layers of GUI too
 
-
+-  Implement a Lighting engine ([Krypton XNA](https://krypton.codeplex.com/))
