@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
-using JPEngine;
-using JPEngine.Graphics;
 using UnitTestProject.ManualTests;
 
 namespace UnitTestProject

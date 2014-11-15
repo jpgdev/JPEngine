@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms;
+using JPEngine.Graphics;
 using JPEngine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using OpenTK;
@@ -19,11 +20,6 @@ using OpenTK;
 
 namespace GameEditor
 {
-    // System.Drawing and the XNA Framework both define Color and Rectangle
-    // types. To avoid conflicts, we specify exactly which ones to use.
-    using Color = System.Drawing.Color;
-    using Rectangle = Microsoft.Xna.Framework.Rectangle;
-
 
     /// <summary>
     /// Custom control uses the XNA Framework GraphicsDevice to render onto

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using JPEngine;
-using JPEngine.ECS;
-using JPEngine.ECS.Components;
+using JPEngine.Components;
+using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

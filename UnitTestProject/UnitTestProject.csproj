@@ -43,9 +43,6 @@
     <StartupObject>UnitTestProject.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Helpers\AssemblyUtilities.cs" />
-    <Compile Include="Helpers\DeviceType.cs" />
-    <Compile Include="Helpers\MockedGraphicsDeviceService.cs" />
     <Compile Include="ManualTests\ManualTestsCore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
