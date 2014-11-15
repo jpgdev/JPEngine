@@ -37,8 +37,6 @@ namespace UnitTestProject.Tests.ResourcesManagers
             Assert.IsTrue(Engine.SoundFX.IsResourcePathAdded(name));
             Assert.IsTrue(Engine.SoundFX.IsResourceLoaded(name));
             Assert.NotNull(Engine.SoundFX[name]);
-
-            Engine.SoundFX.UnloadContent();
         }
 
         [Test]
@@ -65,10 +63,15 @@ namespace UnitTestProject.Tests.ResourcesManagers
 
             Assert.IsTrue(Engine.SoundFX.Add(name, path, true));
 
-            Assert.IsTrue(Engine.SoundFX[name].Play(0.05f, 0, 0));
-            
+            Assert.IsTrue(Engine.SoundFX[name].Play(0f, 0, 0));
+        }
+
+        [TearDown]
+        public void UnloadContent()
+        {
             Engine.SoundFX.UnloadContent();
         }
+
 
         [TestFixtureTearDown]
         public void Finished()

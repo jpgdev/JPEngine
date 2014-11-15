@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 
-namespace CustomGame
+namespace GameEditor
 {
     public abstract class GameControl : GraphicsDeviceControl
     {
@@ -18,10 +18,7 @@ namespace CustomGame
             Application.Idle += delegate { GameLoop(); };
         }
 
-        protected override void Draw()
-        {
-            Draw(_gameTime);
-        }
+        
 
         private void GameLoop()
         {
@@ -35,5 +32,10 @@ namespace CustomGame
         protected abstract void Update(GameTime gameTime);
 
         protected abstract void Draw(GameTime gameTime);
+
+        protected override void Draw()
+        {
+            Draw(_gameTime);
+        }
     }
 }

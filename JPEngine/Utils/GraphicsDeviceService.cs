@@ -77,7 +77,7 @@ namespace JPEngine.Utils
 
             _graphicsDevice = new GraphicsDevice(
                 GraphicsAdapter.DefaultAdapter,
-                GraphicsProfile.HiDef,
+                GraphicsProfile.Reach,
                 parameters);
 
             //Useless because no-one can subscribe to it before it happens

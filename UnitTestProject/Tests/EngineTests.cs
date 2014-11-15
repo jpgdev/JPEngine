@@ -60,26 +60,10 @@ namespace UnitTestProject.Tests
 
             Assert.True(Engine.Window != null);
             Assert.True(Engine.Window.IsInitialized);
+
+            Assert.True(Engine.Fonts != null);
+            Assert.True(Engine.Fonts.IsInitialized);
         }
-
-        [Test]
-        public void WindowResizeTest()
-        {
-            const int height = 200;
-            const int width = 150;
-
-            Engine.Window.Height = height;
-            Assert.AreEqual(Engine.Window.Height, height);
-            
-            Engine.Window.Width = width;
-            Assert.AreEqual(Engine.Window.Width , width);
-            
-            Engine.Window.IsFullScreen = true;
-            Assert.True(Engine.Window.IsFullScreen);
-            Assert.AreEqual(_form.WindowState, FormWindowState.Maximized);
-        }
-
-       
 
         [TestFixtureTearDown]
         public void Finished()
@@ -88,7 +72,5 @@ namespace UnitTestProject.Tests
             _graphicsDeviceService.GraphicsDevice.Dispose();
             _graphicsDeviceService.Release(true);
         }
-
-        
     }
 }

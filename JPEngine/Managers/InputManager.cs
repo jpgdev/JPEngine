@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Managers
 {
+    //TODO: Make a IInputManager to enable multiple implementations of this class
+    //TODO: MonoInputManager = this version, WindowsInputManager = listen to window messages to get the correct input
+
     public class InputManager : Manager
     {
         #region Attributes
@@ -95,37 +98,6 @@ namespace JPEngine.Managers
                         OnKeyReleased(this, e);
                 }
             }
-
-            //foreach (InputKey key in keys)
-            //{
-            //    if (key.Key == Keys.LeftAlt || key.Key == Keys.RightAlt ||
-            //        key.Key == Keys.LeftShift || key.Key == Keys.RightShift ||
-            //        key.Key == Keys.LeftControl || key.Key == Keys.RightControl)
-            //    {
-            //        continue;
-            //    }
-
-            //    bool pressed = Engine.InputHelper.IsKeyDown(key.Key);
-            //    key.Pressed = pressed;
-
-            //    if (Engine.InputHelper.IsKeyDown(key.Key))
-            //    {
-            //        e.Key = key.Key;
-
-            //        if (KeyDown != null) KeyDown.Invoke(this, e);
-            //        if (KeyPress != null) KeyPress.Invoke(this, e);
-            //    }
-            //    else if (Engine.InputHelper.IsKeyReleased(key.Key))
-            //    {
-            //        e.Key = key.Key;
-            //        if (KeyUp != null) KeyUp.Invoke(this, e);
-            //    }
-            //    else if (Engine.InputHelper.IsKeyPressed(key.Key))
-            //    {
-            //        e.Key = key.Key;
-            //        if (KeyPress != null) KeyPress.Invoke(this, e);
-            //    }
-            //}
         }
 
 
@@ -196,8 +168,6 @@ namespace JPEngine.Managers
         }
 
         #endregion
-
-
 
         public static char GetCharValue(Keys key, bool shiftClicked)
         {

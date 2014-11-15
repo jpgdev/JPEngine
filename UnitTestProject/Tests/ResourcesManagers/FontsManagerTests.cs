@@ -6,8 +6,9 @@ using NUnit.Framework;
 
 namespace UnitTestProject.Tests.ResourcesManagers
 {
+    
     [TestFixture]
-    public class TextureManagerTests
+    public class FontsManagerTests
     {
         private Form _form;
         private GraphicsDeviceService _graphicsDeviceService;
@@ -27,39 +28,38 @@ namespace UnitTestProject.Tests.ResourcesManagers
         }
 
         [Test]
-        public void TestTextureLoad()
+        public void TestFontsLoad()
         {
-            const string name = "crate";
-            const string path = "Sprites/crate";
+            const string name = "font1";
+            const string path = "Fonts/font1";
 
-            Assert.IsTrue(Engine.Textures.Add(name, path, true));
-            Assert.IsTrue(Engine.Textures.IsResourcePathAdded(name));
-            Assert.IsTrue(Engine.Textures.IsResourceLoaded(name));
-            Assert.NotNull(Engine.Textures[name]);
+            Assert.IsTrue(Engine.Fonts.Add(name, path, true));
+            Assert.IsTrue(Engine.Fonts.IsResourcePathAdded(name));
+            Assert.IsTrue(Engine.Fonts.IsResourceLoaded(name));
+            Assert.NotNull(Engine.Fonts[name]);
         }
 
         [Test]
-        public void TestTextureUnloadContent()
+        public void TestFontsUnloadContent()
         {
-            const string name = "crate";
-            const string path = "Sprites/crate";
+            const string name = "font1";
+            const string path = "Fonts/font1";
 
-            Assert.IsTrue(Engine.Textures.Add(name, path, true));
+            Assert.IsTrue(Engine.Fonts.Add(name, path, true));
 
-            Engine.Textures.UnloadContent();
+            Engine.Fonts.UnloadContent();
 
-            Assert.AreEqual(Engine.Textures.AmountAdded, 0);
-            Assert.AreEqual(Engine.Textures.AmountLoaded, 0);
+            Assert.AreEqual(Engine.Fonts.AmountAdded, 0);
+            Assert.AreEqual(Engine.Fonts.AmountLoaded, 0);
 
-            Assert.Catch<KeyNotFoundException>(() => Engine.Textures.GetResource(name));
+            Assert.Catch<KeyNotFoundException>(() => Engine.Fonts.GetResource(name));
         }
 
         [TearDown]
         public void UnloadContent()
         {
-            Engine.Textures.UnloadContent();
+            Engine.Fonts.UnloadContent();
         }
-
 
         [TestFixtureTearDown]
         public void Finished()

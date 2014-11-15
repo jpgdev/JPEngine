@@ -6,6 +6,9 @@ using System;
 
 namespace JPEngine.Managers
 {
+
+    //TODO: Make this class a SpirteBatch wrapper, replace all the SpriteBatch.Draw() methods and remove the Z-Index to make sure it is well done
+    //TODO: Implement SpriteBatch.DrawString too?
     public class SpriteBatchManager : Manager
     {
         private const int STEPS_PER_LAYER = 2048;

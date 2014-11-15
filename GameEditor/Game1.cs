@@ -1,21 +1,19 @@
-﻿using JPEngine;
+﻿using System.Threading;
+using JPEngine;
 using JPEngine.ECS;
 using JPEngine.ECS.Components;
-using JPEngine.Managers;
-using JPEngine.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace CustomGame
+namespace GameEditor
 {
     public class Game1 : GameControl
     {
         protected override void Initialize()
         {
             base.Initialize();
-            
-            Engine.Initialize((GraphicsDeviceService)Services.GetService(typeof(GraphicsDeviceService)), Handle);
+
+            Engine.Initialize((IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService)), TopLevelControl.Handle);
 
             Entity mainCamera = new Entity("_MainCamera", true);
 
@@ -30,17 +28,20 @@ namespace CustomGame
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
 
-            {
-                var e = new Entity("player");
-                //e.Transform.Scale = new Vector2(0.5f, 0.5f);
+            InitTestEntities();
+        }
 
-                e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
-                //e.AddComponent(new PlayerInput(e));
-                e.AddComponent(new RectCollider(e) { Width = 96, Height = 96 });
-                e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+        private static void InitTestEntities()
+        {
+            var e = new Entity("player");
+            //e.Transform.Scale = new Vector2(0.5f, 0.5f);
 
-                Engine.Entities.AddEntity(e);
-            }
+            e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
+            //e.AddComponent(new PlayerInput(e));
+            e.AddComponent(new RectCollider(e) {Width = 96, Height = 96});
+            e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+
+            Engine.Entities.AddEntity(e);
         }
 
         protected override void Update(GameTime gameTime)
@@ -50,6 +51,16 @@ namespace CustomGame
 
         protected override void Draw(GameTime gameTime)
         {
+            if (!this.Focused)
+            {
+                Thread.Sleep(50);
+            }
+            else
+            {
+                Thread.Sleep(1);
+            }
+
+            this.GraphicsDevice.Clear(Color.Blue);
             Engine.Draw(gameTime);
         }
     }

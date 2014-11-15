@@ -1,4 +1,4 @@
-﻿namespace GameFormImplementation
+﻿namespace GameEditor
 {
     partial class Form1
     {
@@ -28,35 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.game11 = new GameEditor.Game1();
             this.SuspendLayout();
             // 
-            // label1
+            // game11
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.game11.BackColor = System.Drawing.Color.Black;
+            this.game11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.game11.Location = new System.Drawing.Point(66, 12);
+            this.game11.Name = "game11";
+            this.game11.Size = new System.Drawing.Size(590, 470);
+            this.game11.TabIndex = 1;
+            this.game11.VSync = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(745, 529);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.game11);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private Game1 game11;
+
     }
 }
 

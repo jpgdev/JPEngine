@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine
 {
-    //TODO: Inherit from DrawableGameComponent to be sure we will be called? And add ourselves as a service
     public static class Engine
     {
         #region Attributes
@@ -33,6 +32,7 @@ namespace JPEngine
         private static TextureManager _textureManager;
         private static MusicManager _musicManager;
         private static SoundFXManager _soundManager;
+        private static FontsManager _fontsManager;
 
         #endregion
 
@@ -89,6 +89,11 @@ namespace JPEngine
             get { return _cameraManager; }
         }
 
+        public static FontsManager Fonts
+        {
+            get { return _fontsManager; }
+        }
+
         #endregion
 
         #region Methods
@@ -105,7 +110,6 @@ namespace JPEngine
 
             InitializeCore(graphicsDeviceService);
         }
-
 
         /// <summary>
         /// Initialize the engine.
@@ -125,7 +129,7 @@ namespace JPEngine
             if (graphicsDeviceService == null)
                 throw new NullReferenceException("The graphicsDeviceService cannot be null.");
 
-            //TODO: Keep and use this?
+            //TODO: Keep globally and use services?
             var services = new GameServiceContainer();
             services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
 
@@ -143,6 +147,7 @@ namespace JPEngine
             _musicManager = new MusicManager(_contentManager);
             _soundManager = new SoundFXManager(_contentManager);
             _textureManager = new TextureManager(_contentManager);
+            _fontsManager = new FontsManager(_contentManager);
 
             _spriteBatchManager.Initialize();
             _windowManager.Initialize();
@@ -153,6 +158,7 @@ namespace JPEngine
             _musicManager.Initialize();
             _soundManager.Initialize();
             _textureManager.Initialize();
+            _fontsManager.Initialize();
         }
 
         public static void UnloadContent()
@@ -176,7 +182,6 @@ namespace JPEngine
         public static void Draw(GameTime gameTime)
         {
             _windowManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
             SpriteBatch spriteBatch = _spriteBatchManager.Begin();

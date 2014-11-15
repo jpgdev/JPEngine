@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenTK;
 #endregion
 
-namespace CustomGame
+namespace GameEditor
 {
     // System.Drawing and the XNA Framework both define Color and Rectangle
     // types. To avoid conflicts, we specify exactly which ones to use.
@@ -34,10 +34,11 @@ namespace CustomGame
     {
         #region Fields
 
-
         // However many GraphicsDeviceControl instances you have, they all share
         // the same underlying GraphicsDevice, managed by this helper service.
         private GraphicsDeviceService _graphicsDeviceService;
+
+        private bool _initialized = false;
 
         private readonly ServiceContainer _services = new ServiceContainer(); 
 
@@ -68,7 +69,6 @@ namespace CustomGame
 
         #region Initialization
 
-
         /// <summary>
         /// Initializes the control.
         /// </summary>
@@ -84,6 +84,8 @@ namespace CustomGame
 
                 // Give derived classes a chance to initialize themselves.
                 Initialize();
+
+                _initialized = true;
             }
 
             base.OnCreateControl();
@@ -113,6 +115,9 @@ namespace CustomGame
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
+            //if (!_initialized) 
+            //    return;
+
             string beginDrawError = BeginDraw();
 
             if (string.IsNullOrEmpty(beginDrawError))
@@ -163,7 +168,7 @@ namespace CustomGame
             // largest of these controls. But what if we are currently drawing
             // a smaller control? To avoid unwanted stretching, we set the
             // viewport to only use the top left portion of the full backbuffer.
-            Viewport viewport = new Viewport
+            GraphicsDevice.Viewport = new Viewport
             {
                 X = 0,
                 Y = 0,
@@ -171,9 +176,7 @@ namespace CustomGame
                 Height = ClientSize.Height,
                 MinDepth = 0,
                 MaxDepth = 1
-            };
-
-            GraphicsDevice.Viewport = viewport;
+            }; ;
 
             return null;
         }
@@ -239,18 +242,15 @@ namespace CustomGame
             {
                 try
                 {
-                    _graphicsDeviceService.ResetDevice(ClientSize.Width,
-                                                      ClientSize.Height);
+                    _graphicsDeviceService.ResetDevice(ClientSize.Width, ClientSize.Height);
                 }
                 catch (Exception e)
                 {
                     return "Graphics device reset failed\n\n" + e;
                 }
             }
-
             return null;
         }
-
 
         /// <summary>
         /// If we do not have a valid graphics device (for instance if the device
@@ -272,7 +272,6 @@ namespace CustomGame
                 }
             }
         }
-
 
         /// <summary>
         /// Ignores WinForms paint-background messages. The default implementation

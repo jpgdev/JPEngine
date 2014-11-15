@@ -92,13 +92,19 @@ namespace JPEngine.Managers
             if (graphicsDeviceService is GraphicsDeviceManager)
                 return Create(graphicsDeviceService as GraphicsDeviceManager);
 
-            var window = Control.FromHandle(windowHandle) as Form;
+            var ctrl = Control.FromHandle(windowHandle);
+            var window = ctrl as Form;
             if (window == null)
                 throw new ArgumentException("The windowHandle is not a valid Form handle.");
 
             return new FormWindowManager(graphicsDeviceService, window);
         }
 
+        /// <summary>
+        /// Will create the basic WindowManager using the XNA's out-of-the-box GraphicsDeviceManager.
+        /// </summary>
+        /// <param name="graphicsDeviceService"></param>
+        /// <returns></returns>
         internal static WindowManager Create(GraphicsDeviceManager graphicsDeviceService)
         {
             return new BasicWindowManager(graphicsDeviceService);

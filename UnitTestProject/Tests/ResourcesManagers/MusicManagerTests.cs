@@ -32,10 +32,10 @@ namespace UnitTestProject.Tests.ResourcesManagers
         //{
         //    const string name = "ammo_pickup";
 
-        //    Engine.Textures.Add(name, "Sounds/ammo_pickup", true);
-        //    Assert.IsTrue(Engine.Textures.IsResourcePathAdded(name));
-        //    Assert.IsTrue(Engine.Textures.IsResourceLoaded(name));
-        //    Assert.NotNull(Engine.Textures[name]);
+        //    Engine.Music.Add(name, "Sounds/ammo_pickup", true);
+        //    Assert.IsTrue(Engine.Music.IsResourcePathAdded(name));
+        //    Assert.IsTrue(Engine.Music.IsResourceLoaded(name));
+        //    Assert.NotNull(Engine.Music[name]);
         //}
 
 
@@ -45,14 +45,14 @@ namespace UnitTestProject.Tests.ResourcesManagers
         //    const string name = "ammo_pickup";
         //    const string path = "Sounds/ammo_pickup";
 
-        //    Assert.IsTrue(Engine.SoundFX.Add(name, path, true));
+        //    Assert.IsTrue(Engine.Music.Add(name, path, true));
 
-        //    Engine.SoundFX.UnloadContent();
+        //    Engine.Music.UnloadContent();
 
-        //    Assert.AreEqual(Engine.SoundFX.AmountAdded, 0);
-        //    Assert.AreEqual(Engine.SoundFX.AmountLoaded, 0);
+        //    Assert.AreEqual(Engine.Music.AmountAdded, 0);
+        //    Assert.AreEqual(Engine.Music.AmountLoaded, 0);
 
-        //    Assert.Catch<KeyNotFoundException>(() => Engine.SoundFX.GetResource(name));
+        //    Assert.Catch<KeyNotFoundException>(() => Engine.Music.GetResource(name));
         //}
 
 
@@ -62,11 +62,15 @@ namespace UnitTestProject.Tests.ResourcesManagers
         //    const string name = "ammo_pickup";
         //    const string path = "Sounds/ammo_pickup";
 
-        //    Assert.IsTrue(Engine.SoundFX.Add(name, path, true));
+        //    Assert.IsTrue(Engine.Music.Add(name, path, true));
 
-        //    Assert.IsTrue(Engine.SoundFX[name].Play());
+        //    Assert.IsTrue(Engine.Music[name].Play());
+        //}
 
-        //    Engine.SoundFX.UnloadContent();
+        //[TearDown]
+        //public void UnloadContent()
+        //{
+        //    Engine.Music.UnloadContent();
         //}
 
         [TestFixtureTearDown]

@@ -8,7 +8,7 @@ namespace JPEngine.Managers
 {
     //TODO: Launch exceptions instead of returning false? (for Add & Load)
 
-    public abstract class ResourceManager<T> : Manager where T : IDisposable
+    public abstract class ResourceManager<T> : Manager
     {
         #region Attributes
 
@@ -219,7 +219,8 @@ namespace JPEngine.Managers
                 if (_resources.Remove(name))
                 {
                     OnResourceUnloaded(new ListItemEventArgs<T>(r, ListItemAction.Removed));
-                    r.Dispose();
+                    if(r is IDisposable)
+                        (r as IDisposable).Dispose();
                     //TODO: May cause a problem because it may be Disposed when someone tries to access it in the EventHandler?
                     removed = true;
                 }

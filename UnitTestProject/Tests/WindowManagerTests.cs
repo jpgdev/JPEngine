@@ -28,8 +28,8 @@ namespace UnitTestProject.Tests
         [Test]
         public void WindowResizeTest()
         {
-            const int height = 200;
-            const int width = 150;
+            const int height = 123;
+            const int width = 456;
 
             Engine.Window.Height = height;
             Assert.AreEqual(Engine.Window.Height, height);

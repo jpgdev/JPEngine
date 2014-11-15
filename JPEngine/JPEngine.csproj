@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JPEngine</RootNamespace>
     <AssemblyName>JPEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -101,6 +101,7 @@
     <Compile Include="Events\ValueChangedEvent.cs" />
     <Compile Include="Events\ListItemEvents.cs" />
     <Compile Include="Managers\CameraManager.cs" />
+    <Compile Include="Managers\FontsManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\Window\BasicWindowManager.cs" />
     <Compile Include="Managers\Window\OpenTKWindowManager.cs" />
