@@ -1,4 +1,4 @@
-﻿using JPEngine.ECS.Components;
+﻿using JPEngine.Components;
 using JPEngine.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

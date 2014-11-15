@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace JPEngine.ECS.Systems
+namespace JPEngine.Entities.Systems
 {
     interface ISystem
     {

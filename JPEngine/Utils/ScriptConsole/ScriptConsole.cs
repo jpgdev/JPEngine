@@ -19,7 +19,6 @@ namespace JPEngine.Utils.ScriptConsole
         public bool OpenOnWrite { get; set; }
         public bool PauseGameWhenOpened { get; set; }
 
-
         public float CursorBlinkSpeed { get; set; }
 
         public int Width { get; set; }
@@ -74,7 +73,6 @@ namespace JPEngine.Utils.ScriptConsole
 
 
     }
-
 
     public class ScriptConsole
     {
@@ -157,11 +155,9 @@ namespace JPEngine.Utils.ScriptConsole
             Buffer = new OutputLine("", OutputLineType.Command);
 
             //Renderer
-            _pixel = new Texture2D(Engine.Window.GraphicsDevice, 1, 1);//new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            _pixel = new Texture2D(Engine.Window.GraphicsDevice, 1, 1);
             _pixel.SetData(new[] { Color.White });
             
-            //_width = game.GraphicsDevice.Viewport.Width;
-            //_height = 300;
             _position = new Vector2(Options.Margin, 0);
 
             _oneCharacterWidth = Options.Font.MeasureString("x").X;

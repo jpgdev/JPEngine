@@ -1,19 +1,21 @@
 ﻿using System;
 using JPEngine.Enums;
+using JPEngine.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace JPEngine.ECS.Components
+namespace JPEngine.Components
 {
-    public interface IEntityDrawable
+    public interface IDrawableComponent
     {
         bool Visible { get; }
 
         DrawingLayer Layer { get; }
 
-        event EventHandler<EventArgs> VisibleChanged;
+        event EventHandler<ValueChangedEventArgs<bool>> VisibleChanged;
 
-        event EventHandler<EventArgs> LayerChanged;
+        event EventHandler<ValueChangedEventArgs<DrawingLayer>> LayerChanged;
+
 
         void Draw(SpriteBatch spriteBatch, GameTime gameTime);
         //void Draw();

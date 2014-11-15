@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-namespace JPEngine.ECS.Systems
+namespace JPEngine.Entities.Systems
 {
     public abstract class System : ISystem
     {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using JPEngine.ECS.Components;
+using JPEngine.Components;
 using JPEngine.Events;
 
 namespace JPEngine.Managers

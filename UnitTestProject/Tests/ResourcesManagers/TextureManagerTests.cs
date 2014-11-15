@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using JPEngine;
-using JPEngine.Utils;
+using JPEngine.Graphics;
 using NUnit.Framework;
 
 namespace UnitTestProject.Tests.ResourcesManagers
@@ -59,7 +59,6 @@ namespace UnitTestProject.Tests.ResourcesManagers
         {
             Engine.Textures.UnloadContent();
         }
-
 
         [TestFixtureTearDown]
         public void Finished()

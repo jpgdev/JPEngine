@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
+using JPEngine.Utils;
 
-namespace JPEngine.Utils
+namespace JPEngine.Graphics
 {
     public class GameGraphicsDeviceService : GraphicsDeviceService
     {

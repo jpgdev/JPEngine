@@ -10,6 +10,6 @@
         MiddleGround2 = 5,
         Background1 = 6,
         Background2 = 7,
-        Background3 = 8,
+        Background3 = 8
     }
 }

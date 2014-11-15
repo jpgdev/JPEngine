@@ -1,11 +1,13 @@
 ﻿using System;
+using JPEngine.Entities;
 using JPEngine.Enums;
+using JPEngine.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace JPEngine.ECS.Components
+namespace JPEngine.Components
 {
-    public class DrawableComponent : EntityComponent, IEntityDrawable
+    public class DrawableComponent : BaseComponent, IDrawableComponent
     {
         private DrawingLayer _drawingLayer = DrawingLayer.Default;
         private bool _visible = true;
@@ -18,8 +20,8 @@ namespace JPEngine.ECS.Components
         }
 
 
-        public event EventHandler<EventArgs> VisibleChanged;
-        public event EventHandler<EventArgs> LayerChanged;
+        public event EventHandler<ValueChangedEventArgs<bool>> VisibleChanged;
+        public event EventHandler<ValueChangedEventArgs<DrawingLayer>> LayerChanged;
 
         //TODO: Remove the NotImplementedException
         //public virtual void Draw() { throw new NotImplementedException(); }
@@ -44,9 +46,10 @@ namespace JPEngine.ECS.Components
             {
                 if (_visible != value)
                 {
+                    bool oldValue = _visible;
                     _visible = value;
                     if (VisibleChanged != null)
-                        VisibleChanged(this, EventArgs.Empty);
+                        VisibleChanged(this, new ValueChangedEventArgs<bool>(oldValue, _visible));
                 }
             }
         }
@@ -78,9 +81,10 @@ namespace JPEngine.ECS.Components
 
                     //_drawingLayer = (DrawingLayer)MathHelper.Clamp(0, (int)value);
                     //_drawingLayer = Math.Max(0, (int)value);
+                    DrawingLayer oldValue = _drawingLayer;
                     _drawingLayer = value;
                     if (LayerChanged != null)
-                        LayerChanged(this, EventArgs.Empty);
+                        LayerChanged(this, new ValueChangedEventArgs<DrawingLayer>(oldValue, _drawingLayer));
                 }
             }
         }

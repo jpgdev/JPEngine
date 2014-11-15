@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using JPEngine.ECS.Components;
+using JPEngine.Components;
 using JPEngine.Events;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace JPEngine.ECS
+namespace JPEngine.Entities
 {
     public class EntitiesManager : Manager
     {
@@ -79,6 +80,22 @@ namespace JPEngine.ECS
 
             return _taggedEntities[tag];
         }
+        
+        private IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IComponent
+        {
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
+
+            return _tempEntities.SelectMany(e => e.GetComponents<T>());
+        }
+
+        private IEnumerable<IComponent> GetAllComponentsOfType(Type type)
+        {
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
+
+            return _tempEntities.SelectMany(e => e.GetComponents(type));
+        }
 
         public void ClearEntities()
         {
@@ -101,12 +118,5 @@ namespace JPEngine.ECS
             AddTaggedEntity(entity);
         }
 
-        private IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IEntityComponent
-        {
-            _tempEntities.Clear();
-            _tempEntities.AddRange(_entities);
-
-            return _tempEntities.SelectMany(e => e.GetComponents<T>());
-        }
     }
 }

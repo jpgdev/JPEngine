@@ -1,11 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using OpenTK.Graphics;
+﻿using System;
+using System.Threading;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 #region Using Statements
-
-using System;
-using System.Threading;
-using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
@@ -15,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 // we don't care so we just disable this warning.
 #pragma warning disable 67
 
-namespace JPEngine.Utils
+namespace JPEngine.Graphics
 {
     /// <summary>
     /// Helper class responsible for creating and managing the GraphicsDevice.

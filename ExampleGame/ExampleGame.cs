@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Principal;
+﻿using JPEngine.Components;
 using JPEngine.Enums;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
@@ -8,9 +7,8 @@ using Microsoft.Xna.Framework.Input;
 
 using JPEngine;
 using JPEngine.Managers;
-using JPEngine.ECS;
+using JPEngine.Entities;
 using ExampleGame.CustomComponents;
-using JPEngine.ECS.Components;
 
 namespace ExampleGame
 {

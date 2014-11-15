@@ -48,6 +48,8 @@
     <Compile Include="Helpers\DeviceType.cs" />
     <Compile Include="Helpers\MockedGraphicsDeviceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\Entities\EntitiesTests.cs" />
+    <Compile Include="Tests\Entities\ComponentsTests.cs" />
     <Compile Include="Tests\Entities\EntitiesManagerTests.cs" />
     <Compile Include="Tests\ResourcesManagers\FontsManagerTests.cs" />
     <Compile Include="Tests\ResourcesManagers\MusicManagerTests.cs" />

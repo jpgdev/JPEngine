@@ -1,12 +1,12 @@
-﻿using System;
-using JPEngine;
-using JPEngine.ECS;
+﻿using JPEngine;
+using JPEngine.Components;
+using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace ExampleGame.CustomComponents
 {
-    public class PlayerInput : EntityComponent
+    public class PlayerInput : BaseComponent
     {
         public PlayerInput(Entity entity)
             : base(entity)

@@ -1,6 +1,6 @@
-﻿namespace JPEngine.ECS.Components
+﻿namespace JPEngine.Components
 {
-    public interface IEntityComponent
+    public interface IComponent
     {
         string Tag { get; }
 

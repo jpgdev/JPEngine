@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JPEngine.Entities;
+using Microsoft.Xna.Framework;
 
-namespace JPEngine.ECS
+namespace JPEngine.Components
 {
-    public class TransformComponent : EntityComponent
+    public class TransformComponent : BaseComponent
     {
         //public Vector2 Position = Vector2.Zero;
         public Vector3 Position = Vector3.Zero;

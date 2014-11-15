@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JPEngine.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace JPEngine.ECS.Components
+namespace JPEngine.Components
 {
-    public class RectCollider : EntityComponent
+    public class RectCollider : BaseComponent
     {
         //TODO: Debug purposes
         private RectRenderer _rectRenderer;

@@ -1,7 +1,7 @@
 ﻿#region Include Statements
 
 using System;
-using JPEngine.ECS;
+using JPEngine.Entities;
 using JPEngine.Managers;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;

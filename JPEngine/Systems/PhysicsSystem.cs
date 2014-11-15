@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JPEngine.ECS.Systems
+namespace JPEngine.Entities.Systems
 {
     internal class PhysicsSystem : System
     {

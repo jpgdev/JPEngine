@@ -1,8 +1,9 @@
 ﻿using System;
+using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace JPEngine.ECS.Components
+namespace JPEngine.Components
 {
     public class DrawableSpriteComponent : DrawableComponent
     {

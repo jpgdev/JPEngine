@@ -1,14 +1,13 @@
-﻿using System;
-using JPEngine.Managers;
+﻿using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 
-namespace JPEngine.ECS.Components
+namespace JPEngine.Components
 {
 
     //Some infos : http://gamedev.stackexchange.com/questions/59301/xna-2d-camera-scrolling-why-use-matrix-transform
 
 
-    public class CameraComponent : EntityComponent
+    public class CameraComponent : BaseComponent
     {
         public Vector2 Origin
         {

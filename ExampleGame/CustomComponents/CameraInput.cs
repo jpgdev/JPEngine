@@ -1,11 +1,12 @@
 ﻿using JPEngine;
-using JPEngine.ECS;
+using JPEngine.Components;
+using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace ExampleGame.CustomComponents
 {
-    public class CameraInput : EntityComponent
+    public class CameraInput : BaseComponent
     {
         private float _speed = 100;
 
@@ -14,7 +15,6 @@ namespace ExampleGame.CustomComponents
             get { return _speed; }
             set { _speed = value; }
         }
-        
 
         public CameraInput(Entity entity)
             : base(entity)

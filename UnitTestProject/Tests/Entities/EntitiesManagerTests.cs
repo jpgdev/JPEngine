@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using JPEngine;
-using JPEngine.Utils;
+using JPEngine.Graphics;
 using NUnit.Framework;
 
 namespace UnitTestProject.Tests.Entities
@@ -31,6 +31,13 @@ namespace UnitTestProject.Tests.Entities
         public void Test()
         {
             //TODO: Fill this
+        }
+
+        //TODO: On TagChanged tests
+        [TearDown]
+        public void OnTagChangedTest()
+        {
+           
         }
 
 
