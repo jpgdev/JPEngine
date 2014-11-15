@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.ECS.Components
 {
@@ -41,7 +42,7 @@ namespace JPEngine.ECS.Components
             _rectRenderer = GameObject.GetComponent<RectRenderer>();
             if (_rectRenderer == null)
             {
-                _rectRenderer = new RectRenderer(GameObject, Bounds, Engine.Window.CreateTexture(1, 1));
+                _rectRenderer = new RectRenderer(GameObject, Bounds, new Texture2D(Engine.Window.GraphicsDevice, 1, 1));
                 GameObject.AddComponent(_rectRenderer);
             }
             //

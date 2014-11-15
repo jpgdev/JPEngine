@@ -3,26 +3,21 @@
 using System;
 using JPEngine.ECS;
 using JPEngine.Managers;
-using JPEngine.Utils;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 #endregion
 
 namespace JPEngine
 {
-    //TODO: Inherit from DrawableGameComponent to be sure we will be called?
-
-
+    //TODO: Inherit from DrawableGameComponent to be sure we will be called? And add ourselves as a service
     public static class Engine
     {
         #region Attributes
-
-        private static GraphicsDeviceManager _graphicsDeviceManager;
-        private static Game _game;
+        
+        private static ContentManager _contentManager;
 
         private static ScriptConsole _console;
 
@@ -33,7 +28,7 @@ namespace JPEngine
         private static InputManager _inputManager;
         private static SettingsManager _settingsManager;
         private static CameraManager _cameraManager;
-        
+
         //Resources managers
         private static TextureManager _textureManager;
         private static MusicManager _musicManager;
@@ -46,7 +41,9 @@ namespace JPEngine
         public static ScriptConsole Console
         {
             get { return _console; }
+            set { _console = value; }
         }
+
         public static SpriteBatchManager SpriteManager
         {
             get { return _spriteBatchManager; }
@@ -97,32 +94,56 @@ namespace JPEngine
         #region Methods
 
         /// <summary>
-        /// Initialize the managers.
+        /// Initialize the engine.
         /// </summary>
-        /// <param name="game"></param>
-        public static void Initialize(Game game)
+        /// <param name="graphicsDeviceService"></param>
+        /// <param name="windowHandle">The Form containing the game handle.</param>
+        //public static void Initialize(Game game)
+        public static void Initialize(IGraphicsDeviceService graphicsDeviceService, IntPtr windowHandle)
         {
-            if(game == null)
-                throw new NullReferenceException("The game cannot be null.");
+            _windowManager = WindowManager.Create(graphicsDeviceService, windowHandle);
 
-            _game = game;
+            InitializeCore(graphicsDeviceService);
+        }
 
-            //Setup the GraphicsDeviceManager
-            var graphicsService = (IGraphicsDeviceService) game.Services.GetService(typeof(IGraphicsDeviceService));
-            _graphicsDeviceManager = graphicsService as GraphicsDeviceManager ?? new GraphicsDeviceManager(_game);
 
-            //SpriteBatch spriteBatch = new SpriteBatch(_graphicsDeviceManager.GraphicsDevice);
+        /// <summary>
+        /// Initialize the engine.
+        /// </summary>
+        /// <param name="graphicsDeviceService"></param>
+        /// <param name="gameWindow">The Game window.</param>
+        //public static void Initialize(Game game)
+        public static void Initialize(IGraphicsDeviceService graphicsDeviceService, GameWindow gameWindow)
+        {
+            _windowManager = WindowManager.Create(graphicsDeviceService, gameWindow);
 
-            _spriteBatchManager = new SpriteBatchManager(_graphicsDeviceManager.GraphicsDevice);
-            _windowManager = new WindowManager(_graphicsDeviceManager);
+            InitializeCore(graphicsDeviceService);
+        }
+
+        private static void InitializeCore(IGraphicsDeviceService graphicsDeviceService)
+        {
+            if (graphicsDeviceService == null)
+                throw new NullReferenceException("The graphicsDeviceService cannot be null.");
+
+            //TODO: Keep and use this?
+            var services = new GameServiceContainer();
+            services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
+
+            _contentManager = new ContentManager(services)
+            {
+                RootDirectory = "Content"
+            };
+            
+            _spriteBatchManager = new SpriteBatchManager(_windowManager.GraphicsDevice);
+
             _entityManager = new EntitiesManager();
             _settingsManager = new SettingsManager();
             _inputManager = new InputManager();
             _cameraManager = new CameraManager();
-            _musicManager = new MusicManager(game.Content);
-            _soundManager = new SoundFXManager(game.Content);
-            _textureManager = new TextureManager(game.Content);
-            
+            _musicManager = new MusicManager(_contentManager);
+            _soundManager = new SoundFXManager(_contentManager);
+            _textureManager = new TextureManager(_contentManager);
+
             _spriteBatchManager.Initialize();
             _windowManager.Initialize();
             _entityManager.Initialize();
@@ -132,17 +153,6 @@ namespace JPEngine
             _musicManager.Initialize();
             _soundManager.Initialize();
             _textureManager.Initialize();
-
-
-            //TODO: Add a way to load the resource directly from the Engine NOT the game
-            //TODO: Implement a BitmapFont?
-            _console = new ScriptConsole(game, new ConsoleOptions(game.Content.Load<SpriteFont>("Fonts/ConsoleFont"))
-            {
-                ToggleKey = Keys.F1,
-                 Width = game.GraphicsDevice.Viewport.Width
-            });
-
-            _console.Initialize();
         }
 
         public static void UnloadContent()
@@ -150,6 +160,8 @@ namespace JPEngine
             _musicManager.UnloadContent();
             _soundManager.UnloadContent();
             _textureManager.UnloadContent();
+
+            _contentManager.Unload();
         }
 
         public static void Update(GameTime gameTime)
@@ -157,13 +169,14 @@ namespace JPEngine
             _spriteBatchManager.Update(gameTime);
             _inputManager.Update(gameTime);
 
-            if (!(_console.IsActive && _console.Options.PauseGameWhenOpened)) 
+            if (!(_console != null && _console.IsActive && _console.Options.PauseGameWhenOpened))
                 _entityManager.Update(gameTime);
         }
 
         public static void Draw(GameTime gameTime)
         {
-            _graphicsDeviceManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            _windowManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
             SpriteBatch spriteBatch = _spriteBatchManager.Begin();
@@ -172,7 +185,8 @@ namespace JPEngine
 
             _spriteBatchManager.End();
 
-            _console.Draw(spriteBatch, gameTime);
+            if (_console != null)
+                _console.Draw(spriteBatch, gameTime);
         }
 
         #endregion

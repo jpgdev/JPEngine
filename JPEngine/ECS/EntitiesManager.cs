@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JPEngine.ECS.Components;
 using JPEngine.Events;
 using JPEngine.Managers;
 using Microsoft.Xna.Framework;
@@ -9,8 +10,8 @@ namespace JPEngine.ECS
 {
     public class EntitiesManager : Manager
     {
-        private readonly List<Entity> _currentList = new List<Entity>();
-        private readonly List<Entity> _masterList = new List<Entity>();
+        private readonly List<Entity> _tempEntities = new List<Entity>(); //The list used to work with
+        private readonly List<Entity> _entities = new List<Entity>();   //The core list of entities
         private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
 
         internal EntitiesManager()
@@ -19,36 +20,36 @@ namespace JPEngine.ECS
 
         protected override bool InitializeCore()
         {
-            _currentList.Clear();
-            _currentList.AddRange(_masterList);
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
 
-            _currentList.ForEach(e => e.Initialize());
+            _tempEntities.ForEach(e => e.Initialize());
 
             return true;
         }
 
         internal override void Update(GameTime gameTime)
         {
-            _currentList.Clear();
-            _currentList.AddRange(_masterList);
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
 
-            _currentList.ForEach(e => e.Update(gameTime));
+            _tempEntities.ForEach(e => e.Update(gameTime));
         }
 
         internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            _currentList.Clear();
-            _currentList.AddRange(_masterList);
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
 
             //TODO: Call SpriteManager which will be handling the layers? Or do it here?
-            _currentList.ForEach(e => e.Draw(spriteBatch, gameTime));
+            _tempEntities.ForEach(e => e.Draw(spriteBatch, gameTime));
         }
 
         public void AddEntity(Entity entity)
         {
             entity.Initialize();
 
-            _masterList.Add(entity);
+            _entities.Add(entity);
             AddTaggedEntity(entity);
         }
 
@@ -81,8 +82,8 @@ namespace JPEngine.ECS
 
         public void ClearEntities()
         {
-            _masterList.Clear();
-            _currentList.Clear();
+            _entities.Clear();
+            _tempEntities.Clear();
             _taggedEntities.Clear();
         }
 
@@ -98,6 +99,14 @@ namespace JPEngine.ECS
             }
 
             AddTaggedEntity(entity);
+        }
+
+        private IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IEntityComponent
+        {
+            _tempEntities.Clear();
+            _tempEntities.AddRange(_entities);
+
+            return _tempEntities.SelectMany(e => e.GetComponents<T>());
         }
     }
 }

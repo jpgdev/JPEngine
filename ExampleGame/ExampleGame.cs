@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Principal;
 using JPEngine.Enums;
+using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,13 +26,18 @@ namespace ExampleGame
         
         protected override void Initialize()
         {
-            Engine.Initialize(this);
+            Engine.Initialize(graphics, Window);
+            Engine.Console = new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
+            {
+                Width = GraphicsDevice.Viewport.Width
+            });
 
             base.Initialize();
         }
 
         protected override void LoadContent()
-        {           
+        {
+
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
             Engine.Textures.Add("background", "Tiles/background", true);
@@ -57,8 +64,6 @@ namespace ExampleGame
 
             Engine.Settings.Add(new Setting<Keys>("PageUp", Keys.PageUp));
             Engine.Settings.Add(new Setting<Keys>("PageDown", Keys.PageDown));
-            
-            
 
             LoadTestsEntities();
         }
@@ -102,7 +107,7 @@ namespace ExampleGame
                 e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
                 e.AddComponent(new PlayerInput(e));
                 e.AddComponent(new RectCollider(e) { Width = 96, Height = 96 });
-                e.AddComponent(new RectRenderer(e, Rectangle.Empty, Engine.Window.CreateTexture(1, 1)));
+                e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
 
                 Engine.Entities.AddEntity(e);
             }

@@ -46,15 +46,15 @@ namespace JPEngine.Managers
             return _settings[name];
         }
 
-        public void SaveSettings()
-        {
-            Utils.JsonHelper.SaveToFile(_settings, @"C:\Users\JP\Desktop\test\settings.txt");
-        }
+        //public void SaveSettings()
+        //{
+        //    Utils.JsonHelper.SaveToFile(_settings, @"C:\Users\JP\Desktop\test\settings.txt");
+        //}
 
-        public void LoadSettings()
-        {
-            //_settings.Clear();
-            _settings = Utils.JsonHelper.LoadFromFile<Dictionary<string, Setting>>(@"C:\Users\JP\Desktop\test\settings.txt");
-        }       
+        //public void LoadSettings()
+        //{
+        //    //_settings.Clear();
+        //    _settings = Utils.JsonHelper.LoadFromFile<Dictionary<string, Setting>>(@"C:\Users\JP\Desktop\test\settings.txt");
+        //}       
     }
 }

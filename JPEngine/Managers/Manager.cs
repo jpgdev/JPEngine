@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public abstract class Manager
+    public abstract class Manager : IDisposable
     {
         private bool _isInitialized;
 
@@ -37,5 +37,11 @@ namespace JPEngine.Managers
         public virtual void UnloadContent()
         {
         }
+
+        public virtual void Dispose()
+        {
+            UnloadContent();
+        }
+
     }
 }

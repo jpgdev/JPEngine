@@ -1,4 +1,5 @@
-﻿using JPEngine;
+﻿using System;
+using JPEngine;
 using JPEngine.ECS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -18,16 +19,10 @@ namespace ExampleGame.CustomComponents
             float delta = gameTime.ElapsedGameTime.Milliseconds/1000.0f;
             const float speed = 100;
 
-            //if (Engine.Input.IsKeyClicked((Keys) Engine.Settings["BtnQ"].Value))
-            //{
-            //    Engine.SoundFX.Play("ammo_pickup", 0.05f);
-            //    Console.WriteLine("Val = {0}, Type = {1}", Engine.Settings["test"].Value,
-            //        Engine.Settings["test"].ValueType);
-            //    Console.WriteLine("Val = {0}, Type = {1}", Engine.Settings["test2"].Value,
-            //        Engine.Settings["test2"].ValueType);
-            //    Console.WriteLine("Val = {0}, Type = {1}", Engine.Settings["BtnQ"].Value,
-            //        Engine.Settings["BtnQ"].ValueType);
-            //}
+            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["Q"].Value))
+            {
+                Engine.SoundFX["ammo_pickup"].Play(0.05f, 0, 0);
+            }
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["SpaceBar"].Value))
             {

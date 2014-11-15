@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using JPEngine.ECS;
 using NLua;
 
@@ -17,14 +16,14 @@ namespace JPEngine.Utils.ScriptConsole
         public LuaParser()
         {
             _luaParser = new Lua();
+            _luaParser.LoadCLRPackage();
         }
 
         public void Initialize()
         {
-            _luaParser.LoadCLRPackage();
-
             _luaParser.RegisterFunction("byTag", Engine.Entities, typeof (EntitiesManager).GetMethod("GetEntityByTag"));
             _luaParser.RegisterFunction("byTags", Engine.Entities, typeof (EntitiesManager).GetMethod("GetEntitiesByTag"));
+            _luaParser.RegisterFunction("byType", Engine.Entities, typeof(EntitiesManager).GetMethod("GetAllComponentsOfType", BindingFlags.NonPublic | BindingFlags.Instance));
             _luaParser.RegisterFunction("init", this,
                 typeof (LuaParser).GetMethod("SetupBasicVariables", BindingFlags.NonPublic | BindingFlags.Instance));
         }

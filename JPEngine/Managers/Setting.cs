@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace JPEngine.Managers
 {
@@ -19,7 +19,7 @@ namespace JPEngine.Managers
             get { return _name; }
         }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual Type ValueType
         {
             get { return typeof (object); }

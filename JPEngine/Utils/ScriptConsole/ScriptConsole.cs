@@ -48,6 +48,8 @@ namespace JPEngine.Utils.ScriptConsole
 
             Font = font;
 
+            ToggleKey = Keys.F1;
+
             OpenOnWrite = true;
             PauseGameWhenOpened = true;
 
@@ -101,8 +103,7 @@ namespace JPEngine.Utils.ScriptConsole
                     _scriptParser = value;
             }
         }
-
-
+        
         #region Rendering Variables
 
         //TODO: Refactor out of here
@@ -112,8 +113,6 @@ namespace JPEngine.Utils.ScriptConsole
         private int _maxCharactersPerLine;
         private Vector2 _position;
         private Vector2 _firstCommandPositionOffset = Vector2.Zero;
-
-
 
         Rectangle Bounds
         {
@@ -141,12 +140,10 @@ namespace JPEngine.Utils.ScriptConsole
 
         #endregion
 
-
-        internal ScriptConsole(Game game, ConsoleOptions options) //  SpriteBatch spriteBatch, 
+        public ScriptConsole(ConsoleOptions options) //  SpriteBatch spriteBatch, 
         {
-
-            if(game == null)
-                throw new ArgumentNullException("The game cannot be null.");
+            //if(game == null)
+            //    throw new ArgumentNullException("The game cannot be null.");
 
             if (options == null)
                 throw new ArgumentNullException("The options cannot be null.");
@@ -160,7 +157,7 @@ namespace JPEngine.Utils.ScriptConsole
             Buffer = new OutputLine("", OutputLineType.Command);
 
             //Renderer
-            _pixel = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            _pixel = new Texture2D(Engine.Window.GraphicsDevice, 1, 1);//new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             _pixel.SetData(new[] { Color.White });
             
             //_width = game.GraphicsDevice.Viewport.Width;
@@ -170,24 +167,10 @@ namespace JPEngine.Utils.ScriptConsole
             _oneCharacterWidth = Options.Font.MeasureString("x").X;
             _maxCharactersPerLine = (int)((Bounds.Width - Options.Padding * 2) / _oneCharacterWidth);
             //
-        }
 
-        internal void Initialize()
-        {
             Engine.Input.KeyClicked += EventInput_KeyClicked;
 
             _scriptParser.Initialize();
-            //_luaParser = new Lua();
-            //_luaParser.LoadCLRPackage();
-            //_luaParser.RegisterFunction("byTag", Engine.Entities, typeof(EntityManager).GetMethod("GetEntitiesByTag"));
-            //_luaParser.RegisterFunction("init", this, typeof(ScriptConsole).GetMethod("LoadBasics"));
-            //_luaParser.RegisterFunction("help", this, typeof(ScriptConsole).GetMethod("ShowHelp"));
-            
-            //string initString = "import ('JPEngine')\n" +
-            //                    "import ('JPEngine.Managers')\n" +
-            //                    "import ('Microsoft.Xna.Framework')\n";
-
-            //_luaParser.DoString(initString);
         }
 
         public void AddToBuffer(string text)
@@ -230,11 +213,10 @@ namespace JPEngine.Utils.ScriptConsole
                 return;
 
             //var output = commandProcesser.Process(Buffer.Output).Split('\n').Where(l => l != "");
-            object[] result = null;
             try
             {
                 Out.Add(new OutputLine(Buffer.Output, OutputLineType.Command));
-                result = _scriptParser.ParseScript(Buffer.Output) as object[];
+                object[] result = _scriptParser.ParseScript(Buffer.Output);
                 if (result != null)
                 {
                     foreach (var line in result)
@@ -246,7 +228,6 @@ namespace JPEngine.Utils.ScriptConsole
                         Out.Add(new OutputLine(output, OutputLineType.Output));
                     }
                 }
-                
             }
             catch (Exception e)
             {
@@ -321,15 +302,9 @@ namespace JPEngine.Utils.ScriptConsole
                     if (IsPrintable(c))
                     {
                         Buffer.Output += c;
-                        //Console.WriteLine(Buffer.Output);
                     }
                     break;
             }
-
-            //switch (e.KeyCode)
-            //{
-
-            //}
         }
 
 
@@ -396,8 +371,6 @@ namespace JPEngine.Utils.ScriptConsole
             return pos;
         }
 
-
-
         private void DrawCursor(SpriteBatch spriteBatch, Vector2 pos, GameTime gameTime)
         {
             if (!IsInBounds(pos.Y))
@@ -444,9 +417,6 @@ namespace JPEngine.Utils.ScriptConsole
 
 
         #endregion
-
-
-       
         
     }
 }
