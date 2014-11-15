@@ -109,7 +109,6 @@
     <Compile Include="Managers\SettingsManager.cs" />
     <Compile Include="Managers\Window\IWindowManager.cs" />
     <Compile Include="Managers\Window\FormWindowManager.cs" />
-    <Compile Include="Graphics\GameGraphicsDeviceService.cs" />
     <Compile Include="Graphics\GraphicsDeviceService.cs" />
     <Compile Include="Utils\ScriptConsole\CommandHistory.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleRenderer.cs" />

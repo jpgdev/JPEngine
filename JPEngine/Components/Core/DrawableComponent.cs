@@ -19,7 +19,6 @@ namespace JPEngine.Components
             LayerChanged += OnLayerChanged;
         }
 
-
         public event EventHandler<ValueChangedEventArgs<bool>> VisibleChanged;
         public event EventHandler<ValueChangedEventArgs<DrawingLayer>> LayerChanged;
 

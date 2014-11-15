@@ -133,10 +133,9 @@ namespace JPEngine
             var services = new GameServiceContainer();
             services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
 
-            _contentManager = new ContentManager(services)
-            {
-                RootDirectory = "Content"
-            };
+            //TODO: Enable the user to change the RootDirectory
+            //TODO: EngineSettings object?
+            _contentManager = new ContentManager(services, "Content");
             
             _spriteBatchManager = new SpriteBatchManager(_windowManager.GraphicsDevice);
 
@@ -175,8 +174,12 @@ namespace JPEngine
             _spriteBatchManager.Update(gameTime);
             _inputManager.Update(gameTime);
 
-            if (!(_console != null && _console.IsActive && _console.Options.PauseGameWhenOpened))
+            if (!(_console != null &&
+                  _console.IsActive &&
+                  _console.Options.PauseGameWhenOpened))
+            {
                 _entityManager.Update(gameTime);
+            }
         }
 
         public static void Draw(GameTime gameTime)

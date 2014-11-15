@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Utils.ScriptConsole
 {
-    //TODO: Check if null on each?
+    //TODO: Check if null on each option?
     public class ConsoleOptions
     {
         public SpriteFont Font { get; set; }
@@ -38,10 +38,11 @@ namespace JPEngine.Utils.ScriptConsole
         public Color PastCommandColor { get; set; }
         public Color PastCommandOutputColor { get; set; }
 
-
+        //TODO: ScrollUpKey, ScrollDownKey, IsScrollable, IsClickable (Mouse) (if not, the mouse will ignore it)
 
         public ConsoleOptions(SpriteFont font)
         {
+            //TODO: Find a way to have a Font in the Engine, without relying on the Game
             if (font == null)
                 throw new ArgumentNullException("The font cannot be null.");
 
@@ -70,8 +71,6 @@ namespace JPEngine.Utils.ScriptConsole
             PastCommandOutputColor = Color.Violet;
             BackgroundColor = new Color(0, 0, 0, 175);
         }
-
-
     }
 
     public class ScriptConsole

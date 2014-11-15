@@ -27,8 +27,6 @@ namespace JPEngine.Graphics
     {
         #region Fields
 
-
-
         private Game _game; //HACK : Temp fix for the GraphicsDevice ctor that crashes if there is no Game instance
 
         // Singleton device service instance.
@@ -41,7 +39,6 @@ namespace JPEngine.Graphics
 
         #endregion
 
-
         /// <summary>
         /// Gets the current graphics device.
         /// </summary>
@@ -49,7 +46,6 @@ namespace JPEngine.Graphics
         {
             get { return _graphicsDevice; }
         }
-
 
         // IGraphicsDeviceService events.
         public event EventHandler<EventArgs> DeviceCreated;
@@ -71,6 +67,7 @@ namespace JPEngine.Graphics
             };
             //parameters.BackBufferFormat = SurfaceFormat.Color;
 
+            //HACK : Need a Game to be created to be able to create a GraphicsDevice
             _game = new Game();
 
             _graphicsDevice = new GraphicsDevice(

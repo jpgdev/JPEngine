@@ -9,11 +9,18 @@ namespace JPEngine.Managers
 
         private readonly Form _windowForm;
 
+        private FormBorderStyle _defaultBorderStyle;
+
         public override bool IsFullScreen
         {
             get { return _windowForm.WindowState == FormWindowState.Maximized; }
             set
             {
+                //If the window was not FullScreen, and is now changing to FullScreen
+                if (value && !IsFullScreen)
+                    _defaultBorderStyle = _windowForm.FormBorderStyle;
+                    
+                _windowForm.FormBorderStyle = value ? FormBorderStyle.None : _defaultBorderStyle;
                 _windowForm.WindowState = value ? FormWindowState.Maximized : FormWindowState.Normal;
                 ApplySettings();
             }
@@ -23,6 +30,7 @@ namespace JPEngine.Managers
             : base(graphicsDeviceService)
         {
             _windowForm = windowForm;
+            _defaultBorderStyle = _windowForm.FormBorderStyle;
         }
 
         public override void ApplySettings()
