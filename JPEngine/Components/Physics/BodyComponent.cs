@@ -9,7 +9,6 @@ namespace JPEngine.Components.Physics
     public class BodyComponent : BaseComponent
     {
         private Body _body;
-
         public Body Body
         {
             get { return _body; }

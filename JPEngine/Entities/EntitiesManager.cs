@@ -38,6 +38,7 @@ namespace JPEngine.Entities
         //public event EventHandler<ListItemEventArgs<Entity>> EntityRemoved;
 
 
+        //TODO: List of Systems...
         public Box2DPhysicsSystem PhysicsSystem { get; set; }
 
         internal EntitiesManager()
@@ -46,7 +47,9 @@ namespace JPEngine.Entities
 
         protected override bool InitializeCore()
         {
+            //TODO: List of Systems...
             PhysicsSystem = new Box2DPhysicsSystem(new Vector2(0, 9.82f));
+            PhysicsSystem.Initialize();
 
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
@@ -72,6 +75,7 @@ namespace JPEngine.Entities
 
         private void UpdateSystems(GameTime gameTime)
         {
+            //TODO: List of Systems...
 
             //HACK : Temp for testings, REALLY NOT EFFICIENT
 

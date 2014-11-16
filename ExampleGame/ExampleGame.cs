@@ -106,7 +106,7 @@ namespace ExampleGame
 
             {
                 var e = new Entity("player");
-                e.Transform.Scale = new Vector2(0.5f, 0.5f);
+                //e.Transform.Scale = new Vector2(0.5f, 0.5f);
                 e.Transform.Position = new Vector2(-200, 30);
 
                 const int width = 64; //96;
@@ -172,9 +172,9 @@ namespace ExampleGame
                     {
                         int mod = x % 2;
                         string name = mod == 1 ? "ground" : "platform";
-                        //BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                        BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
 
-                        CreateCrate(new Vector2(startX + (x*width), startY + (y*height)), name, 64, 64); //, bodyType);
+                        CreateCrate(new Vector2(startX + (x * width), startY + (y * height)), name, 64, 64, bodyType);
                     }
                 }
                     
