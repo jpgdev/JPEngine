@@ -1,5 +1,7 @@
 ### TODOS
 
+- Add a global (to the solution) 'libs' directory for all externals dll.
+
 - Implements Unit Tests for current functionalities
 	- EntityManager
 		- Events
