@@ -1,13 +1,18 @@
-﻿namespace JPEngine.Components
+﻿using System;
+using JPEngine.Events;
+
+namespace JPEngine.Components
 {
     public interface IComponent
     {
+        bool Enabled { get; }
+
         string Tag { get; }
 
         void Initialize();
 
         void Start();
 
-        //TODO: Put the Enabled here and add OnEnabled, OnDisabled
+        event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
     }
 }

@@ -175,9 +175,6 @@ namespace JPEngine
 
         #endregion
 
-
-
-
         #region Methods
 
         public static void UnloadContent()

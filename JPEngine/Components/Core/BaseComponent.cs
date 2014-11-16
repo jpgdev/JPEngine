@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Components
 {
-    public class BaseComponent : IComponent, IUpdateableComponent, ICloneable
+    public class BaseComponent : IUpdateableComponent, ICloneable
     {
         #region Attributes
 
@@ -28,9 +28,11 @@ namespace JPEngine.Components
             get { return _tag; }
             protected set
             {
+                if (_tag == value) 
+                    return;
+                
                 string oldValue = _tag;
                 _tag = value;
-
                 if(TagChanged != null)
                     TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
             }
@@ -41,13 +43,14 @@ namespace JPEngine.Components
             get { return _enabled; }
             set
             {
-                if (_enabled != value)
-                {
-                    bool oldValue = _enabled;
-                    _enabled = value;
-                    if (EnabledChanged != null)
-                        EnabledChanged(this, new ValueChangedEventArgs<bool>(oldValue, _enabled));
-                }
+                if (_enabled == value) 
+                    return;
+                
+                bool oldValue = _enabled;
+                _enabled = value;
+                if (EnabledChanged != null)
+                    EnabledChanged(this, new ValueChangedEventArgs<bool>(oldValue, _enabled));
+                
             }
         }
 
@@ -59,13 +62,13 @@ namespace JPEngine.Components
             get { return _updateOrder; }
             set
             {
-                if (_updateOrder != value)
-                {
-                    int oldValue = _updateOrder;
-                    _updateOrder = value;
-                    if (UpdateOrderChanged != null)
-                        UpdateOrderChanged(this, new ValueChangedEventArgs<int>(oldValue, _updateOrder));
-                }
+                if (_updateOrder == value) 
+                    return;
+
+                int oldValue = _updateOrder;
+                _updateOrder = value;
+                if (UpdateOrderChanged != null)
+                    UpdateOrderChanged(this, new ValueChangedEventArgs<int>(oldValue, _updateOrder));
             }
         }
 

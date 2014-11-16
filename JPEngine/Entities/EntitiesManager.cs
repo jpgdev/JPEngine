@@ -4,6 +4,7 @@ using System.Linq;
 using JPEngine.Components;
 using JPEngine.Events;
 using JPEngine.Managers;
+using JPEngine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,25 +14,31 @@ namespace JPEngine.Entities
     {
         /* TODO: Scenes
          * 
-         * Split the entities by scenes => contains a list of entities
+         * - Split the entities by scenes => contains a list of entities
          * 
-         * Put the Scene in the Entity construtor directly? Since we won't be using only one huge list in THIS class
-         *  OR EntitiesManager.GetEntity(name) => _scenes.GetEntity(name) ..... Too slow?
+         * - Put the Scene in the Entity construtor directly? Since we won't be using only one huge list in THIS class
+         * OR 
+         * - EntitiesManager.GetEntity(name) => _scenes.GetEntity(name) ..... Too slow?
          *  
-         * Do we want to keep Entities in the Scene object OR keep a dictionnary here with the Scene as a key?
+         * - Do we want to keep Entities in the Scene object OR keep a dictionnary here with the Scene as a key?
          * 
-         * If we keep a dictonnary HERE, we would need to change the way Entities work to keep the components here too, 
-         * so that they share the same Architecture mindset.         * 
+         * - If we keep a dictonnary HERE, we would need to change the way Entities work to keep the components here too, 
+         *   so that they share the same Architecture mindset.         * 
          */
 
-        private readonly List<Entity> _tempEntities = new List<Entity>(); //The list used to work with
         private readonly List<Entity> _entities = new List<Entity>();   //The core list of entities
+        private readonly List<Entity> _tempEntities = new List<Entity>(); //The list used to work with
         private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
-
+        
+        private readonly List<ISystem> _systems = new List<ISystem>();
+        private readonly List<ISystem> _tempSystems = new List<ISystem>();
 
         public event EventHandler<ListItemEventArgs<Entity>> EntityAdded;
         //TODO: Implement a Remove? Maybe only usefull when Scenes will be implented to move an Entity to another scene?
         //public event EventHandler<ListItemEventArgs<Entity>> EntityRemoved;
+
+
+        public Box2DPhysicsSystem PhysicsSystem { get; set; }
 
         internal EntitiesManager()
         {
@@ -39,6 +46,8 @@ namespace JPEngine.Entities
 
         protected override bool InitializeCore()
         {
+            PhysicsSystem = new Box2DPhysicsSystem(new Vector2(0, 9.82f));
+
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
 
@@ -49,10 +58,28 @@ namespace JPEngine.Entities
 
         internal override void Update(GameTime gameTime)
         {
+            UpdateSystems(gameTime);
+
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
 
-            _tempEntities.ForEach(e => e.Update(gameTime));
+            _tempEntities.ForEach(e => 
+            { 
+                if (e.Enabled) 
+                    e.Update(gameTime); 
+            });
+        }
+
+        private void UpdateSystems(GameTime gameTime)
+        {
+
+            //HACK : Temp for testings, REALLY NOT EFFICIENT
+
+            //Cache this in a Dictonnary of Components by type
+            //Subscribe to Entity.OnComponentAdded & when we do AddEntity, we check for each components
+            Dictionary<Type, IEnumerable<IComponent>> components = PhysicsSystem.TypesUsed.ToDictionary(t => t, GetAllComponentsOfType);
+
+            PhysicsSystem.Update(components, gameTime);
         }
 
         internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -61,18 +88,24 @@ namespace JPEngine.Entities
             _tempEntities.AddRange(_entities);
 
             //TODO: Call SpriteManager which will be handling the layers? Or do it here?
-            _tempEntities.ForEach(e => e.Draw(spriteBatch, gameTime));
+           _tempEntities.ForEach(e =>
+            {
+                if (e.Enabled)
+                    e.Draw(spriteBatch, gameTime);
+            });
         }
+
+        #region Entities Handling
 
         public void AddEntity(Entity entity)
         {
-            if(!entity.Initialized)
+            if (!entity.Initialized)
                 entity.Initialize();
 
             _entities.Add(entity);
             AddTaggedEntity(entity);
 
-            if(EntityAdded != null)
+            if (EntityAdded != null)
                 EntityAdded(this, new ListItemEventArgs<Entity>(entity, ListItemAction.Added));
         }
 
@@ -102,8 +135,8 @@ namespace JPEngine.Entities
 
             return _taggedEntities[tag];
         }
-        
-        private IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IComponent
+
+        public IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IComponent
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
@@ -111,7 +144,7 @@ namespace JPEngine.Entities
             return _tempEntities.SelectMany(e => e.GetComponents<T>());
         }
 
-        private IEnumerable<IComponent> GetAllComponentsOfType(Type type)
+        public IEnumerable<IComponent> GetAllComponentsOfType(Type type)
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
@@ -126,6 +159,39 @@ namespace JPEngine.Entities
             _tempEntities.Clear();
             _taggedEntities.Clear();
         }
+
+        #endregion
+
+        #region Systems Handling
+
+        public ISystem GetSystem(Type type)
+        {
+            return GetSystems(type).FirstOrDefault();
+        }
+
+        public T GetSystem<T>() where T : class, ISystem
+        {
+            return GetSystems<T>().FirstOrDefault();
+        }
+
+        public IEnumerable<ISystem> GetSystems(Type type) 
+        {
+            _tempSystems.Clear();
+            _tempSystems.AddRange(_systems);
+
+            return _tempSystems.Where(c => (c.GetType() == type)); 
+        }
+
+        public IEnumerable<T> GetSystems<T>() where T : class, ISystem
+        {
+            _tempSystems.Clear();
+            _tempSystems.AddRange(_systems);
+
+            return _tempSystems.OfType<T>();
+        }
+
+        #endregion
+        
 
         private void OnEntityTagChanged(object sender, ValueChangedEventArgs<string> e)
         {

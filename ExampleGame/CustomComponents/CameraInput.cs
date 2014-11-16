@@ -23,26 +23,26 @@ namespace ExampleGame.CustomComponents
 
         public override void Update(GameTime gameTime)
         {
-            float delta = gameTime.ElapsedGameTime.Milliseconds/1000.0f;
+            float deltaSinceLastUpdate = gameTime.ElapsedGameTime.Milliseconds/1000.0f;
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["W"].Value))
             {
-                Transform.Position.Y -= _speed * delta;
+                Transform.Position.Y -= _speed * deltaSinceLastUpdate;
             }
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["S"].Value))
             {
-                Transform.Position.Y += _speed * delta;
+                Transform.Position.Y += _speed * deltaSinceLastUpdate;
             }
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["D"].Value))
             {
-                Transform.Position.X += _speed * delta;
+                Transform.Position.X += _speed * deltaSinceLastUpdate;
             }
 
             if (Engine.Input.IsKeyDown((Keys) Engine.Settings["A"].Value))
             {
-                Transform.Position.X -= _speed * delta;
+                Transform.Position.X -= _speed * deltaSinceLastUpdate;
             }
 
             if (Engine.Input.IsKeyDown((Keys)Engine.Settings["R"].Value))

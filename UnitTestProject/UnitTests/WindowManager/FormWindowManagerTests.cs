@@ -6,13 +6,12 @@ using NUnit.Framework;
 namespace UnitTestProject.Tests
 {
     [TestFixture]
-    public class WindowManagerTests
+    public class FormWindowManagerTests : WindowManagerTests
     {
         private Form _form;
-        private GraphicsDeviceService _graphicsDeviceService;
 
         [TestFixtureSetUp]
-        public void SetUpTest()
+        public override void SetUpTest()
         {
             _form = new Form()
             {
@@ -26,7 +25,7 @@ namespace UnitTestProject.Tests
         }
 
         [Test]
-        public void WindowResizeTest()
+        public override void WindowResizeTest()
         {
             const int height = 123;
             const int width = 456;
@@ -39,29 +38,11 @@ namespace UnitTestProject.Tests
         }
 
         [Test]
-        public void WindowFullScreenTest()
+        public override void WindowFullScreenTest()
         {
             Engine.Window.IsFullScreen = true;
             Assert.True(Engine.Window.IsFullScreen);
-
-            //TODO: Test for non-Form WindowManager...
-
             Assert.AreEqual(_form.WindowState, FormWindowState.Maximized);
-        }
-
-        //[Test]
-        //public void WindowIsMouseVisibleTest()
-        //{
-        //    //TODO: Test for all possible WindowManager
-        //    //Engine.Window.IsMouseVisible = true;
-        //}
-
-        [TestFixtureTearDown]
-        public void Finished()
-        {
-            Engine.UnloadContent();
-            _graphicsDeviceService.GraphicsDevice.Dispose();
-            _graphicsDeviceService.Release(true);
         }
     }
 }

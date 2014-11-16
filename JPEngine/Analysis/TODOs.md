@@ -11,7 +11,10 @@
 		
 	- Components
 	
-	-...
+	- WindowManager 
+		- FormWindowManager
+		- OpenTKWindowManager
+		- BaseWindowManager
 		
 - Console
 	- Implement Selection
@@ -21,17 +24,13 @@
 	- Implement Scrollbar
 		- ConsoleOptions.IsScrollable
 		- ConsoleOptions.ScrollUpKey
-		- ConsoleOptions.ScrollDownKey
-		
-	- Split ScriptConsole (but keep this as a "main" class)
-		- ConsoleRenderer
-		- ConsoleInputProcessor  	
+		- ConsoleOptions.ScrollDownKey		
 		
 - Entity & Component IClonable (or Copy Constructor?)
 
-- Implement a IsActive/IsEnabled for:
-	- Entity
-	- Components
+- Call the Start() function only when the Component is Enabled, otherwise subscribe to the OnEnabledChanged event to do it the first time it is enabled
+
+- Implement a IsEnabled for:
 	- Systems
 
 - Add Events in Entity
@@ -40,7 +39,7 @@
 
 - Add Events in EntityManager
 	- OnComponentAdded
-	- OnComponentRemoved	
+	- OnComponentRemoved
 	
 - Implement Scenes
 

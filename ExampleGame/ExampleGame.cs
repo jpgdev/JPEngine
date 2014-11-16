@@ -1,4 +1,11 @@
-﻿using JPEngine.Components;
+﻿using System.Collections.Specialized;
+using FarseerPhysics;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
+using JPEngine.Components;
+using JPEngine.Components.Physics;
 using JPEngine.Enums;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
@@ -99,25 +106,116 @@ namespace ExampleGame
 
             {
                 var e = new Entity("player");
-                //e.Transform.Scale = new Vector2(0.5f, 0.5f);
+                e.Transform.Scale = new Vector2(0.5f, 0.5f);
+                e.Transform.Position = new Vector2(-200, 30);
+
+                const int width = 64; //96;
+                const int height = 64; //96;
                 
                 e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
                 e.AddComponent(new PlayerInput(e));
-                e.AddComponent(new RectCollider(e) { Width = 96, Height = 96 });
-                e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+
+                Body body = BodyFactory.CreateRectangle(
+                    Engine.Entities.PhysicsSystem.World,
+                    ConvertUnits.ToSimUnits(width * e.Transform.Scale.X),
+                    ConvertUnits.ToSimUnits(height * e.Transform.Scale.Y),
+                    1, e);
+
+                body.BodyType = BodyType.Dynamic;
+                body.FixedRotation = true;
+                body.Mass = 0;
+                body.Friction = 0;
+                body.LinearDamping = 3f;
+
+                body.OnCollision += (a, b, contact) =>
+                {
+                    Entity e1 = a.Body.UserData as Entity;
+                    Entity e2 = b.Body.UserData as Entity;
+                    if (e1 != null && e2 != null)
+                    {
+                        if (e2.Tag == "ground")
+                            b.Body.IgnoreGravity = false;
+
+                        //if (e1.Tag == "ground")
+                        //    a.Body.IgnoreGravity = false;
+                    }
+                    return true;
+                };
+
+                body.Position = new Vector2(
+                    ConvertUnits.ToSimUnits(e.Transform.Position.X),
+                    ConvertUnits.ToSimUnits(e.Transform.Position.Y));
+
+                body.Rotation = e.Transform.Rotation;
+
+                e.AddComponent(new BodyComponent(e, body));
+
+
+                //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
+                //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
 
                 Engine.Entities.AddEntity(e);
             }
-            
+
+            CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static);
+            CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
+
             {
-                var e2 = new Entity();
-                e2.Transform.Position.X = 100;
-                e2.Transform.Position.Y = 100;
+                float startX = -300;
+                float startY = 100;
+                const int width = 64;
+                const int height = 64;
 
-                e2.AddComponent(new DrawableSpriteComponent(e2, Engine.Textures["crate"]));
+                for (int x = 0; x < 10; x++)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        int mod = x % 2;
+                        string name = mod == 1 ? "ground" : "platform";
+                        //BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
 
-                Engine.Entities.AddEntity(e2);
+                        CreateCrate(new Vector2(startX + (x*width), startY + (y*height)), name, 64, 64); //, bodyType);
+                    }
+                }
+                    
             }
+        }
+
+        private static void CreateCrate(Vector2 pos, string name, int width = 64, int height = 64, BodyType bodyType = BodyType.Dynamic)
+        {
+            const int crate_width = 64;
+            const int crate_height = 64;
+
+            var e2 = new Entity(name);
+            e2.Transform.Position.X = pos.X;
+            e2.Transform.Position.Y = pos.Y;
+            e2.Transform.Scale.X = width / crate_width;
+            e2.Transform.Scale.Y = height / crate_height;
+
+            Body body = BodyFactory.CreateRectangle(
+                Engine.Entities.PhysicsSystem.World,
+                ConvertUnits.ToSimUnits(width),
+                ConvertUnits.ToSimUnits(height),
+                100, 
+                e2);
+
+            body.Mass = 100;
+            body.Friction = 100;
+            body.LinearDamping = 3f;
+            body.IgnoreGravity = true;
+            body.FixedRotation = true;
+            body.BodyType = bodyType;
+
+            body.Position = new Vector2(
+                ConvertUnits.ToSimUnits(e2.Transform.Position.X),
+                ConvertUnits.ToSimUnits(e2.Transform.Position.Y));
+
+            body.Rotation = e2.Transform.Rotation;
+
+            e2.AddComponent(new BodyComponent(e2, body));
+            e2.AddComponent(new DrawableSpriteComponent(e2, Engine.Textures["crate"]));
+
+            Engine.Entities.AddEntity(e2);
         }
 
         protected override void UnloadContent()

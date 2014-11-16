@@ -49,10 +49,12 @@
     <Compile Include="UnitTests\Entities\EntitiesTests.cs" />
     <Compile Include="UnitTests\Entities\ComponentsTests.cs" />
     <Compile Include="UnitTests\Entities\EntitiesManagerTests.cs" />
+    <Compile Include="UnitTests\ResourcesManagers\ResourceManagerTests.cs" />
+    <Compile Include="UnitTests\WindowManager\FormWindowManagerTests.cs" />
     <Compile Include="UnitTests\ResourcesManagers\FontsManagerTests.cs" />
     <Compile Include="UnitTests\ResourcesManagers\MusicManagerTests.cs" />
     <Compile Include="UnitTests\ResourcesManagers\AudioFXManagerTests.cs" />
-    <Compile Include="UnitTests\WindowManagerTests.cs" />
+    <Compile Include="UnitTests\WindowManager\WindowManagerTests.cs" />
     <Compile Include="UnitTests\EngineTests.cs" />
     <Compile Include="UnitTests\ResourcesManagers\TextureManagerTests.cs" />
   </ItemGroup>

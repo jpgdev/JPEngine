@@ -48,7 +48,9 @@ namespace JPEngine.Managers
             float min = (MathHelper.Max(0, (int)drawableSprite.Layer - 1) * STEPS_PER_LAYER);
             float max = (int)drawableSprite.Layer * STEPS_PER_LAYER;
             ////float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
-            float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
+            //float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
+            float zIndex = min / (_numberOfLayers * STEPS_PER_LAYER);
+
 
 
             return MathHelper.Clamp(1f, 0f, zIndex);

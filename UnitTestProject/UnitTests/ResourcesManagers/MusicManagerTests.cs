@@ -1,84 +1,71 @@
-﻿using System.Windows.Forms;
-using JPEngine;
-using JPEngine.Graphics;
+﻿using JPEngine;
 using NUnit.Framework;
 
-namespace UnitTestProject.Tests.ResourcesManagers
+namespace UnitTestProject.UnitTests.ResourcesManagers
 {
 
     [TestFixture]
-    public class MusicManagerTests
+    public class MusicManagerTests : ResourceManagerTests
     {
-        private Form _form;
-        private GraphicsDeviceService _graphicsDeviceService;
-
-        [TestFixtureSetUp]
-        public void SetUpTest()
+        [Test]
+        public override void ResourceAddTest()
         {
-            _form = new Form()
-            {
-                Width = 800,
-                Height = 600
-            };
-
-            _graphicsDeviceService = GraphicsDeviceService.AddRef(_form.Handle, _form.ClientSize.Width, _form.ClientSize.Height);
-
-            Engine.Initialize(_graphicsDeviceService, _form.Handle);
+            throw new System.NotImplementedException();
         }
 
-        //TODO: Uncomment and fill this
-        //[Test]
-        //public void TestMusicLoad()
-        //{
-        //    const string name = "ammo_pickup";
-
-        //    Engine.Music.Add(name, "Sounds/ammo_pickup", true);
-        //    Assert.IsTrue(Engine.Music.IsResourcePathAdded(name));
-        //    Assert.IsTrue(Engine.Music.IsResourceLoaded(name));
-        //    Assert.NotNull(Engine.Music[name]);
-        //}
-
-
-        //[Test]
-        //public void TestSoundFXUnloadContent()
-        //{
-        //    const string name = "ammo_pickup";
-        //    const string path = "Sounds/ammo_pickup";
-
-        //    Assert.IsTrue(Engine.Music.Add(name, path, true));
-
-        //    Engine.Music.UnloadContent();
-
-        //    Assert.AreEqual(Engine.Music.AmountAdded, 0);
-        //    Assert.AreEqual(Engine.Music.AmountLoaded, 0);
-
-        //    Assert.Catch<KeyNotFoundException>(() => Engine.Music.GetResource(name));
-        //}
-
-
-        //[Test]
-        //public void TestSoundFX_Play()
-        //{
-        //    const string name = "ammo_pickup";
-        //    const string path = "Sounds/ammo_pickup";
-
-        //    Assert.IsTrue(Engine.Music.Add(name, path, true));
-
-        //    Assert.IsTrue(Engine.Music[name].Play());
-        //}
-
-        //[TearDown]
-        //public void UnloadContent()
-        //{
-        //    Engine.Music.UnloadContent();
-        //}
-
-        [TestFixtureTearDown]
-        public void Finished()
+        [Test]
+        public override void ResourceLoadTest()
         {
-            Engine.UnloadContent();
-            _graphicsDeviceService.GraphicsDevice.Dispose();
-            _graphicsDeviceService.Release(true);
+            throw new System.NotImplementedException();
+
+            //const string name = "ammo_pickup";
+
+            //Engine.Music.Add(name, "Sounds/ammo_pickup", true);
+            //Assert.IsTrue(Engine.Music.IsResourcePathAdded(name));
+            //Assert.IsTrue(Engine.Music.IsResourceLoaded(name));
+            //Assert.NotNull(Engine.Music[name]);
+        }
+
+        [Test]
+        public override void UnloadContentTest()
+        {
+            throw new System.NotImplementedException();
+
+            //const string name = "ammo_pickup";
+            //const string path = "Sounds/ammo_pickup";
+
+            //Assert.IsTrue(Engine.Music.Add(name, path, true));
+
+            //Engine.Music.UnloadContent();
+
+            //Assert.AreEqual(Engine.Music.AmountAdded, 0);
+            //Assert.AreEqual(Engine.Music.AmountLoaded, 0);
+
+            //Assert.Catch<KeyNotFoundException>(() => Engine.Music.GetResource(name));
+        }
+
+        [Test]
+        public void TestMusic_Play()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Test]
+        public void TestMusic_Stop()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Test]
+        public void TestMusic_StopAndPlay()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            Engine.Music.UnloadContent();
         }
     }
 }

@@ -5,6 +5,7 @@ using JPEngine.Components;
 using JPEngine.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenTK.Graphics.ES11;
 
 namespace JPEngine.Entities
 {
@@ -27,7 +28,11 @@ namespace JPEngine.Entities
         private readonly TransformComponent _transform;
 
         private bool _initialized;
+        private bool _isEnabled;
         private string _tag = string.Empty;
+
+        public event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
+        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
 
         #region Properties
 
@@ -57,6 +62,21 @@ namespace JPEngine.Entities
             }
         }
 
+        public bool Enabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled == value)
+                    return;
+
+                bool oldValue = _isEnabled;
+                _isEnabled = value;
+                if (EnabledChanged != null)
+                    EnabledChanged(this, new ValueChangedEventArgs<bool>(oldValue, _isEnabled));
+            }
+        }
+
         /// <summary>
         ///     Get a copy of the list of all the components.
         /// </summary>
@@ -74,23 +94,12 @@ namespace JPEngine.Entities
             //AddComponent(_transform);
 
             _tag = tag;
+            Enabled = true;
             
             if (autoAdd)
                 Engine.Entities.AddEntity(this);
         }
 
-        public object Clone()
-        {
-            var e = new Entity();
-
-            //TODO: Get a copy of each of the components (implement IClonable)
-            //TODO: Set the GameObject to the new one.
-            //TODO: Call AddComponent
-
-            throw new NotImplementedException();
-        }
-
-        public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
 
         public void Initialize()
         {
@@ -102,28 +111,10 @@ namespace JPEngine.Entities
 
             _tempComponents.ForEach(c => c.Initialize());
 
-            //TODO: Check if they are enabled before starting?
+            //TODO: Check if they are enabled before starting, otherwise subscribe
             _tempComponents.ForEach(c => c.Start());
 
             _initialized = true;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            _tempUpdateableComponents.Clear();
-            _tempUpdateableComponents.AddRange(_updateableComponents);
-
-            foreach (IUpdateableComponent c in _tempUpdateableComponents.Where(c => c.Enabled))
-                c.Update(gameTime);
-        }
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            _tempDrawableComponents.Clear();
-            _tempDrawableComponents.AddRange(_drawableComponents);
-
-            foreach (IDrawableComponent c in _tempDrawableComponents.Where(c => c.Visible))
-                c.Draw(spriteBatch, gameTime);
         }
 
         #region Components Handling
@@ -136,10 +127,6 @@ namespace JPEngine.Entities
             //Type componentType = entityComponent.GetType();
             //if (GetComponent<componentType>())
 
-            //TODO: Test if there is already a component of the same Type ?????
-            //if(GetComponent<T>() != null)
-            //    throw new ArgumentException(string.Format("There is already a Component of this type in this entity.", component.Name));
-
             if (!string.IsNullOrEmpty(component.Tag))
             {
                 try
@@ -149,7 +136,7 @@ namespace JPEngine.Entities
                 catch (ArgumentException e)
                 {
                     throw new ArgumentException(
-                        string.Format("There is already a Component with the name {0} in this entity.", component.Tag));
+                        string.Format("There is already a Component with the tag '{0}' in this entity.", component.Tag));
                 }
             }
 
@@ -259,7 +246,7 @@ namespace JPEngine.Entities
         /// <returns></returns>
         public IEnumerable<IComponent> GetComponents(Type type)
         {
-            return _components.Where(c => (c.GetType() == type));
+            return _components.Where(c => (c.GetType() == type)); 
         }
 
         /// <summary>
@@ -276,6 +263,30 @@ namespace JPEngine.Entities
         }
 
         #endregion
+
+        public void Update(GameTime gameTime)
+        {
+            if (!Enabled)
+                return;
+
+            _tempUpdateableComponents.Clear();
+            _tempUpdateableComponents.AddRange(_updateableComponents);
+
+            foreach (IUpdateableComponent c in _tempUpdateableComponents.Where(c => c.Enabled))
+                c.Update(gameTime);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (!Enabled) 
+                return;
+
+            _tempDrawableComponents.Clear();
+            _tempDrawableComponents.AddRange(_drawableComponents);
+
+            foreach (IDrawableComponent c in _tempDrawableComponents.Where(c => c.Visible))
+                c.Draw(spriteBatch, gameTime);
+        }
 
         #region Order Changing Event handling
 
@@ -312,5 +323,16 @@ namespace JPEngine.Entities
         }
 
         #endregion
+
+        public object Clone()
+        {
+            var e = new Entity();
+
+            //TODO: Get a copy of each of the components (implement IClonable)
+            //TODO: Set the GameObject to the new one.
+            //TODO: Call AddComponent
+
+            throw new NotImplementedException();
+        }
     }
 }

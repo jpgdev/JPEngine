@@ -53,6 +53,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FarseerPhysics MonoGame">
+      <HintPath>External DLLs\FarseerPhysics\FarseerPhysics MonoGame.dll</HintPath>
+    </Reference>
     <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
@@ -80,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\CameraComponent.cs" />
+    <Compile Include="Components\Physics\BodyComponent.cs" />
     <Compile Include="Components\RectCollider.cs" />
     <Compile Include="Components\Core\DrawableComponent.cs" />
     <Compile Include="Components\DrawableSpriteComponent.cs" />
@@ -91,7 +95,7 @@
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Entities\EntitiesManager.cs" />
     <Compile Include="Systems\ISystem.cs" />
-    <Compile Include="Systems\PhysicsSystem.cs" />
+    <Compile Include="Systems\Box2DPhysicsSystem.cs" />
     <Compile Include="Systems\System.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Entities\Entity.cs" />
@@ -111,13 +115,13 @@
     <Compile Include="Managers\Window\FormWindowManager.cs" />
     <Compile Include="Graphics\GraphicsDeviceService.cs" />
     <Compile Include="Utils\ScriptConsole\CommandHistory.cs" />
+    <Compile Include="Utils\ScriptConsole\ConsoleInputProcessor.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleRenderer.cs" />
-    <Compile Include="Utils\ScriptConsole\IScriptParser.cs" />
-    <Compile Include="Utils\ScriptConsole\LuaParser.cs" />
+    <Compile Include="Utils\ScriptConsole\ScriptParser\IScriptParser.cs" />
+    <Compile Include="Utils\ScriptConsole\ScriptParser\LuaParser.cs" />
     <Compile Include="Utils\ScriptConsole\OutputLine.cs" />
     <Compile Include="Utils\ScriptConsole\ScriptConsole.cs" />
     <Compile Include="Utils\JsonSerializer.cs" />
-    <Compile Include="Utils\ScriptConsole\KeyboardInput.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Managers\Resources\MusicManager.cs" />
     <Compile Include="Managers\Resources\SoundFXManager.cs" />
@@ -137,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Analysis\Ideas.md" />
+    <None Include="Analysis\TODOs.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

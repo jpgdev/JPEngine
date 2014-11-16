@@ -102,7 +102,6 @@ namespace JPEngine.Managers
             }
         }
 
-
         #region State getter
 
         public bool IsKeyClicked(Keys key)

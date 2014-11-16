@@ -53,7 +53,6 @@ namespace JPEngine.Managers
         {
             _gameWindow.Width = Width;
             _gameWindow.Height = Height;
-
             //_gameWindow.SwapBuffers();
         }
     }

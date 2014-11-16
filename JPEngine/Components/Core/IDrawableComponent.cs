@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Components
 {
-    public interface IDrawableComponent
+    public interface IDrawableComponent : IComponent
     {
         bool Visible { get; }
 
@@ -15,7 +15,6 @@ namespace JPEngine.Components
         event EventHandler<ValueChangedEventArgs<bool>> VisibleChanged;
 
         event EventHandler<ValueChangedEventArgs<DrawingLayer>> LayerChanged;
-
 
         void Draw(SpriteBatch spriteBatch, GameTime gameTime);
         //void Draw();

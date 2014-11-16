@@ -4,13 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Components
 {
-    public interface IUpdateableComponent
+    public interface IUpdateableComponent : IComponent
     {
-        bool Enabled { get; }
-
         int UpdateOrder { get; }
-
-        event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
 
         event EventHandler<ValueChangedEventArgs<int>> UpdateOrderChanged;
         
