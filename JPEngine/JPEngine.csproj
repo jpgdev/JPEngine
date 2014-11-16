@@ -69,7 +69,7 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
+      <HintPath>External DLLs\OpenTK\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -142,6 +142,17 @@
   <ItemGroup>
     <None Include="Analysis\Ideas.md" />
     <None Include="Analysis\TODOs.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="libs\FarseerPhysics\FarseerPhysics MonoGame.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net35\KopiLua.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net35\NLua.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net40\KopiLua.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net40\NLua.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net45\KopiLua.dll" />
+    <Content Include="libs\NLua.NoPInvoke\net45\NLua.dll" />
+    <Content Include="libs\OpenTK\OpenTK.dll" />
+    <Content Include="libs\OpenTK\OpenTK.GLControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

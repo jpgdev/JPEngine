@@ -12,6 +12,9 @@ namespace JPEngine.Managers
 
     //TODO: Check the Microsoft.Xna.Framework.GameWindow.TextInput event?
 
+    //TODO: Split this in 3 parts: KeyboardHandler, MouseHandler, GamepadHandler and keep them all here, but it would be possible to change them around 
+    
+
     public class InputManager : Manager
     {
         #region Attributes
@@ -22,9 +25,14 @@ namespace JPEngine.Managers
         private MouseState _oldMouseState;
         private MouseState _newMouseState;
 
+        //private GamePadState[] _oldGamePadStates;
+        //private GamePadState[] _newGamePadStates;
+
         public event EventHandler<KeyEventArgs> KeyDown;
         public event EventHandler<KeyEventArgs> KeyClicked;
         public event EventHandler<KeyEventArgs> KeyReleased;
+
+        
 
         #endregion
 
@@ -58,6 +66,12 @@ namespace JPEngine.Managers
 
             _oldMouseState = _newMouseState;
             _newMouseState = Mouse.GetState();
+
+            
+            //_oldGamePadStates[i] = _newGamePadStates[i];
+            //_newGamePadStates[i] = GamePad.GetState(PlayerIndex.One);
+
+            //GamePad.GetCapabilities(PlayerIndex.One).IsConnected
 
             UpdateKeys();
         }
