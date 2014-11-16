@@ -30,7 +30,7 @@ namespace JPEngine.Managers
             return true;
         }
 
-        public float GetZIndex(DrawableSpriteComponent drawableSprite)
+        public float GetZIndex(SpriteComponent drawableSprite)
         {
             //TODO: make this work with the Z, Y axis and the Layers
 

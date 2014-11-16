@@ -78,6 +78,7 @@ namespace ExampleGame
         {
             //Setup & Add the base Camera entity
             Entity mainCamera = new Entity("_MainCamera", true);
+            //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
@@ -95,90 +96,89 @@ namespace ExampleGame
 
             {
                 var e = new Entity("background");
-                e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["background"])
+                e.AddComponent(new SpriteComponent(e, Engine.Textures["grass"])
                 {
                     Layer = DrawingLayer.Background1
                 });
-                e.Transform.Scale *= 1/4f;
+                //e.Transform.Scale *= 1/4f;
 
                 Engine.Entities.AddEntity(e);
             }
+            
+            Entity player = CreatePlayer(new Vector2(-350, 30));
 
+            //CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static);
+            //CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
+
+            float cubeStartX = player.Transform.Position.X;
+            float cubeStartY = player.Transform.Position.Y + 100;
+            const int cubeWidth = 64;
+            const int cubeHeight = 64;
+
+            for (int x = 0; x < 10; x++)
             {
-                var e = new Entity("player");
-                //e.Transform.Scale = new Vector2(0.5f, 0.5f);
-                e.Transform.Position = new Vector2(-200, 30);
+                int y = 0;
+                //for (int y = 0; y < 3; y++)
+                //{
+                    int mod = x % 2;
+                    string name = mod == 1 ? "ground" : "platform";
+                    BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
 
-                const int width = 64; //96;
-                const int height = 64; //96;
-                
-                e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
-                e.AddComponent(new PlayerInput(e));
-
-                Body body = BodyFactory.CreateRectangle(
-                    Engine.Entities.PhysicsSystem.World,
-                    ConvertUnits.ToSimUnits(width * e.Transform.Scale.X),
-                    ConvertUnits.ToSimUnits(height * e.Transform.Scale.Y),
-                    1, e);
-
-                body.BodyType = BodyType.Dynamic;
-                body.FixedRotation = true;
-                body.Mass = 0;
-                body.Friction = 0;
-                body.LinearDamping = 3f;
-
-                body.OnCollision += (a, b, contact) =>
-                {
-                    Entity e1 = a.Body.UserData as Entity;
-                    Entity e2 = b.Body.UserData as Entity;
-                    if (e1 != null && e2 != null)
-                    {
-                        if (e2.Tag == "ground")
-                            b.Body.IgnoreGravity = false;
-
-                        //if (e1.Tag == "ground")
-                        //    a.Body.IgnoreGravity = false;
-                    }
-                    return true;
-                };
-
-                body.Position = new Vector2(
-                    ConvertUnits.ToSimUnits(e.Transform.Position.X),
-                    ConvertUnits.ToSimUnits(e.Transform.Position.Y));
-
-                body.Rotation = e.Transform.Rotation;
-
-                e.AddComponent(new BodyComponent(e, body));
-
-
-                //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
-                //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
-
-                Engine.Entities.AddEntity(e);
+                    CreateCrate(new Vector2(cubeStartX + (x * cubeWidth), cubeStartY + (y * cubeHeight)), name, 64, 64, bodyType);
+                //}
             }
+        }
 
-            CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static);
-            CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
+        private Entity CreatePlayer(Vector2 pos)
+        {
+            Entity player = new Entity("player");
 
+            player.Transform.Scale = new Vector2(0.5f, 0.5f);
+            player.Transform.Position = pos;
+
+            const int playerWidth = 64; //96;
+            const int playerHeight = 64; //96;
+
+            player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
+            player.AddComponent(new PlayerInput(player));
+
+            Body body = BodyFactory.CreateRectangle(
+                Engine.Entities.PhysicsSystem.World,
+                ConvertUnits.ToSimUnits(playerWidth*player.Transform.Scale.X),
+                ConvertUnits.ToSimUnits(playerHeight*player.Transform.Scale.Y),
+                1, player);
+
+            body.BodyType = BodyType.Dynamic;
+            body.FixedRotation = true;
+            body.Mass = 0;
+            body.Friction = 0;
+            body.LinearDamping = 1f;
+
+            body.OnCollision += (a, b, contact) =>
             {
-                float startX = -300;
-                float startY = 100;
-                const int width = 64;
-                const int height = 64;
-
-                for (int x = 0; x < 10; x++)
+                Entity e1 = a.Body.UserData as Entity;
+                Entity e2 = b.Body.UserData as Entity;
+                if (e1 != null && e2 != null)
                 {
-                    for (int y = 0; y < 3; y++)
-                    {
-                        int mod = x % 2;
-                        string name = mod == 1 ? "ground" : "platform";
-                        BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
-
-                        CreateCrate(new Vector2(startX + (x * width), startY + (y * height)), name, 64, 64, bodyType);
-                    }
+                    if (e2.Tag == "ground")
+                        b.Body.IgnoreGravity = false;
                 }
-                    
-            }
+                return true;
+            };
+
+            body.Position = new Vector2(
+                ConvertUnits.ToSimUnits(player.Transform.Position.X),
+                ConvertUnits.ToSimUnits(player.Transform.Position.Y));
+
+            body.Rotation = player.Transform.Rotation;
+            player.AddComponent(new BodyComponent(player, body));
+
+            //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
+            //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+
+            Engine.Entities.AddEntity(player);
+
+            return player;
         }
 
         private static void CreateCrate(Vector2 pos, string name, int width = 64, int height = 64, BodyType bodyType = BodyType.Dynamic)
@@ -213,7 +213,7 @@ namespace ExampleGame
             body.Rotation = e2.Transform.Rotation;
 
             e2.AddComponent(new BodyComponent(e2, body));
-            e2.AddComponent(new DrawableSpriteComponent(e2, Engine.Textures["crate"]));
+            e2.AddComponent(new SpriteComponent(e2, Engine.Textures["crate"]));
 
             Engine.Entities.AddEntity(e2);
         }

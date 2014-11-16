@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Components
 {
-    public class RectRenderer : DrawableSpriteComponent
+    public class RectRenderer : SpriteComponent
     {
         public Rectangle RectangleToRender { get; set; }
         

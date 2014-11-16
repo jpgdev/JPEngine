@@ -86,7 +86,7 @@
     <Compile Include="Components\Physics\BodyComponent.cs" />
     <Compile Include="Components\RectCollider.cs" />
     <Compile Include="Components\Core\DrawableComponent.cs" />
-    <Compile Include="Components\DrawableSpriteComponent.cs" />
+    <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\Core\BaseComponent.cs" />
     <Compile Include="Components\Core\IComponent.cs" />
     <Compile Include="Components\Core\IDrawableComponent.cs" />

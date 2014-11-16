@@ -22,7 +22,7 @@ namespace JPEngine.Systems
         protected override void IntializeCore()
         {
             //In Farseer Physics Engine, 64 pixels = 1 meter
-            ConvertUnits.SetDisplayUnitToSimUnitRatio(64f);
+            ConvertUnits.SetDisplayUnitToSimUnitRatio(48f);
         }
 
         public override void Update(Dictionary<Type, IEnumerable<IComponent>> components, GameTime gameTime)

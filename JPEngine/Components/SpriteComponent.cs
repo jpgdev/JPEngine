@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Components
 {
-    public class DrawableSpriteComponent : DrawableComponent
+    public class SpriteComponent : DrawableComponent
     {
         private Color _drawingColor = Color.White;
         private Rectangle? _drawnPortion; //TODO: Rename?
@@ -50,7 +50,7 @@ namespace JPEngine.Components
 
         #endregion
 
-        public DrawableSpriteComponent(Entity gameObject, Texture2D texture)
+        public SpriteComponent(Entity gameObject, Texture2D texture)
             : base(gameObject)
         {
             if(texture == null)

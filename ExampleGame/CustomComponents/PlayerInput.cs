@@ -85,7 +85,7 @@ namespace ExampleGame.CustomComponents
             if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["SpaceBar"].Value))
             {
                 const float verticalJumpVelocity = 400;
-                const float horizontalJumpVelocity = 100;
+                const float horizontalJumpVelocity = 50;
 
                 //Todo: Checker si y touche le sol
                 Jump(new Vector2(moveVelocity.X * horizontalJumpVelocity, -verticalJumpVelocity));
@@ -111,6 +111,7 @@ namespace ExampleGame.CustomComponents
             {
                 //jumpVelocity *= 10;
                 Vector2 after = ConvertUnits.ToSimUnits(jumpVelocity);
+                //_bodyComponent.Body.ApplyLinearImpulse(after);
                 _bodyComponent.Body.ApplyForce(jumpVelocity);
                 Console.WriteLine("Body : {0} ; {1}", jumpVelocity, after);
             }
@@ -122,12 +123,10 @@ namespace ExampleGame.CustomComponents
         {
             if (_bodyComponent != null)
             {
-                //direction.X *= 4;
-                //direction.Y *= 4;
+                direction *= 10;
 
                 direction.X = MathHelper.Clamp(direction.X, -_maxVelocity.X, _maxVelocity.X);
                 direction.Y = MathHelper.Clamp(direction.Y, -_maxVelocity.Y, _maxVelocity.Y);
-
 
                 _bodyComponent.Body.ApplyLinearImpulse(
                    new Vector2(
