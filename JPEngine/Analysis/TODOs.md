@@ -30,9 +30,6 @@
 
 - Call the Start() function only when the Component is Enabled, otherwise subscribe to the OnEnabledChanged event to do it the first time it is enabled
 
-- Implement a IsEnabled for:
-	- Systems
-
 - Add Events in Entity
 	- OnComponentAdded
 	- OnComponentRemoved
@@ -43,7 +40,10 @@
 	
 - Implement Scenes
 
-- Implement Systems
+- Implement Systems 
+	- Loop in Entitymanager
+	- System Order
+	- Constant Systems (ex. PhysicsSystem in always last and is directly accessible (Engine.Entities.Physics)
 
 - Implement PhysicsSystem
 	- Make a FarseersEngine wrapper, but keep an interface so we can implement our own?
