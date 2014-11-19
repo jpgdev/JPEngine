@@ -39,7 +39,6 @@ namespace JPEngine.Components
             set { _origin = value; }
         }
 
-        //TODO: Do I keep the Texture or the TextureName??????
         public Texture2D Texture { get; set; }
 
         public SpriteEffects SpriteEffects

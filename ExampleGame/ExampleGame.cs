@@ -121,7 +121,7 @@ namespace ExampleGame
                 //for (int y = 0; y < 3; y++)
                 //{
                     int mod = x % 2;
-                    string name = mod == 1 ? "ground" : "platform";
+                    string name = mod == 1 ? "falling_platform" : "platform";
                     BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
 
                     CreateCrate(new Vector2(cubeStartX + (x * cubeWidth), cubeStartY + (y * cubeHeight)), name, 64, 64, bodyType);
@@ -160,7 +160,7 @@ namespace ExampleGame
                 Entity e2 = b.Body.UserData as Entity;
                 if (e1 != null && e2 != null)
                 {
-                    if (e2.Tag == "ground")
+                    if (e2.Tag == "falling_platform")
                         b.Body.IgnoreGravity = false;
                 }
                 return true;
