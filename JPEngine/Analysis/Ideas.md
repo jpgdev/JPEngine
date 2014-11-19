@@ -1,6 +1,19 @@
 ﻿
 # Ideas & Notes
 
+### Childs and parents Entities
+- ChildTransform : Transform
+	- override Position, Scale, Rotation
+		- Position => parent.Position += this.offsetPosition etc...
+	- Entity parent OU Transform parent
+	- Si l'entity courrante est un Child, automatiquement transformé le Transform par un ChildTransform
+- Entity
+	- Entity Parent;
+	- Entity Child;
+	- OnParentChange (add + remove)
+	- OnChildChange (add + remove)
+		- Un event trigger l'autre pour l'autre entité? 	
+
 ### Implement TDD (with Unit Tests)
 - Continue adding tests for already implemented features
 	- Entity Manager
@@ -80,7 +93,7 @@
 	- Usefull for the Console Font and others 
 
 - [LUA in C# -> NLua](https://github.com/NLua/NLua)
-- [How to: Lua + XNA](http://xnacoding.blogspot.ca/2010/07/how-to-lua-xna.html)		
+- [How to: Lua + XNA](http://xnacoding.blogspot.ca/2010/07/how-to-lua-xna.html)
 - [Console in XNA](http://gamedev.stackexchange.com/questions/45107/input-output-console-window-in-xna)
 - [Console implementation in XNA](https://code.google.com/r/jameswalkoski-xnagameconsole-xna4/source/browse)
 - [Use LUA with XNA as events](http://www.gamedev.net/topic/612571-using-lua-with-xna-as-events/)
