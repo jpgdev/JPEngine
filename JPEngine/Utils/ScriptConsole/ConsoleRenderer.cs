@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -172,7 +173,11 @@ namespace JPEngine.Utils.ScriptConsole
                 return;
             }
 
-            pos.X += _options.Font.MeasureString(_consoleInputProcessor.Buffer.Value.Substring(0, _consoleInputProcessor.Buffer.CursorPosition)).X;
+
+            int max = Math.Min(_consoleInputProcessor.Buffer.CursorPosition, _consoleInputProcessor.Buffer.Value.Length);
+            string subString = _consoleInputProcessor.Buffer.Value.Substring(0, max );
+
+            pos.X += _options.Font.MeasureString(subString).X;
             pos.Y -= _options.Font.LineSpacing;
             spriteBatch.DrawString(_options.Font,
                 (int) (gameTime.TotalGameTime.TotalSeconds/_options.CursorBlinkSpeed)%2 == 0

@@ -39,6 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CustomComponents\AutoScrollingCamera.cs" />
     <Compile Include="CustomComponents\CameraInput.cs" />
     <Compile Include="CustomComponents\ParallaxScrollingComponent.cs" />
     <Compile Include="CustomComponents\PlayerInput.cs" />

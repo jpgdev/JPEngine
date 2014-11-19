@@ -31,7 +31,7 @@ namespace ExampleGame.CustomComponents
         {
             spriteBatch.Draw(
                 Texture,
-                new Vector2(_paralaxPosition.X, _paralaxPosition.Y),
+                new Vector2(_paralaxPosition.X, Transform.Position.Y),
                 DrawnPortion,
                 DrawingColor,
                 GameObject.Transform.Rotation,

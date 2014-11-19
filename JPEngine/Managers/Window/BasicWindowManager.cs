@@ -14,6 +14,7 @@ namespace JPEngine.Managers
             get { return (GraphicsDeviceService as GraphicsDeviceManager); }
         }
 
+        //BUG: Not working....
         public override bool IsFullScreen
         {
             get { return _graphicsDeviceManager.IsFullScreen; }
@@ -24,7 +25,6 @@ namespace JPEngine.Managers
             }
         }
 
-        //TODO: I do not have access to the Game object, nor the window, so I don't know how to handle this
         public override bool IsMouseVisible
         {
             get { return _game.IsMouseVisible; }
@@ -44,7 +44,7 @@ namespace JPEngine.Managers
             :base(graphicsDeviceService)
         {
             if (game == null)
-                throw new ArgumentNullException("The game cannot be null.");
+                throw new ArgumentNullException("game");
 
             _game = game;
         }

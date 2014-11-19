@@ -16,7 +16,6 @@ using JPEngine;
 using JPEngine.Managers;
 using JPEngine.Entities;
 using ExampleGame.CustomComponents;
-using OpenTK.Graphics.OpenGL;
 
 namespace ExampleGame
 {
@@ -28,6 +27,8 @@ namespace ExampleGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
         }
         
         protected override void Initialize()
@@ -83,6 +84,7 @@ namespace ExampleGame
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
+            mainCamera.AddComponent(new AutoScrollingCamera(mainCamera) {Speed = 20, IsHorizontal = false});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
             
             //{
@@ -100,12 +102,42 @@ namespace ExampleGame
                 var e = new Entity("background");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
                 {
-                    Layer = DrawingLayer.Background1
+                    Layer = DrawingLayer.Background3,
+                    ParallaxRatio = 0.8f
                 });
                 //e.Transform.Scale *= 1/4f;
 
                 Engine.Entities.AddEntity(e);
             }
+
+
+            //{
+            //    var e = new Entity("crate_cloud");
+            //    e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
+            //    {
+            //        Layer = DrawingLayer.Background2,
+            //        ParallaxRatio = 0.5f
+            //    });
+            //    e.Transform.Position = new Vector2(100, -100);
+            //    //e.Transform.Scale *= 1/4f;
+
+            //    Engine.Entities.AddEntity(e);
+            //}
+
+            {
+                var e = new Entity("crate_cloud2");
+                e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
+                {
+                    Layer = DrawingLayer.Background2,
+                    ParallaxRatio = -1.2f
+                });
+                e.Transform.Position = new Vector2(-170, -180);
+                //e.Transform.Scale *= 1/4f;
+
+                Engine.Entities.AddEntity(e);
+            }
+
+
             
             Entity player = CreatePlayer(new Vector2(-350, 30));
 
@@ -117,14 +149,19 @@ namespace ExampleGame
             const int cubeWidth = 64;
             const int cubeHeight = 64;
 
+
+            Vector2 lastPos = new Vector2(cubeStartX + 5, cubeStartY + 5);
             for (int x = 0; x < 10; x++)
             {
                 int y = 0;
                 int mod = x % 2;
                 string name = mod == 1 ? "ground" : "platform";
                 BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                
+                CreateCrate(lastPos , name, 64, 64, bodyType);
 
-                CreateCrate(new Vector2(cubeStartX + (x * cubeWidth), cubeStartY + (y * cubeHeight)), name, 64, 64, bodyType);
+                lastPos.X += cubeWidth + 5;
+                //lastPos.Y += cubeHeight + 5;
             }
         }
 
