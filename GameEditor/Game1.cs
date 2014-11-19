@@ -36,7 +36,7 @@ namespace GameEditor
             var e = new Entity("player");
             //e.Transform.Scale = new Vector2(0.5f, 0.5f);
 
-            e.AddComponent(new DrawableSpriteComponent(e, Engine.Textures["crate"]));
+            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]));
             //e.AddComponent(new PlayerInput(e));
             e.AddComponent(new RectCollider(e) {Width = 96, Height = 96});
             e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));

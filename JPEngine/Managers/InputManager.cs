@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JPEngine.Events;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Managers
@@ -12,15 +13,78 @@ namespace JPEngine.Managers
 
     //TODO: Check the Microsoft.Xna.Framework.GameWindow.TextInput event?
 
+    //TODO: Split this in 3 parts: KeyboardHelper, MouseHelper, GamePadHelper and keep them all here, but it would be possible to change them around 
+
+    public class GamePadInfos
+    {
+        private GamePadState _oldGamePadState;
+        private GamePadState _newGamePadState;
+
+        private readonly GamePadCapabilities _gamePadCapabilities;
+        private readonly PlayerIndex _playerIndex;
+
+        public GamePadCapabilities GamePadCapabilities
+        {
+            get { return _gamePadCapabilities; }
+        }
+
+        public bool IsConnected
+        {
+            get { return _gamePadCapabilities.IsConnected; }
+        }
+
+        public GamePadInfos(PlayerIndex playerIndex)
+        {
+            _playerIndex = playerIndex;
+            _gamePadCapabilities = GamePad.GetCapabilities(playerIndex);
+        }
+
+        public bool IsButtonUp(Buttons button)
+        {
+            return _newGamePadState.IsButtonUp(button);
+        }
+
+        public bool IsButtonDown(Buttons button)
+        {
+            return _newGamePadState.IsButtonDown(button);
+        }
+
+        public bool IsButtonClicked(Buttons button)
+        {
+            return _oldGamePadState.IsButtonUp(button) && _newGamePadState.IsButtonDown(button);
+        }
+
+        public bool IsButtonReleased(Buttons button)
+        {
+            return _oldGamePadState.IsButtonDown(button) && _newGamePadState.IsButtonUp(button);
+        }
+
+        public bool SetVibration(float leftMotor, float rightMotor)
+        {
+            return GamePad.SetVibration(_playerIndex, leftMotor, rightMotor);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _oldGamePadState = _newGamePadState;
+            _newGamePadState = GamePad.GetState(_playerIndex);
+        }
+    }
+
     public class InputManager : Manager
     {
         #region Attributes
-
+        
         private KeyboardState _newKBState;
         private KeyboardState _oldKBState;
 
         private MouseState _oldMouseState;
         private MouseState _newMouseState;
+
+        private readonly GamePadInfos _gamePad1;
+        private readonly GamePadInfos _gamePad2;
+        private readonly GamePadInfos _gamePad3;
+        private readonly GamePadInfos _gamePad4;
 
         public event EventHandler<KeyEventArgs> KeyDown;
         public event EventHandler<KeyEventArgs> KeyClicked;
@@ -29,7 +93,7 @@ namespace JPEngine.Managers
         #endregion
 
         #region Properties
-
+        
         public KeyboardState CurrentKeyboardState
         {
             get { return _newKBState; }
@@ -45,10 +109,34 @@ namespace JPEngine.Managers
             get { return new Vector2(_newMouseState.X, _newMouseState.Y); }
         }
 
+        public GamePadInfos GamePad1
+        {
+            get { return _gamePad1; }
+        }
+
+        public GamePadInfos GamePad2
+        {
+            get { return _gamePad2; }
+        }
+
+        public GamePadInfos GamePad3
+        {
+            get { return _gamePad3; }
+        }
+
+        public GamePadInfos GamePad4
+        {
+            get { return _gamePad4; }
+        }
+
         #endregion
 
         internal InputManager()
         {
+            _gamePad1 = new GamePadInfos(PlayerIndex.One);
+            _gamePad2 = new GamePadInfos(PlayerIndex.Two);
+            _gamePad3 = new GamePadInfos(PlayerIndex.Three);
+            _gamePad4 = new GamePadInfos(PlayerIndex.Four);
         }
 
         internal override void Update(GameTime gameTime)
@@ -58,6 +146,11 @@ namespace JPEngine.Managers
 
             _oldMouseState = _newMouseState;
             _newMouseState = Mouse.GetState();
+
+            _gamePad1.Update(gameTime);
+            _gamePad2.Update(gameTime);
+            _gamePad3.Update(gameTime);
+            _gamePad4.Update(gameTime);
 
             UpdateKeys();
         }
@@ -70,34 +163,40 @@ namespace JPEngine.Managers
 
             //List<Keys> diffs = _oldKBState.GetPressedKeys().Except(_newKBState.GetPressedKeys()).ToList();
 
+            //Get all the pressed keys from this frame and the last frame.
             IEnumerable<Keys> lastAndCurrentFrameKeys = _oldKBState.GetPressedKeys().Union(_newKBState.GetPressedKeys());
-            //foreach (Keys key in CurrentKeyboardState.GetPressedKeys())
             foreach (Keys key in lastAndCurrentFrameKeys)
             {
-                if (key == Keys.LeftAlt || key == Keys.RightAlt)
+                switch (key)
                 {
-                    e.Alt = true;
-                }
-                else if (key == Keys.LeftShift || key == Keys.RightShift)
-                {
-                    e.Shift = true;
-                }
-                else if (key == Keys.LeftControl || key == Keys.RightControl)
-                {
-                    e.Control = true;
-                }
-                else
-                {
-                    e.Key = key;
+                    case Keys.RightAlt:
+                    case Keys.LeftAlt:
+                        e.Alt = true;
+                        break;
 
-                    if (IsKeyDown(key))
-                        OnKeyDown(this, e);
+                    case Keys.RightShift:
+                    case Keys.LeftShift:
+                        e.Shift = true;
+                        break;
 
-                    if (IsKeyClicked(key))
-                        OnKeyClicked(this, e);
+                    case Keys.RightControl:
+                    case Keys.LeftControl:
+                        e.Control = true;
+                        break;
 
-                    if(IsKeyReleased(key))
-                        OnKeyReleased(this, e);
+                    default:
+                        e.Key = key;
+
+                        if (IsKeyDown(key))
+                            OnKeyDown(this, e);
+
+                        if (IsKeyClicked(key))
+                            OnKeyClicked(this, e);
+
+                        if(IsKeyReleased(key))
+                            OnKeyReleased(this, e);
+
+                        break;
                 }
             }
         }
@@ -172,8 +271,6 @@ namespace JPEngine.Managers
 
         public static char GetCharValue(Keys key, bool shiftClicked)
         {
-            //bool shift = IsKeyDown(Keys.LeftShift) || IsKeyDown(Keys.LeftShift);
-            
             switch (key)
             {
                 //Alphabet keys

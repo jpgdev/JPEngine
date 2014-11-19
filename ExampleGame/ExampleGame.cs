@@ -27,6 +27,8 @@ namespace ExampleGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
         }
         
         protected override void Initialize()
@@ -46,7 +48,8 @@ namespace ExampleGame
         {
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
-            Engine.Textures.Add("background", "Tiles/background", true);
+            Engine.Textures.Add("background", "Background/clouds_and_trees", true);
+            
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
             
@@ -81,6 +84,7 @@ namespace ExampleGame
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
+            mainCamera.AddComponent(new AutoScrollingCamera(mainCamera) {Speed = 20, IsHorizontal = false});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
             
             //{
@@ -96,18 +100,48 @@ namespace ExampleGame
 
             {
                 var e = new Entity("background");
-                e.AddComponent(new SpriteComponent(e, Engine.Textures["grass"])
+                e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
                 {
-                    Layer = DrawingLayer.Background1
+                    Layer = DrawingLayer.Background3,
+                    ParallaxRatio = 0.8f
                 });
                 //e.Transform.Scale *= 1/4f;
 
                 Engine.Entities.AddEntity(e);
             }
+
+
+            //{
+            //    var e = new Entity("crate_cloud");
+            //    e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
+            //    {
+            //        Layer = DrawingLayer.Background2,
+            //        ParallaxRatio = 0.5f
+            //    });
+            //    e.Transform.Position = new Vector2(100, -100);
+            //    //e.Transform.Scale *= 1/4f;
+
+            //    Engine.Entities.AddEntity(e);
+            //}
+
+            {
+                var e = new Entity("crate_cloud2");
+                e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
+                {
+                    Layer = DrawingLayer.Background2,
+                    ParallaxRatio = -1.2f
+                });
+                e.Transform.Position = new Vector2(-170, -180);
+                //e.Transform.Scale *= 1/4f;
+
+                Engine.Entities.AddEntity(e);
+            }
+
+
             
             Entity player = CreatePlayer(new Vector2(-350, 30));
 
-            //CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static);
+            CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static, Color.LightBlue, 0);
             //CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
 
             float cubeStartX = player.Transform.Position.X;
@@ -115,17 +149,19 @@ namespace ExampleGame
             const int cubeWidth = 64;
             const int cubeHeight = 64;
 
+
+            Vector2 lastPos = new Vector2(cubeStartX + 5, cubeStartY + 5);
             for (int x = 0; x < 10; x++)
             {
                 int y = 0;
-                //for (int y = 0; y < 3; y++)
-                //{
-                    int mod = x % 2;
-                    string name = mod == 1 ? "falling_platform" : "platform";
-                    BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                int mod = x % 2;
+                string name = mod == 1 ? "ground" : "platform";
+                BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                
+                CreateCrate(lastPos , name, 64, 64, bodyType);
 
-                    CreateCrate(new Vector2(cubeStartX + (x * cubeWidth), cubeStartY + (y * cubeHeight)), name, 64, 64, bodyType);
-                //}
+                lastPos.X += cubeWidth + 5;
+                //lastPos.Y += cubeHeight + 5;
             }
         }
 
@@ -146,32 +182,29 @@ namespace ExampleGame
                 Engine.Entities.PhysicsSystem.World,
                 ConvertUnits.ToSimUnits(playerWidth*player.Transform.Scale.X),
                 ConvertUnits.ToSimUnits(playerHeight*player.Transform.Scale.Y),
-                1, player);
+                1);
 
             body.BodyType = BodyType.Dynamic;
             body.FixedRotation = true;
             body.Mass = 0;
-            body.Friction = 0;
+            body.Friction = 1f;
             body.LinearDamping = 1f;
-
-            body.OnCollision += (a, b, contact) =>
-            {
-                Entity e1 = a.Body.UserData as Entity;
-                Entity e2 = b.Body.UserData as Entity;
-                if (e1 != null && e2 != null)
-                {
-                    if (e2.Tag == "falling_platform")
-                        b.Body.IgnoreGravity = false;
-                }
-                return true;
-            };
 
             body.Position = new Vector2(
                 ConvertUnits.ToSimUnits(player.Transform.Position.X),
                 ConvertUnits.ToSimUnits(player.Transform.Position.Y));
 
             body.Rotation = player.Transform.Rotation;
-            player.AddComponent(new BodyComponent(player, body));
+            BodyComponent bodyComponent = new BodyComponent(player, body);
+
+            bodyComponent.OnCollision += (sender, args) =>
+            {
+                if (args.BodyComponentB.GameObject.Tag == "ground")
+                    args.BodyComponentB.Body.IgnoreGravity = false;
+            };
+
+
+            player.AddComponent(bodyComponent);
 
             //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
             //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
@@ -181,41 +214,43 @@ namespace ExampleGame
             return player;
         }
 
-        private static void CreateCrate(Vector2 pos, string name, int width = 64, int height = 64, BodyType bodyType = BodyType.Dynamic)
+        private static void CreateCrate(Vector2 pos, string name, int width = 64, int height = 64, BodyType bodyType = BodyType.Dynamic, Color? color = null, float friction = 0.2f)
         {
-            const int crate_width = 64;
-            const int crate_height = 64;
+            const int crateWidth = 64;
+            const int crateHeight = 64;
 
-            var e2 = new Entity(name);
-            e2.Transform.Position.X = pos.X;
-            e2.Transform.Position.Y = pos.Y;
-            e2.Transform.Scale.X = width / crate_width;
-            e2.Transform.Scale.Y = height / crate_height;
+            var e = new Entity(name);
+            e.Transform.Position.X = pos.X;
+            e.Transform.Position.Y = pos.Y;
+            e.Transform.Scale.X = width / (float)crateWidth;
+            e.Transform.Scale.Y = height / (float)crateHeight;
 
             Body body = BodyFactory.CreateRectangle(
                 Engine.Entities.PhysicsSystem.World,
                 ConvertUnits.ToSimUnits(width),
                 ConvertUnits.ToSimUnits(height),
-                100, 
-                e2);
+                100);
 
             body.Mass = 100;
-            body.Friction = 100;
+            body.Friction = friction;
             body.LinearDamping = 3f;
             body.IgnoreGravity = true;
             body.FixedRotation = true;
             body.BodyType = bodyType;
 
             body.Position = new Vector2(
-                ConvertUnits.ToSimUnits(e2.Transform.Position.X),
-                ConvertUnits.ToSimUnits(e2.Transform.Position.Y));
+                ConvertUnits.ToSimUnits(e.Transform.Position.X),
+                ConvertUnits.ToSimUnits(e.Transform.Position.Y));
 
-            body.Rotation = e2.Transform.Rotation;
+            body.Rotation = e.Transform.Rotation;
+            
+            e.AddComponent(new BodyComponent(e, body));
 
-            e2.AddComponent(new BodyComponent(e2, body));
-            e2.AddComponent(new SpriteComponent(e2, Engine.Textures["crate"]));
+            Color c = color ?? Color.White;
 
-            Engine.Entities.AddEntity(e2);
+            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { DrawingColor = c });
+
+            Engine.Entities.AddEntity(e);
         }
 
         protected override void UnloadContent()

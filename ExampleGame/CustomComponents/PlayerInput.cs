@@ -13,7 +13,7 @@ namespace ExampleGame.CustomComponents
     public class PlayerInput : BaseComponent
     {
         private BodyComponent _bodyComponent;
-        private Vector2 _maxVelocity = new Vector2(10, 20);
+        private Vector2 _maxMovementVelocity = new Vector2(10, 20);
 
         public PlayerInput(Entity entity)
             : base(entity)
@@ -87,7 +87,7 @@ namespace ExampleGame.CustomComponents
                 const float verticalJumpVelocity = 400;
                 const float horizontalJumpVelocity = 50;
 
-                //Todo: Checker si y touche le sol
+                //Todo: Checker si y touche le sol avant de sauter (pas de infinite jumping)
                 Jump(new Vector2(moveVelocity.X * horizontalJumpVelocity, -verticalJumpVelocity));
             }
 
@@ -125,8 +125,8 @@ namespace ExampleGame.CustomComponents
             {
                 direction *= 10;
 
-                direction.X = MathHelper.Clamp(direction.X, -_maxVelocity.X, _maxVelocity.X);
-                direction.Y = MathHelper.Clamp(direction.Y, -_maxVelocity.Y, _maxVelocity.Y);
+                direction.X = MathHelper.Clamp(direction.X, -_maxMovementVelocity.X, _maxMovementVelocity.X);
+                direction.Y = MathHelper.Clamp(direction.Y, -_maxMovementVelocity.Y, _maxMovementVelocity.Y);
 
                 _bodyComponent.Body.ApplyLinearImpulse(
                    new Vector2(

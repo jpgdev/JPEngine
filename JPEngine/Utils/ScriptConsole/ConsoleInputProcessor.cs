@@ -11,19 +11,19 @@ namespace JPEngine.Utils.ScriptConsole
     internal class ConsoleInputProcessor
     {
         private readonly ConsoleOptions _options;
-        
+
         internal bool IsActive { get; private set; }
 
         internal CommandHistory History { get; private set; }
 
-        internal OutputLine Buffer { get; private set; }
+        internal InputBuffer Buffer { get; private set; }
 
         internal List<OutputLine> Out { get; set; }
 
         internal IScriptParser ScriptParser { get; set; }
         
-        public event EventHandler Open;
-        public event EventHandler Close;
+        internal event EventHandler Open;
+        internal event EventHandler Close;
 
         internal ConsoleInputProcessor(ConsoleOptions consoleOptions)
         {
@@ -34,7 +34,7 @@ namespace JPEngine.Utils.ScriptConsole
 
             History = new CommandHistory();
             Out = new List<OutputLine>();
-            Buffer = new OutputLine("", OutputLineType.Command);
+            Buffer = new InputBuffer();
 
             Engine.Input.KeyClicked += EventInput_KeyClicked;
         }
@@ -50,38 +50,92 @@ namespace JPEngine.Utils.ScriptConsole
             if (!IsActive)
                 return;
 
-            if (e.Key == Keys.V && Keyboard.GetState().IsKeyDown(Keys.LeftControl)) // CTRL + V
+            //Special commands using the CTRL key
+            if (e.Control)
             {
-                if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) //Thread Apartment must be in Single-Threaded for the Clipboard to work
+                switch (e.Key)
                 {
-                    AddToBuffer(System.Windows.Forms.Clipboard.GetText());
-                    return;
+                    case Keys.A:
+                        Buffer.IsSelecting = true;
+                        Buffer.CursorPosition = 0;
+                        Buffer.CursorPosition = Buffer.Value.Length;
+                        return;
+
+                    case Keys.C:
+                        if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) //Thread Apartment must be in Single-Threaded for the Clipboard to work
+                            System.Windows.Forms.Clipboard.SetText(Buffer.Selection);
+                        return;
+
+                    case Keys.X:
+                        if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) //Thread Apartment must be in Single-Threaded for the Clipboard to work
+                        {
+                            System.Windows.Forms.Clipboard.SetText(Buffer.Selection);
+                            Buffer.ReplaceSelection(string.Empty);
+                        }
+                        return;
+
+                    case Keys.V:
+                        if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) //Thread Apartment must be in Single-Threaded for the Clipboard to work
+                            AddToInputBuffer(System.Windows.Forms.Clipboard.GetText());
+                        return;
                 }
             }
-
+            
             switch (e.Key)
             {
-                case Keys.Enter: ExecuteBuffer(); break;
-
-                case Keys.Back:
-                    if (Buffer.Output.Length > 0)
-                    {
-                        Buffer.Output = Buffer.Output.Substring(0, Buffer.Output.Length - 1);
-                    }
+                case Keys.Enter: 
+                    ExecuteBuffer(); 
                     break;
 
-                case Keys.Up: Buffer.Output = History.Previous(); break;
+                case Keys.Back:
+                    if (Buffer.SelectionLength > 0)
+                        Buffer.ReplaceSelection(string.Empty);
+                    else
+                        Buffer.RemoveBeforeCursor(1);
 
-                case Keys.Down: Buffer.Output = History.Next(); break;
+                    break;
+
+                case Keys.Delete:
+                    if (Buffer.SelectionLength > 0)
+                        Buffer.ReplaceSelection(string.Empty);
+                    else
+                        Buffer.RemoveAfterCursor(1);
+
+                    break;
+
+                case Keys.Up: 
+                    Buffer.Set(History.Previous());
+                    break;
+
+                case Keys.Down:
+                    Buffer.Set(History.Next());
+                    break;
+
+                case Keys.Left:
+                    Buffer.IsSelecting = e.Shift;
+                    Buffer.CursorPosition--;
+                    break;
+
+                case Keys.Right:
+                    Buffer.IsSelecting = e.Shift;
+                    Buffer.CursorPosition++;
+                    break;
                     
                 default:
+                    Buffer.IsSelecting = e.Shift;
                     char c = InputManager.GetCharValue(e.Key, e.Shift);
                     if (IsPrintable(c))
                     {
-                        Buffer.Output += c;
+                        if (Buffer.SelectionLength > 0)
+                            Buffer.ReplaceSelection(c.ToString());
+                        else
+                            Buffer.Add(c.ToString());
                     }
+                        
                     break;
             }
+
+            
         }
 
         internal void ToggleConsole()
@@ -95,17 +149,17 @@ namespace JPEngine.Utils.ScriptConsole
                Close(this, EventArgs.Empty);
         }
 
-        internal void AddToBuffer(string text)
+        internal void AddToInputBuffer(string text)
         {
             var lines = text.Split('\n').Where(line => line != "").ToArray();
             int i;
             for (i = 0; i < lines.Length - 1; i++)
             {
                 var line = lines[i];
-                Buffer.Output += line;
+                Buffer.Add(line);
                 ExecuteBuffer();
             }
-            Buffer.Output += lines[i];
+            Buffer.Add(lines[i]);
         }
 
         internal void AddToOutput(string text)
@@ -123,7 +177,6 @@ namespace JPEngine.Utils.ScriptConsole
             }
         }
 
-
         private bool IsPrintable(char letter)
         {
             return _options.Font.Characters.Contains(letter);
@@ -131,13 +184,13 @@ namespace JPEngine.Utils.ScriptConsole
 
         private void ExecuteBuffer()
         {
-            if (string.IsNullOrEmpty(Buffer.Output))
+            if (string.IsNullOrEmpty(Buffer.Value))
                 return;
             
             try
             {
-                Out.Add(new OutputLine(Buffer.Output, OutputLineType.Command));
-                object[] result = ScriptParser.ParseScript(Buffer.Output);
+                Out.Add(new OutputLine(Buffer.Value, OutputLineType.Command));
+                object[] result = ScriptParser.ParseScript(Buffer.Value);
                 if (result != null)
                 {
                     foreach (var line in result)
@@ -156,8 +209,8 @@ namespace JPEngine.Utils.ScriptConsole
                 Out.Add(new OutputLine(message, OutputLineType.Output));
             }
 
-            History.Add(Buffer.Output);
-            Buffer.Output = "";
+            History.Add(Buffer.Value);
+            Buffer.Clear();
         }
     }
 }

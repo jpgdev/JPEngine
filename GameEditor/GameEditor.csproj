@@ -61,11 +61,11 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
+      <HintPath>..\JPEngine\libs\OpenTK\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\JPEngine\libs\OpenTK\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

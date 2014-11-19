@@ -10,7 +10,6 @@ namespace JPEngine.Systems
     {
         private bool _enabled;
         private bool _initialized;
-
         private IEnumerable<Type> _typesUsed = new List<Type>();
 
         #region Properties
@@ -44,14 +43,7 @@ namespace JPEngine.Systems
         #endregion
        
         public event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
-
-
-        //protected System()
-        //{
-        //    TypesUsed = new List<Type>();
-        //}
-
-
+        
         public void Initialize()
         {
             if (_initialized)
