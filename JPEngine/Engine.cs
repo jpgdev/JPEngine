@@ -15,9 +15,10 @@ namespace JPEngine
     public static class Engine
     {
         #region Attributes
+
+        private static float _framesPerSecond;
         
         private static ContentManager _contentManager;
-
         private static ScriptConsole _console;
 
         //Managers
@@ -92,6 +93,11 @@ namespace JPEngine
         public static FontsManager Fonts
         {
             get { return _fontsManager; }
+        }
+
+        public static float FramesPerSecond
+        {
+            get { return _framesPerSecond; }
         }
 
         #endregion
@@ -202,6 +208,9 @@ namespace JPEngine
         public static void Draw(GameTime gameTime)
         {
             _windowManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            _framesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            //System.Console.WriteLine("FPS : " + FramesPerSecond);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
             SpriteBatch spriteBatch = _spriteBatchManager.Begin();
