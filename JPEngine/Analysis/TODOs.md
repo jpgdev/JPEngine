@@ -16,11 +16,7 @@
 		- OpenTKWindowManager
 		- BaseWindowManager
 		
-- Console
-	- Implement Selection
-	
-	- Implement Delete key
-	
+- Console	
 	- Implement Scrollbar
 		- ConsoleOptions.IsScrollable
 		- ConsoleOptions.ScrollUpKey

@@ -47,7 +47,8 @@ namespace ExampleGame
         {
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
-            Engine.Textures.Add("background", "Tiles/background", true);
+            Engine.Textures.Add("background", "Background/clouds_and_trees", true);
+            
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
             
@@ -97,7 +98,7 @@ namespace ExampleGame
 
             {
                 var e = new Entity("background");
-                e.AddComponent(new SpriteComponent(e, Engine.Textures["grass"])
+                e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
                 {
                     Layer = DrawingLayer.Background1
                 });

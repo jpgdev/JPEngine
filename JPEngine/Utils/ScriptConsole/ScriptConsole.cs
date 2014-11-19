@@ -28,10 +28,13 @@ namespace JPEngine.Utils.ScriptConsole
 
         public Color PromptColor { get; set; }
         public Color BackgroundColor { get; set; }
+        public Color SelectionColor { get; set; }
         public Color BufferColor { get; set; }
         public Color CursorColor { get; set; }
         public Color PastCommandColor { get; set; }
         public Color PastCommandOutputColor { get; set; }
+
+        
 
         //TODO: ScrollUpKey, ScrollDownKey, IsScrollable, IsClickable (Mouse) (if not, the mouse will ignore it)
 
@@ -65,6 +68,7 @@ namespace JPEngine.Utils.ScriptConsole
             PastCommandColor = Color.Aqua;
             PastCommandOutputColor = Color.Violet;
             BackgroundColor = new Color(0, 0, 0, 175);
+            SelectionColor = new Color(Color.DarkRed, 175);
         }
     }
 
@@ -93,7 +97,7 @@ namespace JPEngine.Utils.ScriptConsole
         public ScriptConsole(ConsoleOptions options)
         {
             if (options == null)
-                throw new ArgumentNullException("The options cannot be null.");
+                throw new ArgumentNullException("options");
 
             Options = options;
 
@@ -114,7 +118,7 @@ namespace JPEngine.Utils.ScriptConsole
 
         public void AddToBuffer(string text)
         {
-            _consoleInputProcessor.AddToBuffer(text);
+            _consoleInputProcessor.AddToInputBuffer(text);
         }
 
         public void AddToOutput(string text)

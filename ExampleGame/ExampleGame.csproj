@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CustomComponents\CameraInput.cs" />
+    <Compile Include="CustomComponents\ParallaxScrollingComponent.cs" />
     <Compile Include="CustomComponents\PlayerInput.cs" />
     <Compile Include="ExampleGame.cs" />
     <Compile Include="Program.cs" />
@@ -67,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Background\clouds_and_trees.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Fonts\ConsoleFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

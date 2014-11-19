@@ -117,6 +117,7 @@
     <Compile Include="Utils\ScriptConsole\CommandHistory.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleInputProcessor.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleRenderer.cs" />
+    <Compile Include="Utils\ScriptConsole\InputBuffer.cs" />
     <Compile Include="Utils\ScriptConsole\ScriptParser\IScriptParser.cs" />
     <Compile Include="Utils\ScriptConsole\ScriptParser\LuaParser.cs" />
     <Compile Include="Utils\ScriptConsole\OutputLine.cs" />
