@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\CameraComponent.cs" />
+    <Compile Include="Components\ICamera.cs" />
     <Compile Include="Components\Physics\BodyComponent.cs" />
     <Compile Include="Components\RectCollider.cs" />
     <Compile Include="Components\Core\DrawableComponent.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="Components\RectRenderer.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Entities\EntitiesManager.cs" />
+    <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\Resources\IResourceManager.cs" />
     <Compile Include="Systems\ISystem.cs" />
     <Compile Include="Systems\Box2DPhysicsSystem.cs" />
     <Compile Include="Systems\System.cs" />

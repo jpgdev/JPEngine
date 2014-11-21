@@ -22,10 +22,12 @@ namespace JPEngine.Managers
         {
             get { return GraphicsDeviceService.GraphicsDevice; }
         }
+
         public Viewport Viewport
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport; }
         }
+
         public virtual int Width
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Width; }
@@ -41,6 +43,7 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
+
         public virtual int Height
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Height; }
@@ -56,8 +59,11 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
+
         public abstract bool IsFullScreen{ get; set; }
+
         public abstract bool IsMouseVisible{ get; set; }
+
         public abstract Rectangle Bounds { get; }
 
         #endregion

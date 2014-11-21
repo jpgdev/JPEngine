@@ -6,15 +6,15 @@ namespace JPEngine.Managers
 {
     public class CameraManager : Manager
     {
-        private readonly List<CameraComponent> _cameras = new List<CameraComponent>();
-        private readonly Dictionary<string, CameraComponent> _taggedCameras = new Dictionary<string, CameraComponent>();
-        private CameraComponent _currentCamera;
+        private readonly List<ICamera> _cameras = new List<ICamera>();
+        private readonly Dictionary<string, ICamera> _taggedCameras = new Dictionary<string, ICamera>();
+        private ICamera _currentCamera;
 
         internal CameraManager()
         {
         }
 
-        public CameraComponent Current
+        public ICamera Current
         {
             get { return _currentCamera; }
         }
@@ -35,7 +35,7 @@ namespace JPEngine.Managers
             return false;
         }
 
-        public bool SetCurrent(CameraComponent camera)
+        public bool SetCurrent(ICamera camera)
         {
             if (!_cameras.Contains(camera))
                 AddCamera(camera);
@@ -45,14 +45,14 @@ namespace JPEngine.Managers
             return true;
         }
 
-        public void AddCamera(CameraComponent camera)
+        public void AddCamera(ICamera camera)
         {
             _cameras.Add(camera);
 
-            if (!string.IsNullOrEmpty(camera.GameObject.Tag))
+            if (!string.IsNullOrEmpty(camera.Tag))
             {
-                camera.GameObject.TagChanged += CameraTagChanged;
-                _taggedCameras.Add(camera.GameObject.Tag, camera);
+                camera.TagChanged += CameraTagChanged;
+                _taggedCameras.Add(camera.Tag, camera);
             }
         }
 
@@ -61,12 +61,12 @@ namespace JPEngine.Managers
             return _taggedCameras.ContainsKey(tag);
         }
 
-        public bool ContainsCamera(CameraComponent cam)
+        public bool ContainsCamera(ICamera cam)
         {
             return _cameras.Contains(cam);
         }
 
-        public CameraComponent GetCamera(string tag)
+        public ICamera GetCamera(string tag)
         {
             if (_taggedCameras.ContainsKey(tag))
                 return _taggedCameras[tag];
@@ -78,20 +78,20 @@ namespace JPEngine.Managers
         {
             if (_taggedCameras.ContainsKey(tag))
             {
-                CameraComponent cam = _taggedCameras[tag];
+                ICamera cam = _taggedCameras[tag];
                 if (_taggedCameras.Remove(tag))
                 {
-                    cam.GameObject.TagChanged -= CameraTagChanged;
+                    cam.TagChanged -= CameraTagChanged;
                     return RemoveCamera(cam);
                 }
             }
             return false;
         }
 
-        private bool RemoveCamera(CameraComponent camera)
+        private bool RemoveCamera(ICamera camera)
         {
-            return _taggedCameras.ContainsKey(camera.GameObject.Tag)
-                ? RemoveCamera(camera.GameObject.Tag)
+            return _taggedCameras.ContainsKey(camera.Tag)
+                ? RemoveCamera(camera.Tag)
                 : _cameras.Remove(camera);
         }
 
@@ -101,7 +101,7 @@ namespace JPEngine.Managers
         {
             if (_taggedCameras.ContainsKey(e.OldValue))
             {
-                CameraComponent cam = _taggedCameras[e.OldValue];
+                ICamera cam = _taggedCameras[e.OldValue];
                 _taggedCameras.Remove(e.OldValue);
                 _taggedCameras.Add(e.NewValue, cam);
             }

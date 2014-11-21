@@ -5,8 +5,10 @@ using JPEngine.Entities;
 using JPEngine.Managers;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 #endregion
 
@@ -21,6 +23,7 @@ namespace JPEngine
         private static ContentManager _contentManager;
         private static ScriptConsole _console;
 
+        //TODO: Make Interface for each to abstract the functionalities
         //Managers
         private static SpriteBatchManager _spriteBatchManager;
         private static WindowManager _windowManager;
@@ -30,10 +33,10 @@ namespace JPEngine
         private static CameraManager _cameraManager;
 
         //Resources managers
-        private static TextureManager _textureManager;
-        private static MusicManager _musicManager;
-        private static SoundFXManager _soundManager;
-        private static FontsManager _fontsManager;
+        private static IResourceManager<Texture2D> _textureManager;
+        private static IResourceManager<Song> _musicManager;
+        private static IResourceManager<SoundEffect> _soundManager;
+        private static IResourceManager<SpriteFont> _fontsManager;
 
         #endregion
 
@@ -50,24 +53,29 @@ namespace JPEngine
             get { return _spriteBatchManager; }
         }
 
-        public static WindowManager Window
+        public static IWindowManager Window
         {
             get { return _windowManager; }
         }
 
-        public static TextureManager Textures
+        public static IResourceManager<Texture2D> Textures
         {
             get { return _textureManager; }
         }
 
-        public static MusicManager Music
+        public static IResourceManager<Song> Music
         {
             get { return _musicManager; }
         }
 
-        public static SoundFXManager SoundFX
+        public static IResourceManager<SoundEffect> SoundFX
         {
             get { return _soundManager; }
+        }
+
+        public static IResourceManager<SpriteFont> Fonts
+        {
+            get { return _fontsManager; }
         }
 
         public static SettingsManager Settings
@@ -88,11 +96,6 @@ namespace JPEngine
         public static CameraManager Cameras
         {
             get { return _cameraManager; }
-        }
-
-        public static FontsManager Fonts
-        {
-            get { return _fontsManager; }
         }
 
         public static float FramesPerSecond

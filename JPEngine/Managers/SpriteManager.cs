@@ -9,6 +9,9 @@ namespace JPEngine.Managers
 
     //TODO: Make this class a SpirteBatch wrapper, replace all the SpriteBatch.Draw() methods and remove the Z-Index to make sure it is well done
     //TODO: Implement SpriteBatch.DrawString too?
+
+    //TODO:  ISpriteRenderer INTERFACE
+
     public class SpriteBatchManager : Manager
     {
         private const int STEPS_PER_LAYER = 2048;
@@ -63,7 +66,7 @@ namespace JPEngine.Managers
         {
             //TODO: Add a validation that it can be started (begin has not been called already this frame)
             
-            CameraComponent camera = Engine.Cameras.Current;
+            ICamera camera = Engine.Cameras.Current;
             if (camera != null)
             {
                 _spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);

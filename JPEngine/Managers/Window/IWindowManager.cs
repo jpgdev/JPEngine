@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Managers
 {
@@ -11,6 +12,10 @@ namespace JPEngine.Managers
         int Height { get; set; }
 
         bool IsFullScreen { get; set; }
+
+        bool IsMouseVisible { get; set; }
+
+        Rectangle Bounds { get; }
 
         Viewport Viewport { get; }
     }

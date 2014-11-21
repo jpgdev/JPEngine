@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public abstract class Manager : IDisposable
+    public abstract class Manager : IDisposable, IManager
     {
         private bool _isInitialized;
 
@@ -20,7 +20,7 @@ namespace JPEngine.Managers
 
         public event EventHandler<EventArgs> Initialized;
 
-        internal void Initialize()
+        public void Initialize()
         {
             _isInitialized = InitializeCore();
         }
