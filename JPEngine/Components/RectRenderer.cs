@@ -16,7 +16,7 @@ namespace JPEngine.Components
         //{
         //    if (texture == null)
         //        texture = new Texture2D(Engine.Window.GraphicsDevice, 1, 1);
-        //    //throw new ArgumentNullException("The texture cannot be null.");
+        //    //throw new ArgumentNullException("texture");
 
         //    Texture = texture;
         //    RectangleToRender = rectangle;
@@ -28,7 +28,7 @@ namespace JPEngine.Components
         {
             //if (texture == null)
             //    texture = new Texture2D(Engine.Window.GraphicsDevice, 1, 1);
-                //throw new ArgumentNullException("The texture cannot be null.");
+                //throw new ArgumentNullException("texture");
 
             Texture = texture;
             RectangleToRender = rectangle;

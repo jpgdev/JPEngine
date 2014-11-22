@@ -53,7 +53,7 @@ namespace JPEngine.Components
             : base(gameObject)
         {
             if(texture == null)
-                throw new ArgumentNullException("The texture cannot be null.");
+                throw new ArgumentNullException("texture");
 
             Texture = texture;
             _origin = new Vector2((float)texture.Width / 2, (float)texture.Height / 2);

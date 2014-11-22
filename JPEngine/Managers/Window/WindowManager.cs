@@ -71,7 +71,7 @@ namespace JPEngine.Managers
         internal WindowManager(IGraphicsDeviceService graphicsDeviceService)
         {
             if (graphicsDeviceService == null)
-                throw new ArgumentNullException("The graphicsDeviceService cannot be null.");
+                throw new ArgumentNullException("graphicsDeviceService");
 
             GraphicsDeviceService = graphicsDeviceService;
         }
@@ -101,7 +101,7 @@ namespace JPEngine.Managers
             {
                 return Create(graphicsDeviceService, gameWindow.Handle);
             }
-            catch (ArgumentException ae) { }
+            catch (ArgumentException) { }
 
             //Could not find a window...
             throw new ArgumentException("The game window could not be found."); //TODO: Add a more meaningful message?

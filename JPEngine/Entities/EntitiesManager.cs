@@ -101,7 +101,16 @@ namespace JPEngine.Entities
 
         #region Entities Handling
 
-        public void AddEntity(Entity entity)
+        public Entity CreateEntity(string tag = "")
+        {
+            Entity e = new Entity(tag);
+
+            AddEntity(e);
+
+            return e;
+        }
+
+        private void AddEntity(Entity entity)
         {
             if (!entity.Initialized)
                 entity.Initialize();

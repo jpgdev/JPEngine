@@ -10,14 +10,18 @@ namespace JPEngine.Managers
         private readonly Dictionary<string, ICamera> _taggedCameras = new Dictionary<string, ICamera>();
         private ICamera _currentCamera;
 
-        internal CameraManager()
-        {
-        }
 
         public ICamera Current
         {
             get { return _currentCamera; }
         }
+
+
+        internal CameraManager()
+        {
+        }
+
+       
 
         protected override bool InitializeCore()
         {

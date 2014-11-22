@@ -21,7 +21,7 @@ namespace JPEngine.Systems
 
         protected override void IntializeCore()
         {
-            //In Farseer Physics Engine, 64 pixels = 1 meter
+            //Set the ratio of pixel to meter for the Farseer Physics Engine
             ConvertUnits.SetDisplayUnitToSimUnitRatio(48f);
         }
 

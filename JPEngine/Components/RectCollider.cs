@@ -37,7 +37,7 @@ namespace JPEngine.Components
             IsSolid = true;
         }
 
-        public override void Start()
+        protected override void StartCore()
         {
             //TODO: To debug
             _rectRenderer = GameObject.GetComponent<RectRenderer>();

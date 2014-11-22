@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using FarseerPhysics;
-using FarseerPhysics.Collision.Shapes;
-using FarseerPhysics.Common;
+﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using JPEngine.Components;
@@ -81,7 +78,7 @@ namespace ExampleGame
         private void LoadTestsEntities()
         {
             //Setup & Add the base Camera entity
-            Entity mainCamera = new Entity("_MainCamera", true);
+            Entity mainCamera = Engine.Entities.CreateEntity("_MainCamera");
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
@@ -89,19 +86,17 @@ namespace ExampleGame
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
           
             {
-                var e = new Entity("background");
+                var e = Engine.Entities.CreateEntity("background");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
                 {
                     Layer = DrawingLayer.Background3,
                     ParallaxRatio = 1f
                 });
                 //e.Transform.Scale *= 1/4f;
-
-                Engine.Entities.AddEntity(e);
             }
             
             {
-                var e = new Entity("crate_cloud2");
+                var e = Engine.Entities.CreateEntity("crate_cloud2");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
                 {
                     Layer = DrawingLayer.Background2,
@@ -110,8 +105,6 @@ namespace ExampleGame
                 e.AddComponent(new AutoScrollingCamera(e) { Speed = -10});
                 e.Transform.Position = new Vector2(-170, -180);
                 //e.Transform.Scale *= 1/4f;
-
-                Engine.Entities.AddEntity(e);
             }
             
             Entity player = CreatePlayer(new Vector2(-350, 30));
@@ -141,7 +134,7 @@ namespace ExampleGame
 
         private Entity CreatePlayer(Vector2 pos)
         {
-            Entity player = new Entity("player");
+            Entity player = Engine.Entities.CreateEntity("player");
 
             player.Transform.Scale = new Vector2(0.5f, 0.5f);
             player.Transform.Position = pos;
@@ -182,7 +175,6 @@ namespace ExampleGame
             //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
             //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
 
-            Engine.Entities.AddEntity(player);
 
             return player;
         }
@@ -192,7 +184,7 @@ namespace ExampleGame
             const int crateWidth = 64;
             const int crateHeight = 64;
 
-            var e = new Entity(name);
+            var e = Engine.Entities.CreateEntity(name);
             e.Transform.Position.X = pos.X;
             e.Transform.Position.Y = pos.Y;
             e.Transform.Scale.X = width / (float)crateWidth;
@@ -222,8 +214,6 @@ namespace ExampleGame
             Color c = color ?? Color.White;
 
             e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { DrawingColor = c });
-
-            Engine.Entities.AddEntity(e);
         }
 
         protected override void UnloadContent()

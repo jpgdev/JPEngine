@@ -42,7 +42,7 @@ namespace JPEngine.Utils.ScriptConsole
         {
             //TODO: Find a way to have a Font in the Engine, without relying on the Game
             if (font == null)
-                throw new ArgumentNullException("The font cannot be null.");
+                throw new ArgumentNullException("font");
 
             Font = font;
 

@@ -7,6 +7,8 @@ namespace JPEngine.Components
     {
         bool Enabled { get; }
 
+        bool Started { get; }
+
         string Tag { get; }
 
         void Initialize();

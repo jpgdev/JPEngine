@@ -11,6 +11,7 @@ namespace JPEngine.Components
 
         private readonly Entity _gameObject;
         private bool _enabled = true;
+        private bool _started = false;
         private string _tag = string.Empty;
         private int _updateOrder;
 
@@ -37,7 +38,7 @@ namespace JPEngine.Components
                     TagChanged(this, new ValueChangedEventArgs<string>(oldValue, _tag));
             }
         }
-
+        
         public bool Enabled
         {
             get { return _enabled; }
@@ -52,6 +53,11 @@ namespace JPEngine.Components
                     EnabledChanged(this, new ValueChangedEventArgs<bool>(oldValue, _enabled));
                 
             }
+        }
+
+        public bool Started
+        {
+            get { return _started; }
         }
 
         /// <summary>
@@ -77,7 +83,7 @@ namespace JPEngine.Components
         protected BaseComponent(Entity entity)
         {
             if(entity == null)
-                throw new ArgumentNullException("The entity cannot be null.");
+                throw new ArgumentNullException("entity");
 
             _gameObject = entity;
 
@@ -86,9 +92,22 @@ namespace JPEngine.Components
             UpdateOrderChanged += OnTagChanged;
         }
 
-        public virtual void Initialize() { }
+        public virtual void Initialize()
+        {
+        }
 
-        public virtual void Start() { }
+        public void Start()
+        {
+            if (_started)
+                return;
+            
+            StartCore();
+            _started = true;
+        }
+
+        protected virtual void StartCore()
+        {
+        }
 
         public event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
         public event EventHandler<ValueChangedEventArgs<int>> UpdateOrderChanged;

@@ -11,7 +11,7 @@ namespace JPEngine.Entities
 {
     //Inspired from : https://xnaentitycomponents.codeplex.com/
 
-    public class Entity : ICloneable
+    public sealed class Entity : ICloneable
     {
         private readonly List<IComponent> _components = new List<IComponent>();
         private readonly List<IDrawableComponent> _drawableComponents = new List<IDrawableComponent>();
@@ -20,7 +20,6 @@ namespace JPEngine.Entities
         private readonly Dictionary<string, IComponent> _taggedComponents = new Dictionary<string, IComponent>();
 
         //The components on which the Drawing and Updating is performed on
-        //TODO: Is it better to clear the lists before they are used, or simply create new ones each time we use them (ex. _tempComponents = _components.ToList();)?
         private readonly List<IComponent> _tempComponents = new List<IComponent>();
         private readonly List<IDrawableComponent> _tempDrawableComponents = new List<IDrawableComponent>();
         private readonly List<IUpdateableComponent> _tempUpdateableComponents = new List<IUpdateableComponent>();
@@ -88,20 +87,17 @@ namespace JPEngine.Entities
 
         #endregion
 
-        public Entity(string tag = "", bool autoAdd = false)
+        //TODO: Add the Manager/ World / Scene in the constructor
+        internal Entity(string tag = "")
         {
             _transform = new TransformComponent(this);
             //AddComponent(_transform);
 
             _tag = tag;
             Enabled = true;
-            
-            if (autoAdd)
-                Engine.Entities.AddEntity(this);
         }
 
-
-        public void Initialize()
+        internal void Initialize()
         {
             if (_initialized)
                 return;
@@ -111,9 +107,6 @@ namespace JPEngine.Entities
 
             _tempComponents.ForEach(c => c.Initialize());
 
-            //TODO: Check if they are enabled before starting, otherwise subscribe
-            _tempComponents.ForEach(c => c.Start());
-
             _initialized = true;
         }
 
@@ -122,10 +115,7 @@ namespace JPEngine.Entities
         public void AddComponent(IComponent component)
         {
             if (component == null)
-                throw new ArgumentNullException("The component cannot be null.");
-
-            //Type componentType = entityComponent.GetType();
-            //if (GetComponent<componentType>())
+                throw new ArgumentNullException("component");
 
             if (!string.IsNullOrEmpty(component.Tag))
             {
@@ -133,7 +123,7 @@ namespace JPEngine.Entities
                 {
                     _taggedComponents.Add(component.Tag, component);
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     throw new ArgumentException(
                         string.Format("There is already a Component with the tag '{0}' in this entity.", component.Tag));
@@ -141,7 +131,6 @@ namespace JPEngine.Entities
             }
 
             _components.Add(component);
-            //_sortedByNameComponents.Add(component.Name, component);
 
             var updateable = component as IUpdateableComponent;
             if (updateable != null)
@@ -160,10 +149,7 @@ namespace JPEngine.Entities
             }
 
             if (_initialized)
-            {
                 component.Initialize();
-                component.Start();
-            }
         }
 
         public bool RemoveComponents(Type type)
@@ -187,7 +173,7 @@ namespace JPEngine.Entities
         public bool RemoveComponent(IComponent component)
         {
             if (component == null)
-                throw new ArgumentNullException("The component cannot be null.");
+                throw new ArgumentNullException("component");
 
             if (_components.Remove(component))
             {
@@ -273,7 +259,13 @@ namespace JPEngine.Entities
             _tempUpdateableComponents.AddRange(_updateableComponents);
 
             foreach (IUpdateableComponent c in _tempUpdateableComponents.Where(c => c.Enabled))
+            {
+                if(!c.Started)
+                    c.Start();
+
                 c.Update(gameTime);
+            }
+               
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

@@ -12,7 +12,7 @@ namespace JPEngine.Components
 
         #region Properties
 
-        public string Tag
+        public new string Tag
         {
             get { return GameObject.Tag; }
             set { GameObject.Tag = value; }

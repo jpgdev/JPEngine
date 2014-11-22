@@ -21,7 +21,7 @@ namespace ExampleGame.CustomComponents
             UpdateOrder = 0;
         }
 
-        public override void Start()
+        protected override void StartCore()
         {
             _bodyComponent = GameObject.GetComponent<BodyComponent>();
             //TODO: If null => GameObject.OnComponentAdded += .... set the _bodyComponent
