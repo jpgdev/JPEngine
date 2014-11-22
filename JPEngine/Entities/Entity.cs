@@ -5,7 +5,6 @@ using JPEngine.Components;
 using JPEngine.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using OpenTK.Graphics.ES11;
 
 namespace JPEngine.Entities
 {
@@ -29,6 +28,7 @@ namespace JPEngine.Entities
         private bool _initialized;
         private bool _isEnabled;
         private string _tag = string.Empty;
+        private readonly long _id;
 
         public event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
         public event EventHandler<ValueChangedEventArgs<string>> TagChanged;
@@ -61,6 +61,11 @@ namespace JPEngine.Entities
             }
         }
 
+        public long ID
+        {
+            get { return _id; }
+        }
+
         public bool Enabled
         {
             get { return _isEnabled; }
@@ -88,11 +93,11 @@ namespace JPEngine.Entities
         #endregion
 
         //TODO: Add the Manager/ World / Scene in the constructor
-        internal Entity(string tag = "")
+        internal Entity(long id, string tag = "")
         {
             _transform = new TransformComponent(this);
             //AddComponent(_transform);
-
+            _id = id;
             _tag = tag;
             Enabled = true;
         }
@@ -243,7 +248,7 @@ namespace JPEngine.Entities
         public IComponent GetComponent(string tag)
         {
             if (!_taggedComponents.ContainsKey(tag))
-                return null; //throw new ArgumentOutOfRangeException(name);
+                return null;
 
             return _taggedComponents[tag] as BaseComponent;
         }
@@ -265,7 +270,6 @@ namespace JPEngine.Entities
 
                 c.Update(gameTime);
             }
-               
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -316,9 +320,14 @@ namespace JPEngine.Entities
 
         #endregion
 
+        public override string ToString()
+        {
+            return string.Format("Entity [{0}] : '{1}'", _id, Tag);
+        }
+
         public object Clone()
         {
-            var e = new Entity();
+            //var e = new Entity();
 
             //TODO: Get a copy of each of the components (implement IClonable)
             //TODO: Set the GameObject to the new one.

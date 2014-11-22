@@ -47,6 +47,7 @@ namespace ExampleGame
         {
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
+            Engine.Textures.Add("lumberjack", "Sprites/lumberjack", true);
             Engine.Textures.Add("background", "Background/clouds_and_trees", true);
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
@@ -109,7 +110,7 @@ namespace ExampleGame
             
             Entity player = CreatePlayer(new Vector2(-350, 30));
 
-            CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static, Color.LightBlue, 0);
+            CreateCrate(new Vector2(-212, 70), "platform", 64, 64, BodyType.Static, Color.LightBlue, 0);
             //CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
 
             float cubeStartX = player.Transform.Position.X;
@@ -122,12 +123,16 @@ namespace ExampleGame
             {
                 int y = 0;
                 int mod = x % 2;
-                string name = mod == 1 ? "ground" : "platform";
-                BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                //string name = mod == 1 ? "ground" : "platform";
+                string name = "platform";
+
+                //BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                BodyType bodyType = BodyType.Static;
+
                 
                 CreateCrate(lastPos , name, 64, 64, bodyType);
 
-                lastPos.X += cubeWidth + 5;
+                lastPos.X += cubeWidth;// + 5;
                 //lastPos.Y += cubeHeight + 5;
             }
         }
@@ -136,19 +141,27 @@ namespace ExampleGame
         {
             Entity player = Engine.Entities.CreateEntity("player");
 
-            player.Transform.Scale = new Vector2(0.5f, 0.5f);
+            //player.Transform.Scale = new Vector2(0.5f, 1f);
             player.Transform.Position = pos;
 
             const int playerWidth = 64; //96;
             const int playerHeight = 64; //96;
 
-            player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
+            AnimatedSpriteComponent animationComponent = new AnimatedSpriteComponent(player, Engine.Textures["lumberjack"]);
+            animationComponent.AddAnimation("walk_left", new SpriteAnimation(64, 64, 4, 256, 64, 0, 64));
+            animationComponent.AddAnimation("walk_right", new SpriteAnimation(64, 64, 4, 256, 64, 0, 128));
+            animationComponent.AddAnimation("walk_up", new SpriteAnimation(64, 64, 4, 256, 64, 0, 196));
+            animationComponent.AddAnimation("walk_down", new SpriteAnimation(64, 64, 4, 256, 64, 0, 0));
+            animationComponent.SetCurrentAnimation("walk_right");
+
+            player.AddComponent(animationComponent);
+            //player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
             player.AddComponent(new PlayerInput(player));
 
             Body body = BodyFactory.CreateRectangle(
                 Engine.Entities.PhysicsSystem.World,
-                ConvertUnits.ToSimUnits(playerWidth*player.Transform.Scale.X),
-                ConvertUnits.ToSimUnits(playerHeight*player.Transform.Scale.Y),
+                ConvertUnits.ToSimUnits(playerWidth/2 * player.Transform.Scale.X),
+                ConvertUnits.ToSimUnits(playerHeight * player.Transform.Scale.Y),
                 1);
 
             body.BodyType = BodyType.Dynamic;
@@ -173,7 +186,7 @@ namespace ExampleGame
             player.AddComponent(bodyComponent);
 
             //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
-            //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+            player.AddComponent(new RectRenderer(player, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
 
 
             return player;

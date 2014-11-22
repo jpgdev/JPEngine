@@ -72,10 +72,10 @@ namespace JPEngine.Components
             spriteBatch.Draw(
                 Texture,
                 new Vector2(Transform.Position.X, Transform.Position.Y),
-                _drawnPortion,
+                DrawnPortion,
                 _drawingColor,
                 GameObject.Transform.Rotation,
-                _origin,
+                Origin,
                 GameObject.Transform.Scale,
                 _spriteEffects,
                 Engine.SpriteManager.GetZIndex(this));

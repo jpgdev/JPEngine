@@ -25,13 +25,15 @@ namespace JPEngine.Entities
          * - If we keep a dictonnary HERE, we would need to change the way Entities work to keep the components here too, 
          *   so that they share the same Architecture mindset.         * 
          */
-
+        
         private readonly List<Entity> _entities = new List<Entity>();   //The core list of entities
         private readonly List<Entity> _tempEntities = new List<Entity>(); //The list used to work with
         private readonly Dictionary<string, List<Entity>> _taggedEntities = new Dictionary<string, List<Entity>>();
         
         private readonly List<ISystem> _systems = new List<ISystem>();
         private readonly List<ISystem> _tempSystems = new List<ISystem>();
+
+        private long _currentUniqueID = 0;
 
         public event EventHandler<ListItemEventArgs<Entity>> EntityAdded;
         //TODO: Implement a Remove? Maybe only usefull when Scenes will be implented to move an Entity to another scene?
@@ -81,7 +83,7 @@ namespace JPEngine.Entities
 
             //Cache this in a Dictonnary of Components by type
             //Subscribe to Entity.OnComponentAdded & when we do AddEntity, we check for each components
-            Dictionary<Type, IEnumerable<IComponent>> components = PhysicsSystem.TypesUsed.ToDictionary(t => t, GetAllComponentsOfType);
+            Dictionary<Type, IEnumerable<IComponent>> components = PhysicsSystem.TypesUsed.ToDictionary(t => t, GetComponentsOfType);
 
             PhysicsSystem.Update(components, gameTime);
         }
@@ -101,9 +103,15 @@ namespace JPEngine.Entities
 
         #region Entities Handling
 
+
+
+        //TODO: Keep a pool of Removed Entities so when we create a new one we get one from the pool, clear it, and give it.
+        //TODO: Otherwise we create a new one.
+        //TODO: Make sure the events are all removed / unsub etc...
+
         public Entity CreateEntity(string tag = "")
         {
-            Entity e = new Entity(tag);
+            Entity e = new Entity(_currentUniqueID++, tag);
 
             AddEntity(e);
 
@@ -149,7 +157,7 @@ namespace JPEngine.Entities
             return _taggedEntities[tag];
         }
 
-        public IEnumerable<T> GetAllComponentsOfType<T>() where T : class, IComponent
+        public IEnumerable<T> GetComponentsOfType<T>() where T : class, IComponent
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
@@ -157,7 +165,7 @@ namespace JPEngine.Entities
             return _tempEntities.SelectMany(e => e.GetComponents<T>());
         }
 
-        public IEnumerable<IComponent> GetAllComponentsOfType(Type type)
+        public IEnumerable<IComponent> GetComponentsOfType(Type type)
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);

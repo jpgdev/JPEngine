@@ -15,6 +15,7 @@ namespace JPEngine.Components
 
         void Start();
 
+        //TODO: This is not forced, so it may not be added to the implementation, remove this or think about another solution.
         event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
     }
 }

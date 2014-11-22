@@ -23,7 +23,6 @@ namespace ExampleGame.CustomComponents
 
         public override void Update(GameTime gameTime)
         {
-            //TODO: Find shorter way to get the camera..... cache it? But need to know it it changes...
             _paralaxPosition.X = Transform.Position.X + Engine.Cameras.Current.Position.X * ParallaxRatio;
         }
 
