@@ -32,7 +32,7 @@ namespace ExampleGame.CustomComponents
                 Texture,
                 new Vector2(_paralaxPosition.X, Transform.Position.Y),
                 DrawnPortion,
-                DrawingColor,
+                Color,
                 GameObject.Transform.Rotation,
                 Origin,
                 GameObject.Transform.Scale,

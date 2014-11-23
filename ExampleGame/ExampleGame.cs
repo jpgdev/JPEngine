@@ -226,7 +226,7 @@ namespace ExampleGame
 
             Color c = color ?? Color.White;
 
-            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { DrawingColor = c });
+            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { Color = c });
         }
 
         protected override void UnloadContent()
@@ -237,35 +237,12 @@ namespace ExampleGame
         protected override void Update(GameTime gameTime)
         {
             Engine.Update(gameTime);
-            
-            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["BtnF"].Value))
-            //{
-            //    Engine.Settings.SaveSettings();
-            //    Engine.Settings.LoadSettings();
-            //    Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
-            //}
-
-            //if (Engine.Input.IsKeyClicked(Keys.P))
-            //{
-            //    Engine.Window.ScreenWidth += 32;
-            //    Engine.Window.ScreenHeight += 24;
-            //    Engine.Window.ApplySettings();
-            //}
-
-            //if (Engine.Input.IsKeyClicked(Keys.M))
-            //{
-            //    Engine.Window.ScreenWidth -= 32;
-            //    Engine.Window.ScreenHeight -= 24;
-            //    Engine.Window.ApplySettings();
-            //}
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             Engine.Draw(gameTime);
-
             base.Draw(gameTime);
         }
     }

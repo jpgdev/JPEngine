@@ -1,13 +1,14 @@
 ﻿using System;
 using JPEngine.Entities;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Components
 {
-    public class SpriteComponent : DrawableComponent
+    public class SpriteComponent : DrawableComponent, ISprite
     {
-        private Color _drawingColor = Color.White;
+        private Color _color = Color.White;
         private Rectangle? _drawnPortion; //TODO: Rename?
         private Vector2 _origin = Vector2.Zero; //Todo: Move this to Transform?
         private SpriteEffects _spriteEffects = SpriteEffects.None;
@@ -15,10 +16,10 @@ namespace JPEngine.Components
 
         #region Properties
 
-        public Color DrawingColor
+        public Color Color
         {
-            get { return _drawingColor; }
-            set { _drawingColor = value; }
+            get { return _color; }
+            set { _color = value; }
         }
 
         /// <summary>
@@ -47,6 +48,21 @@ namespace JPEngine.Components
             set { _spriteEffects = value; }
         }
 
+        public Vector2 Position
+        {
+            get { return Transform.Position; }
+        }
+
+        public Vector2 Scale
+        {
+            get { return Transform.Scale; }
+        }
+
+        public float Rotation
+        {
+            get { return Transform.Rotation; }
+        }
+
         #endregion
 
         public SpriteComponent(Entity gameObject, Texture2D texture)
@@ -73,7 +89,7 @@ namespace JPEngine.Components
                 Texture,
                 new Vector2(Transform.Position.X, Transform.Position.Y),
                 DrawnPortion,
-                _drawingColor,
+                _color,
                 GameObject.Transform.Rotation,
                 Origin,
                 GameObject.Transform.Scale,

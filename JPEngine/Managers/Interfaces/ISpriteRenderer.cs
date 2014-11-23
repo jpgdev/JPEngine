@@ -1,8 +1,4 @@
-﻿using JPEngine.Enums;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace JPEngine.Managers
+﻿namespace JPEngine.Managers
 {
     public interface ISpriteRenderer
     {

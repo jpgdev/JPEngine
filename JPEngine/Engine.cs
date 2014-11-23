@@ -4,6 +4,7 @@ using System;
 using JPEngine.Entities;
 using JPEngine.Managers;
 using JPEngine.Managers.Input;
+using JPEngine.Managers.Window;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -28,7 +29,7 @@ namespace JPEngine
         private static EntitiesManager _entitiesManager;
 
         private static ScriptConsole _console;
-        private static SpriteBatchRenderer _spriteManager;
+        private static SpriteBatchManager _spriteManager;
 
         private static IWindowManager _windowManager;
         private static IResourceManager<Texture2D> _texturesManager;
@@ -55,7 +56,7 @@ namespace JPEngine
             }
         }
 
-        public static SpriteBatchRenderer SpriteManager
+        public static SpriteBatchManager SpriteManager
         {
             get { return _spriteManager; }
             private set
@@ -188,7 +189,7 @@ namespace JPEngine
         /// <param name="game">The game.</param>
         public static void Initialize(GraphicsDeviceManager graphicsDeviceManager, Game game)
         {
-            Window = WindowManager.Create(graphicsDeviceManager, game);
+            Window = WindowManagerFactory.Create(graphicsDeviceManager, game);
             InitializeDefaultCore(graphicsDeviceManager);
         }
 
@@ -199,7 +200,7 @@ namespace JPEngine
         /// <param name="windowHandle">The Form containing the game handle.</param>
         public static void Initialize(IGraphicsDeviceService graphicsDeviceService, IntPtr windowHandle)
         {
-            Window = WindowManager.Create(graphicsDeviceService, windowHandle);
+            Window = WindowManagerFactory.Create(graphicsDeviceService, windowHandle);
             InitializeDefaultCore(graphicsDeviceService);
         }
 
@@ -210,7 +211,7 @@ namespace JPEngine
         /// <param name="gameWindow">The Game window.</param>
         public static void Initialize(IGraphicsDeviceService graphicsDeviceService, GameWindow gameWindow)
         {
-            Window = WindowManager.Create(graphicsDeviceService, gameWindow);
+            Window = WindowManagerFactory.Create(graphicsDeviceService, gameWindow);
             InitializeDefaultCore(graphicsDeviceService);
         }
 
@@ -277,7 +278,7 @@ namespace JPEngine
             /////////////////////
             // TODO: FOR NOW
             Entities = new EntitiesManager();
-            SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
+            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
             ////////////////////
 
             InitializeManagers();
@@ -298,7 +299,7 @@ namespace JPEngine
             _contentManager = new ContentManager(services, "Content");
             ///////////////////////////////////////////////////
 
-            SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
+            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
 
             Entities = new EntitiesManager();
             Settings = new SettingsManager();
@@ -344,12 +345,18 @@ namespace JPEngine
         {
             Input.Update(gameTime);
 
-            if (!(Console != null &&
-                  Console.IsActive &&
-                  Console.Options.PauseGameWhenOpened))
+            if (CanGameUpdate())
             {
                 Entities.Update(gameTime);
             }
+        }
+
+        //TODO: Clean this...
+        private static bool CanGameUpdate()
+        {
+            return !(Console != null &&
+                     Console.IsActive &&
+                     Console.Options.PauseGameWhenOpened);
         }
 
         public static void Draw(GameTime gameTime)
@@ -357,6 +364,8 @@ namespace JPEngine
             Window.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             FramesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            System.Console.WriteLine("FPS: " + FramesPerSecond);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
             SpriteBatch spriteBatch = SpriteManager.Begin();

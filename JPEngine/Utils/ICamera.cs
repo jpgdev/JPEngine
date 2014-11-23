@@ -2,7 +2,7 @@
 using JPEngine.Events;
 using Microsoft.Xna.Framework;
 
-namespace JPEngine.Components
+namespace JPEngine
 {
     public interface ICamera
     {

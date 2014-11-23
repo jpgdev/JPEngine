@@ -1,5 +1,6 @@
 ﻿using JPEngine.Components;
 using JPEngine.Enums;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,13 +13,13 @@ namespace JPEngine.Managers
 
     //TODO:  ISpriteRenderer INTERFACE
 
-    public class SpriteBatchRenderer : Manager, ISpriteRenderer
+    public class SpriteBatchManager : Manager, ISpriteRenderer
     {
         private const int STEPS_PER_LAYER = 2048;
         private int _numberOfLayers;
         private readonly SpriteBatch _spriteBatch;
 
-        internal SpriteBatchRenderer(GraphicsDevice graphicsDevice)
+        internal SpriteBatchManager(GraphicsDevice graphicsDevice)
         {
             if (graphicsDevice == null)
                 throw new NullReferenceException("The graphicsDevice cannot be null.");
@@ -31,7 +32,7 @@ namespace JPEngine.Managers
             _numberOfLayers = Enum.GetNames(typeof(DrawingLayer)).Length;
         }
 
-        public float GetZIndex(SpriteComponent drawableSprite)
+        public float GetZIndex(ISprite sprite)
         {
             //TODO: make this work with the Z, Y axis and the Layers
 
@@ -46,8 +47,8 @@ namespace JPEngine.Managers
             //zIndex +=  MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
 
 
-            float min = (MathHelper.Max(0, (int)drawableSprite.Layer - 1) * STEPS_PER_LAYER);
-            float max = (int)drawableSprite.Layer * STEPS_PER_LAYER;
+            float min = (MathHelper.Max(0, (int)sprite.Layer - 1) * STEPS_PER_LAYER);
+            float max = (int)sprite.Layer * STEPS_PER_LAYER;
             ////float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
             //float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
             float zIndex = min / (_numberOfLayers * STEPS_PER_LAYER);
