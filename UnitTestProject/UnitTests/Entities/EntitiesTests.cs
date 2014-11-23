@@ -35,14 +35,13 @@ namespace UnitTestProject.Tests.Entities
         }
 
         //TODO: On TagChanged tests
-        [TearDown]
+        [Test]
         public void OnTagChangedTest()
         {
-            Entity e = new Entity();
+            //Entity e = new Entity();
 
-            BaseComponent c = new DrawableComponent(e);
+            //BaseComponent c = new DrawableComponent(e);
         }
-
 
         [TestFixtureTearDown]
         public void Finished()

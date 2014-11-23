@@ -1,6 +1,5 @@
 ﻿using System;
 using FarseerPhysics;
-using FarseerPhysics.Dynamics;
 using JPEngine;
 using JPEngine.Components;
 using JPEngine.Components.Physics;
@@ -40,12 +39,12 @@ namespace ExampleGame.CustomComponents
 
         public override void Update(GameTime gameTime)
         {
-            float deltaSinceLastUpdate = gameTime.ElapsedGameTime.Milliseconds / 1000f;
-            const float speed = 100;
+            float deltaSinceLastUpdate = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            const float speed = 300;
             
             Vector2 moveVelocity = new Vector2();
 
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["Q"].Value))
+            if (Engine.Input.Keyboard.IsKeyClicked((Keys)Engine.Settings["Q"].Value))
             {
                 Engine.SoundFX["ammo_pickup"].Play(0.05f, 0, 0);
             }
@@ -60,32 +59,37 @@ namespace ExampleGame.CustomComponents
             //    Transform.Position.Z -= 1;
             //}
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["Q"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["Q"].Value))
             {
-                Rotate(-MathHelper.ToRadians(10f));
+                Rotate(-MathHelper.ToRadians(10f * deltaSinceLastUpdate));
             }
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["E"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["E"].Value))
             {
-                Rotate(MathHelper.ToRadians(10f));
+                Rotate(MathHelper.ToRadians(10f * deltaSinceLastUpdate));
             }
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["UP"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["R"].Value))
+            {
+                ResetRotation();
+            }
+
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["UP"].Value))
             {
                 moveVelocity.Y -= 1;
             }
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["DOWN"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["DOWN"].Value))
             {
                 moveVelocity.Y += 1;
             }
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["RIGHT"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["RIGHT"].Value))
             {
                 moveVelocity.X += 1;
             }
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["LEFT"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["LEFT"].Value))
             {
                 moveVelocity.X -= 1;
             }
@@ -97,13 +101,11 @@ namespace ExampleGame.CustomComponents
 
             Move(moveVelocity);
 
-
-            Vector2 jumpVelocity = Vector2.Zero;
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["SpaceBar"].Value))
+            if (Engine.Input.Keyboard.IsKeyClicked((Keys)Engine.Settings["SpaceBar"].Value))
             {
                 const float verticalJumpVelocity = 400;
                 const float horizontalJumpVelocity = 50;
-                jumpVelocity = new Vector2(moveVelocity.X*horizontalJumpVelocity, -verticalJumpVelocity);
+                Vector2 jumpVelocity = new Vector2(moveVelocity.X*horizontalJumpVelocity, -verticalJumpVelocity);
 
                 //Todo: Checker si y touche le sol avant de sauter (pas de infinite jumping)
                 Jump(jumpVelocity);
@@ -170,6 +172,14 @@ namespace ExampleGame.CustomComponents
                 _bodyComponent.Body.Rotation += radians;
             else
                 Transform.Rotation += radians;
+        }
+
+        private void ResetRotation()
+        {
+            if (_bodyComponent != null)
+                _bodyComponent.Body.Rotation = 0;
+            else
+                Transform.Rotation = 0;
         }
 
         private void Jump(Vector2 jumpVelocity)

@@ -72,7 +72,7 @@ namespace JPEngine.Utils.ScriptConsole
         }
     }
 
-    public class ScriptConsole
+    public class ScriptConsole : IDisposable
     {
         private readonly ConsoleInputProcessor _consoleInputProcessor;
         private readonly ConsoleRenderer _consoleRenderer;
@@ -136,6 +136,12 @@ namespace JPEngine.Utils.ScriptConsole
             if (!_consoleInputProcessor.IsActive) return;
 
             _consoleRenderer.Draw(spriteBatch, gameTime);
+        }
+
+        public void Dispose()
+        {
+            //todo: Dispose...
+            _consoleRenderer.Dispose();
         }
     }
 }

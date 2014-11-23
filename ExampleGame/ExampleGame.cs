@@ -158,32 +158,32 @@ namespace ExampleGame
             //player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
             player.AddComponent(new PlayerInput(player));
 
-            Body body = BodyFactory.CreateRectangle(
-                Engine.Entities.PhysicsSystem.World,
-                ConvertUnits.ToSimUnits(playerWidth/2 * player.Transform.Scale.X),
-                ConvertUnits.ToSimUnits(playerHeight * player.Transform.Scale.Y),
-                1);
+            //Body body = BodyFactory.CreateRectangle(
+            //    Engine.Entities.PhysicsSystem.World,
+            //    ConvertUnits.ToSimUnits(playerWidth/2 * player.Transform.Scale.X),
+            //    ConvertUnits.ToSimUnits(playerHeight * player.Transform.Scale.Y),
+            //    1);
 
-            body.BodyType = BodyType.Dynamic;
-            body.FixedRotation = true;
-            body.Mass = 0;
-            body.Friction = 1f;
-            body.LinearDamping = 1f;
+            //body.BodyType = BodyType.Dynamic;
+            //body.FixedRotation = true;
+            //body.Mass = 0;
+            //body.Friction = 1f;
+            //body.LinearDamping = 1f;
 
-            body.Position = new Vector2(
-                ConvertUnits.ToSimUnits(player.Transform.Position.X),
-                ConvertUnits.ToSimUnits(player.Transform.Position.Y));
+            //body.Position = new Vector2(
+            //    ConvertUnits.ToSimUnits(player.Transform.Position.X),
+            //    ConvertUnits.ToSimUnits(player.Transform.Position.Y));
 
-            body.Rotation = player.Transform.Rotation;
-            BodyComponent bodyComponent = new BodyComponent(player, body);
+            //body.Rotation = player.Transform.Rotation;
+            //BodyComponent bodyComponent = new BodyComponent(player, body);
 
-            bodyComponent.OnCollision += (sender, args) =>
-            {
-                if (args.BodyComponentB.GameObject.Tag == "ground")
-                    args.BodyComponentB.Body.IgnoreGravity = false;
-            };
+            //bodyComponent.OnCollision += (sender, args) =>
+            //{
+            //    if (args.BodyComponentB.GameObject.Tag == "ground")
+            //        args.BodyComponentB.Body.IgnoreGravity = false;
+            //};
 
-            player.AddComponent(bodyComponent);
+            //player.AddComponent(bodyComponent);
 
             //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
             player.AddComponent(new RectRenderer(player, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));

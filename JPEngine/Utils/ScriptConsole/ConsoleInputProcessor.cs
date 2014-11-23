@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using JPEngine.Events;
 using JPEngine.Managers;
+using JPEngine.Managers.Input;
 using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Utils.ScriptConsole
@@ -36,7 +37,7 @@ namespace JPEngine.Utils.ScriptConsole
             Out = new List<OutputLine>();
             Buffer = new InputBuffer();
 
-            Engine.Input.KeyClicked += EventInput_KeyClicked;
+            Engine.Input.Keyboard.KeyClicked += EventInput_KeyClicked;
         }
 
         private void EventInput_KeyClicked(object sender, KeyEventArgs e)
@@ -123,7 +124,7 @@ namespace JPEngine.Utils.ScriptConsole
                     
                 default:
                     Buffer.IsSelecting = e.Shift;
-                    char c = InputManager.GetCharValue(e.Key, e.Shift);
+                    char c = KeyboardHelper.GetCharValue(e.Key, e.Shift);
                     if (IsPrintable(c))
                     {
                         if (Buffer.SelectionLength > 0)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JPEngine.Managers
 {
-    public class SettingsManager : Manager
+    public class SettingsManager : Manager, ISettingsManager
     {
         //TODO: Link MusicManager, SoundFXManager, WindowManager etc... to a setting?
         //      example: Settings.Add(new Setting("soundfx_volume", 0.5f);
@@ -40,21 +40,22 @@ namespace JPEngine.Managers
 
         public Setting Get(string name)
         {
-            if (!_settings.ContainsKey(name))
-                throw new Exception(string.Format("The setting '{0}' does not exist.", name));
-
-            return _settings[name];
+            return !_settings.ContainsKey(name) ? null : _settings[name];
         }
 
-        //public void SaveSettings()
-        //{
-        //    Utils.JsonHelper.SaveToFile(_settings, @"C:\Users\JP\Desktop\test\settings.txt");
-        //}
+        public bool Save(string path)
+        {
+            //path = @"C:\Users\JP\Desktop\test\settings.txt";
+            //Utils.JsonHelper.SaveToFile(_settings, path);
+            throw new NotImplementedException();
+        }
 
-        //public void LoadSettings()
-        //{
-        //    //_settings.Clear();
-        //    _settings = Utils.JsonHelper.LoadFromFile<Dictionary<string, Setting>>(@"C:\Users\JP\Desktop\test\settings.txt");
-        //}       
+        public bool Load(string path)
+        {
+            //path = @"C:\Users\JP\Desktop\test\settings.txt";
+            //_settings.Clear();
+            //_settings = Utils.JsonHelper.LoadFromFile<Dictionary<string, Setting>>(path);
+            throw new NotImplementedException();
+        }       
     }
 }

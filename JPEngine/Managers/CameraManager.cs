@@ -4,32 +4,24 @@ using JPEngine.Events;
 
 namespace JPEngine.Managers
 {
-    public class CameraManager : Manager
+    public class CameraManager : Manager, ICameraManager
     {
         private readonly List<ICamera> _cameras = new List<ICamera>();
         private readonly Dictionary<string, ICamera> _taggedCameras = new Dictionary<string, ICamera>();
-        private ICamera _currentCamera;
 
-
-        public ICamera Current
-        {
-            get { return _currentCamera; }
-        }
-
+        public ICamera Current { get; private set; }
 
         internal CameraManager()
         {
         }
 
-       
-
-        protected override bool InitializeCore()
+        protected override void InitializeCore()
         {
             _cameras.Clear();
             _taggedCameras.Clear();
-
-            return base.InitializeCore();
         }
+
+        #region Camera Handling
 
         public bool SetCurrent(string tag)
         {
@@ -44,7 +36,7 @@ namespace JPEngine.Managers
             if (!_cameras.Contains(camera))
                 AddCamera(camera);
 
-            _currentCamera = camera;
+            Current = camera;
 
             return true;
         }
@@ -78,7 +70,7 @@ namespace JPEngine.Managers
             return null;
         }
 
-        private bool RemoveCamera(string tag)
+        public bool RemoveCamera(string tag)
         {
             if (_taggedCameras.ContainsKey(tag))
             {
@@ -92,12 +84,14 @@ namespace JPEngine.Managers
             return false;
         }
 
-        private bool RemoveCamera(ICamera camera)
+        public bool RemoveCamera(ICamera camera)
         {
             return _taggedCameras.ContainsKey(camera.Tag)
                 ? RemoveCamera(camera.Tag)
                 : _cameras.Remove(camera);
         }
+
+        #endregion
 
         #region EventHandlers
 

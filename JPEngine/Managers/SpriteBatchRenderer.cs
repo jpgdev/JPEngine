@@ -12,13 +12,13 @@ namespace JPEngine.Managers
 
     //TODO:  ISpriteRenderer INTERFACE
 
-    public class SpriteBatchManager : Manager
+    public class SpriteBatchRenderer : Manager, ISpriteRenderer
     {
         private const int STEPS_PER_LAYER = 2048;
         private int _numberOfLayers;
         private readonly SpriteBatch _spriteBatch;
 
-        internal SpriteBatchManager(GraphicsDevice graphicsDevice)
+        internal SpriteBatchRenderer(GraphicsDevice graphicsDevice)
         {
             if (graphicsDevice == null)
                 throw new NullReferenceException("The graphicsDevice cannot be null.");
@@ -26,11 +26,9 @@ namespace JPEngine.Managers
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        protected override bool InitializeCore()
+        protected override void InitializeCore()
         {
             _numberOfLayers = Enum.GetNames(typeof(DrawingLayer)).Length;
-
-            return true;
         }
 
         public float GetZIndex(SpriteComponent drawableSprite)

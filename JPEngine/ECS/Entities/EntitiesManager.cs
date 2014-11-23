@@ -47,7 +47,7 @@ namespace JPEngine.Entities
         {
         }
 
-        protected override bool InitializeCore()
+        protected override void InitializeCore()
         {
             //TODO: List of Systems...
             PhysicsSystem = new Box2DPhysicsSystem(new Vector2(0, 9.82f));
@@ -57,11 +57,9 @@ namespace JPEngine.Entities
             _tempEntities.AddRange(_entities);
 
             _tempEntities.ForEach(e => e.Initialize());
-
-            return true;
         }
 
-        internal override void Update(GameTime gameTime)
+        internal void Update(GameTime gameTime)
         {
             UpdateSystems(gameTime);
 
