@@ -11,6 +11,6 @@ namespace JPEngine.Managers
 
         IGamePadHelper GamePads { get; }
 
-        void Update(GameTime gameTime);
+        void Update();
     }
 }

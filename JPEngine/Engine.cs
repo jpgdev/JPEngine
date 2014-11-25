@@ -27,12 +27,13 @@ namespace JPEngine
         private static ContentManager _contentManager;
 
         //TODO: Use with some kind of GameManager/GamePlayManager?
-        //TODO: Remove this from the Engine, the can uset it or not, do not force it
+        //TODO: Remove this from the Engine, the can use it or not, do not force it
         private static EntitiesManager _entitiesManager;
 
+        //TODO: Remove this from the Engine, the can use it or not, do not force it
         private static ScriptConsole _console;
-        private static ISpriteRenderer _spriteRenderer;
 
+        private static ISpriteRenderer _spriteRenderer;
         private static IWindowManager _windowManager;
         private static IResourceManager<Texture2D> _texturesManager;
         private static IResourceManager<Song> _musicManager;
@@ -281,8 +282,6 @@ namespace JPEngine
             // TODO: FOR NOW
             Entities = new EntitiesManager();
             SpriteRenderer = new SpriteBatchRenderer(Window.GraphicsDevice);
-
-            //SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
             ////////////////////
 
             InitializeManagers();
@@ -299,14 +298,10 @@ namespace JPEngine
             services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
 
             //TODO: Enable the user to change the RootDirectory
-            //TODO: EngineSettings object?
             _contentManager = new ContentManager(services, "Content");
             ///////////////////////////////////////////////////
-
-            //SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
+            
             SpriteRenderer = new SpriteBatchRenderer(Window.GraphicsDevice);
-
-
             Entities = new EntitiesManager();
             Settings = new SettingsManager();
             Input = new InputManager();
@@ -321,7 +316,7 @@ namespace JPEngine
 
         private static void InitializeManagers()
         {
-            //SpriteRenderer.Initialize();
+            SpriteRenderer.Initialize();
             Window.Initialize();
             Entities.Initialize();
             Settings.Initialize();
@@ -349,7 +344,7 @@ namespace JPEngine
 
         public static void Update(GameTime gameTime)
         {
-            Input.Update(gameTime);
+            Input.Update();
 
             if (CanGameUpdate())
             {

@@ -20,7 +20,7 @@ namespace JPEngine.Managers.Input
             get { return _currentMouseState.ScrollWheelValue; }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             _oldMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();

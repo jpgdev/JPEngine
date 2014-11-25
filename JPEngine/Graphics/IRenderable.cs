@@ -17,6 +17,4 @@ namespace JPEngine.Graphics
 
         DrawingLayer Layer { get; }
     }
-
-
 }

@@ -7,7 +7,7 @@ namespace JPEngine.Managers.Input
 {
     public interface IKeyboardHelper
     {
-        void Update(GameTime gameTime);
+        void Update();
 
         bool IsKeyClicked(Keys key);
 

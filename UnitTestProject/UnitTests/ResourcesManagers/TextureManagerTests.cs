@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JPEngine;
 using NUnit.Framework;
 
@@ -35,8 +36,8 @@ namespace UnitTestProject.UnitTests.ResourcesManagers
 
             Engine.Textures.UnloadContent();
 
-            Assert.AreEqual(Engine.Textures.AmountAdded, 0);
-            Assert.AreEqual(Engine.Textures.AmountLoaded, 0);
+            Assert.AreEqual(Engine.Textures.Added.Length, 0);
+            Assert.AreEqual(Engine.Textures.Loaded.Length, 0);
 
             Assert.Catch<KeyNotFoundException>(() => Engine.Textures.GetResource(name));
         }

@@ -9,7 +9,7 @@ namespace JPEngine.Managers.Input
 
         int ScrollWheelValue { get; }
 
-        void Update(GameTime gameTime);
+        void Update();
 
         bool IsButtonClicked(MouseButton button);
 

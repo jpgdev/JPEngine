@@ -1,10 +1,9 @@
-﻿using System;
-using JPEngine.Graphics;
+﻿using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public interface ISpriteRenderer : IDisposable
+    public interface ISpriteRenderer : IManager
     {
         void Begin(Matrix? transformMatrix = null);
 

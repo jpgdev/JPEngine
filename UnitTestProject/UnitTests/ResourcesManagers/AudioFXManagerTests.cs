@@ -36,8 +36,8 @@ namespace UnitTestProject.UnitTests.ResourcesManagers
 
             Engine.SoundFX.UnloadContent();
 
-            Assert.AreEqual(Engine.SoundFX.AmountAdded, 0);
-            Assert.AreEqual(Engine.SoundFX.AmountLoaded, 0);
+            Assert.AreEqual(Engine.SoundFX.Added.Length, 0);
+            Assert.AreEqual(Engine.SoundFX.Loaded.Length, 0);
             
             Assert.Catch<KeyNotFoundException>(() => Engine.SoundFX.GetResource(name));
         }

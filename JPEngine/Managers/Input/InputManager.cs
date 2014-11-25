@@ -38,11 +38,11 @@ namespace JPEngine.Managers.Input
             GamePads = gamePadHelper;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            Keyboard.Update(gameTime);
-            Mouse.Update(gameTime);
-            GamePads.Update(gameTime);
+            Keyboard.Update();
+            Mouse.Update();
+            GamePads.Update();
         }
     }
 }

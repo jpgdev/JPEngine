@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using JPEngine.Events;
-using JPEngine.Managers;
 using JPEngine.Managers.Input;
 using Microsoft.Xna.Framework.Input;
 

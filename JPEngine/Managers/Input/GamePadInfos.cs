@@ -52,7 +52,7 @@ namespace JPEngine.Managers.Input
             return GamePad.SetVibration(_playerIndex, leftMotor, rightMotor);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             _oldGamePadState = _newGamePadState;
             _newGamePadState = GamePad.GetState(_playerIndex);

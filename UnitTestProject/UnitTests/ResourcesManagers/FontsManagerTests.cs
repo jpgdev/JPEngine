@@ -36,8 +36,8 @@ namespace UnitTestProject.UnitTests.ResourcesManagers
 
             Engine.Fonts.UnloadContent();
 
-            Assert.AreEqual(Engine.Fonts.AmountAdded, 0);
-            Assert.AreEqual(Engine.Fonts.AmountLoaded, 0);
+            Assert.AreEqual(Engine.Fonts.Added.Length, 0);
+            Assert.AreEqual(Engine.Fonts.Loaded.Length, 0);
 
             Assert.Catch<KeyNotFoundException>(() => Engine.Fonts.GetResource(name));
         }

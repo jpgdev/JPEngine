@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Graphics
 {
-    public class SpriteBatchRenderer : ISpriteRenderer
+    public class SpriteBatchRenderer : Manager, ISpriteRenderer
     {
         private readonly List<ISprite> _sprites = new List<ISprite>();
         private readonly List<IText> _texts = new List<IText>();
@@ -15,7 +15,7 @@ namespace JPEngine.Graphics
         private readonly int _numberOfLayers;
 
         private readonly SpriteBatch _spriteBatch;
-        private bool _isBegan = false;
+        private bool _isBegan;
 
         public SpriteBatchRenderer(GraphicsDevice graphicsDevice)
         {
@@ -26,7 +26,7 @@ namespace JPEngine.Graphics
         public void Begin(Matrix? transformMatrix)
         {
             if (_isBegan)
-                return;
+                throw new Exception("The Begin has already been called.");
 
             if(transformMatrix.HasValue)
                 _spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, transformMatrix.Value);
@@ -91,6 +91,7 @@ namespace JPEngine.Graphics
                     text.Text,
                     text.Position,
                     text.Color);
+
                 //_spriteBatch.DrawString(
                 //    text.Font,
                 //    text.Text,
@@ -114,6 +115,8 @@ namespace JPEngine.Graphics
         public void Dispose()
         {
             //TODO: Dispose...
+            _sprites.Clear();
+            _texts.Clear();
         }
     }
 }
