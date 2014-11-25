@@ -86,7 +86,7 @@ namespace JPEngine.Entities
             PhysicsSystem.Update(components, gameTime);
         }
 
-        internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
@@ -95,7 +95,7 @@ namespace JPEngine.Entities
            _tempEntities.ForEach(e =>
             {
                 if (e.Enabled)
-                    e.Draw(spriteBatch, gameTime);
+                    e.Draw(gameTime);
             });
         }
 

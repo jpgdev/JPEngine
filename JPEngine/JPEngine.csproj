@@ -83,6 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ECS\Components\CameraComponent.cs" />
+    <Compile Include="Graphics\IRenderable.cs" />
+    <Compile Include="Graphics\IText.cs" />
+    <Compile Include="Graphics\RenderedText.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Utils\ICamera.cs" />
     <Compile Include="Physics\Farseers\BodyComponent.cs" />
     <Compile Include="ECS\Components\RectCollider.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="Managers\Window\FormWindowManager.cs" />
     <Compile Include="Graphics\GraphicsDeviceService.cs" />
     <Compile Include="Managers\Window\WindowManagerFactory.cs" />
+    <Compile Include="Utils\QuadTree2.cs" />
     <Compile Include="Utils\QuadTree.cs" />
     <Compile Include="Utils\ScriptConsole\CommandHistory.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleInputProcessor.cs" />

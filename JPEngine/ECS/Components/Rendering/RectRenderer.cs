@@ -1,6 +1,7 @@
 ﻿using System;
 using JPEngine.Components;
 using JPEngine.Entities;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -35,20 +36,34 @@ namespace JPEngine.Components
             Color = new Color(Color.Teal, 125);
         }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             //TODO: Handle rotation??
+            //TODO: Keep only one sprite and change it, do not recreate one
+            Sprite s = new Sprite(Texture, RectangleToRender, Color, Layer)
+            {
+                Rotation = GameObject.Transform.Rotation,
+                Color = Color,
+                Origin = Origin,
+                Scale = GameObject.Transform.Scale
+            };
+
+            Engine.SpriteRenderer.Draw(s);
+
+
+
+
             //if (Texture != null)
-                spriteBatch.Draw(
-                    Texture,
-                    RectangleToRender,
-                    null,
-                    Color,
-                    0,
-                    //new Vector2((float)RectangleToRender.Width / 2, (float)RectangleToRender.Height / 2),//TODO: Why is the Origin acting so weird?
-                    Vector2.Zero,
-                    SpriteEffects.None,
-                    0);
+                //spriteBatch.Draw(
+                //    Texture,
+                //    RectangleToRender,
+                //    null,
+                //    Color,
+                //    0,
+                //    //new Vector2((float)RectangleToRender.Width / 2, (float)RectangleToRender.Height / 2),//TODO: Why is the Origin acting so weird?
+                //    Vector2.Zero,
+                //    SpriteEffects.None,
+                //    0);
         }
     }
 }

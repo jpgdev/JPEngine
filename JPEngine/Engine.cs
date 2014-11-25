@@ -2,6 +2,7 @@
 
 using System;
 using JPEngine.Entities;
+using JPEngine.Graphics;
 using JPEngine.Managers;
 using JPEngine.Managers.Input;
 using JPEngine.Managers.Window;
@@ -26,10 +27,11 @@ namespace JPEngine
         private static ContentManager _contentManager;
 
         //TODO: Use with some kind of GameManager/GamePlayManager?
+        //TODO: Remove this from the Engine, the can uset it or not, do not force it
         private static EntitiesManager _entitiesManager;
 
         private static ScriptConsole _console;
-        private static SpriteBatchManager _spriteManager;
+        private static ISpriteRenderer _spriteRenderer;
 
         private static IWindowManager _windowManager;
         private static IResourceManager<Texture2D> _texturesManager;
@@ -56,15 +58,15 @@ namespace JPEngine
             }
         }
 
-        public static SpriteBatchManager SpriteManager
+        public static ISpriteRenderer SpriteRenderer
         {
-            get { return _spriteManager; }
-            private set
+            get { return _spriteRenderer; }
+            set
             {
-                if (_spriteManager != null)
-                    _spriteManager.Dispose();
+                if (_spriteRenderer != null)
+                    _spriteRenderer.Dispose();
 
-                _spriteManager = value;
+                _spriteRenderer = value;
             }
         }
 
@@ -278,7 +280,9 @@ namespace JPEngine
             /////////////////////
             // TODO: FOR NOW
             Entities = new EntitiesManager();
-            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
+            SpriteRenderer = new SpriteBatchRenderer(Window.GraphicsDevice);
+
+            //SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
             ////////////////////
 
             InitializeManagers();
@@ -299,7 +303,9 @@ namespace JPEngine
             _contentManager = new ContentManager(services, "Content");
             ///////////////////////////////////////////////////
 
-            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
+            //SpriteManager = new SpriteBatchRenderer(Window.GraphicsDevice);
+            SpriteRenderer = new SpriteBatchRenderer(Window.GraphicsDevice);
+
 
             Entities = new EntitiesManager();
             Settings = new SettingsManager();
@@ -315,7 +321,7 @@ namespace JPEngine
 
         private static void InitializeManagers()
         {
-            SpriteManager.Initialize();
+            //SpriteRenderer.Initialize();
             Window.Initialize();
             Entities.Initialize();
             Settings.Initialize();
@@ -368,14 +374,20 @@ namespace JPEngine
             System.Console.WriteLine("FPS: " + FramesPerSecond);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
-            SpriteBatch spriteBatch = SpriteManager.Begin();
 
-            Entities.Draw(spriteBatch, gameTime);
+            if (Cameras.Current != null)
+                SpriteRenderer.Begin(Cameras.Current.TransformMatrix);
+            else
+                SpriteRenderer.Begin();
 
-            SpriteManager.End();
+            //SpriteBatch spriteBatch = SpriteManager.Begin();
+
+            Entities.Draw(gameTime);
+
+            SpriteRenderer.End();
 
             if (Console != null)
-                Console.Draw(spriteBatch, gameTime);
+                Console.Draw(gameTime);
         }
 
         #endregion

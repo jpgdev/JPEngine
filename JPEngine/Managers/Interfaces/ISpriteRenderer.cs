@@ -1,11 +1,17 @@
-﻿namespace JPEngine.Managers
+﻿using System;
+using JPEngine.Graphics;
+using Microsoft.Xna.Framework;
+
+namespace JPEngine.Managers
 {
-    public interface ISpriteRenderer
+    public interface ISpriteRenderer : IDisposable
     {
-        //void Begin();
+        void Begin(Matrix? transformMatrix = null);
 
-        //void Draw(ISprite sprite);
+        void Draw(ISprite sprite);
 
-        //void End();
+        void DrawString(IText text);
+
+        void End();
     }
 }

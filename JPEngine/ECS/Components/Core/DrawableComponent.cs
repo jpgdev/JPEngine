@@ -71,7 +71,7 @@ namespace JPEngine.Components
 
         #endregion
 
-        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public virtual void Draw(GameTime gameTime)
         {
         }
     }

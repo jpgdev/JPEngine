@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JPEngine.Enums;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -93,33 +95,53 @@ namespace JPEngine.Utils.ScriptConsole
         
         #region Drawing Methods
 
-        internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             if (!_consoleInputProcessor.IsActive) return;
 
-            spriteBatch.Begin();
-            spriteBatch.Draw(_pixel, Bounds, _options.BackgroundColor);
+            Engine.SpriteRenderer.Begin();
 
-            Vector2 nextCommandPosition = DrawCommands(spriteBatch, _consoleInputProcessor.Out, FirstCommandPosition);
-            nextCommandPosition = DrawPrompt(spriteBatch, nextCommandPosition);
-            DrawSelection(spriteBatch, nextCommandPosition);
-            var bufferPosition = DrawCommand(spriteBatch, _consoleInputProcessor.Buffer.Value, nextCommandPosition,
+            //spriteBatch.Begin();
+
+            //TODO: Keep only one sprite and change it, do not recreate one
+            Sprite backGroundSprite = new Sprite(_pixel, Bounds, _options.BackgroundColor, DrawingLayer.Foreground1);
+
+            Engine.SpriteRenderer.Draw(backGroundSprite);
+            //spriteBatch.Draw(_pixel, Bounds, _options.BackgroundColor);
+
+            Vector2 nextCommandPosition = DrawCommands(_consoleInputProcessor.Out, FirstCommandPosition);
+            nextCommandPosition = DrawPrompt(nextCommandPosition);
+            DrawSelection(nextCommandPosition);
+            var bufferPosition = DrawCommand(_consoleInputProcessor.Buffer.Value, nextCommandPosition,
                 _options.BufferColor); //Draw the buffer
+            
+            DrawCursor(bufferPosition, gameTime);
 
-           
-            DrawCursor(spriteBatch, bufferPosition, gameTime);
+            Engine.SpriteRenderer.End();
 
-            spriteBatch.End();
+            //spriteBatch.End();
         }
 
-        private Vector2 DrawPrompt(SpriteBatch spriteBatch, Vector2 pos)
+        private Vector2 DrawPrompt(Vector2 pos)
         {
-            spriteBatch.DrawString(_options.Font, _options.Prompt, pos, _options.PromptColor);
+            RenderedText text = new RenderedText
+            {
+                Font = _options.Font,
+                Text = _options.Prompt,
+                Position = pos,
+                Color = _options.PromptColor,
+                Layer = DrawingLayer.Foreground2
+            };
+
+            Engine.SpriteRenderer.DrawString(text);
+
+            //spriteBatch.DrawString(_options.Font, _options.Prompt, pos, _options.PromptColor);
             pos.X += _oneCharacterWidth * _options.Prompt.Length + _oneCharacterWidth;
+
             return pos;
         }
 
-        private Vector2 DrawCommand(SpriteBatch spriteBatch, string command, Vector2 pos, Color color)
+        private Vector2 DrawCommand(string command, Vector2 pos, Color color)
         {
             //Take into account the prompt character and the space left right after
             int maxCommandLength = _maxCharactersPerLine - _options.Prompt.Length - 1;
@@ -131,7 +153,18 @@ namespace JPEngine.Utils.ScriptConsole
             {
                 if (IsInBounds(pos.Y))
                 {
-                    spriteBatch.DrawString(_options.Font, line, pos, color);
+                    RenderedText text = new RenderedText
+                    {
+                        Font = _options.Font,
+                        Text = line,
+                        Position = pos,
+                        Color = color,
+                        Layer = DrawingLayer.Foreground2
+                    };
+
+                    Engine.SpriteRenderer.DrawString(text);
+
+                    //spriteBatch.DrawString(_options.Font, line, pos, color);
                 }
 
                 ValidateFirstCommandPosition(pos.Y + _options.Font.LineSpacing);
@@ -146,18 +179,18 @@ namespace JPEngine.Utils.ScriptConsole
         /// <param name="lines"></param>
         /// <param name="pos"></param>
         /// <returns></returns>
-        private Vector2 DrawCommands(SpriteBatch spriteBatch, IEnumerable<OutputLine> lines, Vector2 pos)
+        private Vector2 DrawCommands(IEnumerable<OutputLine> lines, Vector2 pos)
         {
             var originalX = pos.X;
             foreach (var command in lines)
             {
                 if (command.Type == OutputLineType.Command)
                 {
-                    pos = DrawPrompt(spriteBatch, pos);
+                    pos = DrawPrompt(pos);
                 }
                 //position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
                 pos.Y =
-                    DrawCommand(spriteBatch, command.ToString(), pos,
+                    DrawCommand(command.ToString(), pos,
                         command.Type == OutputLineType.Command
                             ? _options.PastCommandColor
                             : _options.PastCommandOutputColor).Y;
@@ -166,26 +199,35 @@ namespace JPEngine.Utils.ScriptConsole
             return pos;
         }
 
-        private void DrawCursor(SpriteBatch spriteBatch, Vector2 pos, GameTime gameTime)
+        private void DrawCursor(Vector2 pos, GameTime gameTime)
         {
             if (!IsInBounds(pos.Y))
-            {
                 return;
-            }
-
 
             int max = Math.Min(_consoleInputProcessor.Buffer.CursorPosition, _consoleInputProcessor.Buffer.Value.Length);
             string subString = _consoleInputProcessor.Buffer.Value.Substring(0, max );
 
             pos.X += _options.Font.MeasureString(subString).X;
             pos.Y -= _options.Font.LineSpacing;
-            spriteBatch.DrawString(_options.Font,
-                (int) (gameTime.TotalGameTime.TotalSeconds/_options.CursorBlinkSpeed)%2 == 0
-                    ? _options.Cursor
-                    : "", pos, _options.CursorColor);
+
+
+            RenderedText text = new RenderedText();
+            text.Font = _options.Font;
+            text.Text = (int)(gameTime.TotalGameTime.TotalSeconds / _options.CursorBlinkSpeed) % 2 == 0
+                            ? _options.Cursor
+                            : "";
+            text.Position = pos;
+            text.Color = _options.CursorColor;
+
+            Engine.SpriteRenderer.DrawString(text);
+            
+            //spriteBatch.DrawString(_options.Font,
+            //    (int) (gameTime.TotalGameTime.TotalSeconds/_options.CursorBlinkSpeed)%2 == 0
+            //        ? _options.Cursor
+            //        : "", pos, _options.CursorColor);
         }
 
-        private void DrawSelection(SpriteBatch spriteBatch, Vector2 pos)
+        private void DrawSelection(Vector2 pos)
         {
             int selectionLength = _consoleInputProcessor.Buffer.SelectionEnd -
                                   _consoleInputProcessor.Buffer.SelectionStart;
@@ -197,7 +239,12 @@ namespace JPEngine.Utils.ScriptConsole
                     (int)(selectionLength * _oneCharacterWidth),
                     _options.Font.LineSpacing
                 );
-            spriteBatch.Draw(_pixel, rect, null, _options.SelectionColor);
+
+            //TODO: Keep only one sprite and change it, do not recreate one
+            Sprite selectionSprite = new Sprite(_pixel, rect, _options.SelectionColor, DrawingLayer.Foreground3);
+
+            Engine.SpriteRenderer.Draw(selectionSprite);
+            //spriteBatch.Draw(_pixel, rect, null, _options.SelectionColor);
         }
 
         #endregion
