@@ -286,9 +286,7 @@ public class QuadTree {
         {
             int index = GetIndex(rectangle);
             if (index != -1 && _nodes[0] != null)
-            {
                 _nodes[index].GetPossibleChoicesInternal(objects, rectangle);
-            }
 
             objects.AddRange(objects);
 

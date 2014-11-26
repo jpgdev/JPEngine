@@ -6,7 +6,6 @@ using JPEngine.Events;
 using JPEngine.Managers;
 using JPEngine.Systems;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Entities
 {
@@ -33,7 +32,7 @@ namespace JPEngine.Entities
         private readonly List<ISystem> _systems = new List<ISystem>();
         private readonly List<ISystem> _tempSystems = new List<ISystem>();
 
-        private long _currentUniqueID = 0;
+        private long _currentUniqueID;
 
         public event EventHandler<ListItemEventArgs<Entity>> EntityAdded;
         //TODO: Implement a Remove? Maybe only usefull when Scenes will be implented to move an Entity to another scene?

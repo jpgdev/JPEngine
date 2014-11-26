@@ -28,6 +28,7 @@ namespace JPEngine.Entities
         private bool _initialized;
         private bool _isEnabled;
         private string _tag = string.Empty;
+		//TODO: Change to GUID??
         private readonly long _id;
 
         public event EventHandler<ValueChangedEventArgs<bool>> EnabledChanged;
