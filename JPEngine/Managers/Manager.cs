@@ -1,9 +1,8 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public abstract class Manager : IDisposable
+    public abstract class Manager : IManager
     {
         private bool _isInitialized;
 
@@ -20,17 +19,14 @@ namespace JPEngine.Managers
 
         public event EventHandler<EventArgs> Initialized;
 
-        internal void Initialize()
+        public void Initialize()
         {
-            _isInitialized = InitializeCore();
+             InitializeCore();
+
+            _isInitialized = true;
         }
 
-        protected virtual bool InitializeCore()
-        {
-            return true;
-        }
-
-        internal virtual void Update(GameTime gameTime)
+        protected virtual void InitializeCore()
         {
         }
 
@@ -42,6 +38,5 @@ namespace JPEngine.Managers
         {
             UnloadContent();
         }
-
     }
 }

@@ -82,23 +82,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\CameraComponent.cs" />
-    <Compile Include="Components\Physics\BodyComponent.cs" />
-    <Compile Include="Components\RectCollider.cs" />
-    <Compile Include="Components\Core\DrawableComponent.cs" />
-    <Compile Include="Components\SpriteComponent.cs" />
-    <Compile Include="Components\Core\BaseComponent.cs" />
-    <Compile Include="Components\Core\IComponent.cs" />
-    <Compile Include="Components\Core\IDrawableComponent.cs" />
-    <Compile Include="Components\Core\IUpdateableComponent.cs" />
-    <Compile Include="Components\RectRenderer.cs" />
-    <Compile Include="Components\TransformComponent.cs" />
-    <Compile Include="Entities\EntitiesManager.cs" />
-    <Compile Include="Systems\ISystem.cs" />
-    <Compile Include="Systems\Box2DPhysicsSystem.cs" />
-    <Compile Include="Systems\System.cs" />
+    <Compile Include="ECS\Components\CameraComponent.cs" />
+    <Compile Include="Managers\Interfaces\IRenderableManager.cs" />
+    <Compile Include="Managers\Interfaces\IUpdateableManager.cs" />
+    <Compile Include="Utils\ICamera.cs" />
+    <Compile Include="Physics\Farseers\BodyComponent.cs" />
+    <Compile Include="ECS\Components\RectCollider.cs" />
+    <Compile Include="ECS\Components\Core\DrawableComponent.cs" />
+    <Compile Include="ECS\Components\Rendering\AnimatedSpriteComponent.cs" />
+    <Compile Include="ECS\Components\Rendering\SpriteComponent.cs" />
+    <Compile Include="ECS\Components\Core\BaseComponent.cs" />
+    <Compile Include="ECS\Components\Core\IComponent.cs" />
+    <Compile Include="ECS\Components\Core\IDrawableComponent.cs" />
+    <Compile Include="ECS\Components\Core\IUpdateableComponent.cs" />
+    <Compile Include="ECS\Components\Rendering\RectRenderer.cs" />
+    <Compile Include="ECS\Components\TransformComponent.cs" />
+    <Compile Include="ECS\Entities\EntitiesManager.cs" />
+    <Compile Include="Enums\MouseButton.cs" />
+    <Compile Include="Graphics\ISprite.cs" />
+    <Compile Include="BaseGame.cs" />
+    <Compile Include="Graphics\SpriteBatchRenderer.cs" />
+    <Compile Include="Managers\Input\GamePadHelper.cs" />
+    <Compile Include="Managers\Input\GamePadInfos.cs" />
+    <Compile Include="Managers\Input\Interfaces\IGamePadInfos.cs" />
+    <Compile Include="Managers\Input\Interfaces\IGamePadHelper.cs" />
+    <Compile Include="Managers\Input\Interfaces\IMouseHelper.cs" />
+    <Compile Include="Managers\Input\Interfaces\IKeyboardHelper.cs" />
+    <Compile Include="Managers\Input\KeyboardHelper.cs" />
+    <Compile Include="Managers\Input\MouseHelper.cs" />
+    <Compile Include="Managers\Interfaces\ICameraManager.cs" />
+    <Compile Include="Managers\Interfaces\IInputManager.cs" />
+    <Compile Include="Managers\Interfaces\IManager.cs" />
+    <Compile Include="Managers\Interfaces\IResourceManager.cs" />
+    <Compile Include="Managers\Interfaces\ISettingsManager.cs" />
+    <Compile Include="Managers\Interfaces\ISpriteRenderer.cs" />
+    <Compile Include="ECS\Systems\ISystem.cs" />
+    <Compile Include="Physics\Farseers\Box2DPhysicsSystem.cs" />
+    <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="ECS\Entities\Entity.cs" />
     <Compile Include="Enums\DrawingLayer.cs" />
     <Compile Include="Events\CharacterEventArgs.cs" />
     <Compile Include="Events\KeyEventArgs.cs" />
@@ -106,14 +128,16 @@
     <Compile Include="Events\ListItemEvents.cs" />
     <Compile Include="Managers\CameraManager.cs" />
     <Compile Include="Managers\Resources\FontsManager.cs" />
-    <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\Input\InputManager.cs" />
     <Compile Include="Managers\Window\BasicWindowManager.cs" />
     <Compile Include="Managers\Window\OpenTKWindowManager.cs" />
     <Compile Include="Managers\Setting.cs" />
     <Compile Include="Managers\SettingsManager.cs" />
-    <Compile Include="Managers\Window\IWindowManager.cs" />
+    <Compile Include="Managers\Interfaces\IWindowManager.cs" />
     <Compile Include="Managers\Window\FormWindowManager.cs" />
     <Compile Include="Graphics\GraphicsDeviceService.cs" />
+    <Compile Include="Managers\Window\WindowManagerFactory.cs" />
+    <Compile Include="Utils\QuadTree.cs" />
     <Compile Include="Utils\ScriptConsole\CommandHistory.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleInputProcessor.cs" />
     <Compile Include="Utils\ScriptConsole\ConsoleRenderer.cs" />
@@ -131,13 +155,12 @@
     <Compile Include="Managers\Resources\TextureManager.cs" />
     <Compile Include="Managers\Window\WindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Managers\SpriteManager.cs" />
+    <Compile Include="Managers\SpriteBatchManager.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AI\" />
     <Folder Include="Mapping\" />
-    <Folder Include="Physics\" />
     <Folder Include="Screens\" />
   </ItemGroup>
   <ItemGroup>

@@ -44,7 +44,7 @@ namespace JPEngine.Managers
             : base(graphicsDeviceService)
         {
             if (gameWindow == null)
-                throw new ArgumentNullException("The gameWindow cannot be null.");
+                throw new ArgumentNullException("gameWindow");
 
             _gameWindow = gameWindow;
         }

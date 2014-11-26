@@ -6,9 +6,6 @@ namespace JPEngine.Components
 {
     public class RectCollider : BaseComponent
     {
-        //TODO: Debug purposes
-        private RectRenderer _rectRenderer;
-
         public Vector2 Offset { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -37,22 +34,12 @@ namespace JPEngine.Components
             IsSolid = true;
         }
 
-        public override void Start()
+        protected override void StartCore()
         {
-            //TODO: To debug
-            _rectRenderer = GameObject.GetComponent<RectRenderer>();
-            if (_rectRenderer == null)
-            {
-                _rectRenderer = new RectRenderer(GameObject, Bounds, new Texture2D(Engine.Window.GraphicsDevice, 1, 1));
-                GameObject.AddComponent(_rectRenderer);
-            }
-            //
         }
 
         public override void Update(GameTime gameTime)
         {
-            //TODO: To debug
-            _rectRenderer.RectangleToRender = Bounds;
         }
     }
 }

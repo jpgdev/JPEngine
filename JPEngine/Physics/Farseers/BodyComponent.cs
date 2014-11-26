@@ -69,9 +69,8 @@ namespace JPEngine.Components.Physics
             //TODO: Make own wrapper event and get the value of each (bool) to pass them down to the Farseer Event
             //if (OnCollision != null)
             //    OnCollision(compA, compB, contact);
-
-
-            //TODO: Has a HUGE flaw, if someone put IsColliding to false, then another component to true, the last one will always win
+            
+            //BUG: Has a HUGE flaw, if someone put IsColliding to false, then another component to true, the last one will always win
             // I need something like : isColliding &= col.IsColling; // for each collider events
             BodyCollisionEventArgs col = new BodyCollisionEventArgs(compA, compB, contact);
 

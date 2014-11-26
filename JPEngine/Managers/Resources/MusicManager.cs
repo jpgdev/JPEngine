@@ -11,24 +11,24 @@ namespace JPEngine.Managers
         {
         }
 
-        public bool Play(string name, float volume = 1f)
-        {
-            if (IsResourceLoaded(name))
-            {
-                MediaPlayer.Volume = volume;
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(_resources[name]);
+        //public bool Play(string name, float volume = 1f)
+        //{
+        //    if (IsResourceLoaded(name))
+        //    {
+        //        MediaPlayer.Volume = volume;
+        //        MediaPlayer.IsRepeating = true;
+        //        MediaPlayer.Play(_resources[name]);
 
-                return true;
-            }
-            throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
-        }
+        //        return true;
+        //    }
+        //    throw new Exception(string.Format("The sound effect '{0}' is not loaded.", name));
+        //}
 
-        public bool Stop()
-        {
-            MediaPlayer.Stop();
+        //public bool Stop()
+        //{
+        //    MediaPlayer.Stop();
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

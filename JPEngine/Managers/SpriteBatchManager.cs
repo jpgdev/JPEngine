@@ -1,5 +1,6 @@
 ﻿using JPEngine.Components;
 using JPEngine.Enums;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,7 +10,10 @@ namespace JPEngine.Managers
 
     //TODO: Make this class a SpirteBatch wrapper, replace all the SpriteBatch.Draw() methods and remove the Z-Index to make sure it is well done
     //TODO: Implement SpriteBatch.DrawString too?
-    public class SpriteBatchManager : Manager
+
+    //TODO:  ISpriteRenderer INTERFACE
+
+    public class SpriteBatchManager : Manager, ISpriteRenderer
     {
         private const int STEPS_PER_LAYER = 2048;
         private int _numberOfLayers;
@@ -23,14 +27,12 @@ namespace JPEngine.Managers
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        protected override bool InitializeCore()
+        protected override void InitializeCore()
         {
             _numberOfLayers = Enum.GetNames(typeof(DrawingLayer)).Length;
-
-            return true;
         }
 
-        public float GetZIndex(SpriteComponent drawableSprite)
+        public float GetZIndex(ISprite sprite)
         {
             //TODO: make this work with the Z, Y axis and the Layers
 
@@ -45,8 +47,8 @@ namespace JPEngine.Managers
             //zIndex +=  MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
 
 
-            float min = (MathHelper.Max(0, (int)drawableSprite.Layer - 1) * STEPS_PER_LAYER);
-            float max = (int)drawableSprite.Layer * STEPS_PER_LAYER;
+            float min = (MathHelper.Max(0, (int)sprite.Layer - 1) * STEPS_PER_LAYER);
+            float max = (int)sprite.Layer * STEPS_PER_LAYER;
             ////float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
             //float zIndex = MathHelper.Min(max, min - drawableSprite.Transform.Position.Z) / (_numberOfLayers * STEPS_PER_LAYER);
             float zIndex = min / (_numberOfLayers * STEPS_PER_LAYER);
@@ -63,7 +65,7 @@ namespace JPEngine.Managers
         {
             //TODO: Add a validation that it can be started (begin has not been called already this frame)
             
-            CameraComponent camera = Engine.Cameras.Current;
+            ICamera camera = Engine.Cameras.Current;
             if (camera != null)
             {
                 _spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, camera.TransformMatrix);

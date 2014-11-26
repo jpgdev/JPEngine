@@ -22,10 +22,12 @@ namespace JPEngine.Managers
         {
             get { return GraphicsDeviceService.GraphicsDevice; }
         }
+
         public Viewport Viewport
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport; }
         }
+
         public virtual int Width
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Width; }
@@ -41,6 +43,7 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
+
         public virtual int Height
         {
             get { return GraphicsDeviceService.GraphicsDevice.Viewport.Height; }
@@ -56,8 +59,11 @@ namespace JPEngine.Managers
                 ApplySettings();
             }
         }
+
         public abstract bool IsFullScreen{ get; set; }
+
         public abstract bool IsMouseVisible{ get; set; }
+
         public abstract Rectangle Bounds { get; }
 
         #endregion
@@ -65,7 +71,7 @@ namespace JPEngine.Managers
         internal WindowManager(IGraphicsDeviceService graphicsDeviceService)
         {
             if (graphicsDeviceService == null)
-                throw new ArgumentNullException("The graphicsDeviceService cannot be null.");
+                throw new ArgumentNullException("graphicsDeviceService");
 
             GraphicsDeviceService = graphicsDeviceService;
         }
@@ -74,56 +80,6 @@ namespace JPEngine.Managers
         #region Abstract Methods
 
         public abstract void ApplySettings();
-
-        #endregion
-
-
-        #region WindowManager Factory
-
-        internal static WindowManager Create(IGraphicsDeviceService graphicsDeviceService, GameWindow gameWindow)
-        {
-            if (graphicsDeviceService is GraphicsDeviceManager)
-                throw new NotImplementedException("This is not implemented. You need to use the Game instead of the GameWindow.");
-            
-            //Get a OpenTKGameWindow
-            var form = gameWindow.GetForm();  
-            if (form != null)
-                return new OpenTKWindowManager(graphicsDeviceService as GraphicsDeviceService, form);
-            
-            //Get a Windows.Form
-            try
-            {
-                return Create(graphicsDeviceService, gameWindow.Handle);
-            }
-            catch (ArgumentException ae) { }
-
-            //Could not find a window...
-            throw new ArgumentException("The game window could not be found."); //TODO: Add a more meaningful message?
-        }
-
-        internal static WindowManager Create(IGraphicsDeviceService graphicsDeviceService, IntPtr windowHandle)
-        {
-            if (graphicsDeviceService is GraphicsDeviceManager)
-                throw new NotImplementedException("This is not implemented. You need to use the Game instead of the GameWindow.Handle.");
-
-            //Get a Windows.Form
-            var window = Control.FromHandle(windowHandle) as Form;
-            if (window == null)
-                throw new ArgumentException("The windowHandle is not a valid Windows.Form handle.");
-
-            return new FormWindowManager(graphicsDeviceService, window);
-        }
-
-        /// <summary>
-        /// Will create the basic WindowManager using the XNA's out-of-the-box GraphicsDeviceManager and Game.
-        /// </summary>
-        /// <param name="graphicsDeviceManager"></param>
-        /// <param name="game"></param>
-        /// <returns></returns>
-        internal static WindowManager Create(GraphicsDeviceManager graphicsDeviceManager, Game game)
-        {
-            return new BasicWindowManager(graphicsDeviceManager, game);
-        }
 
         #endregion
     }

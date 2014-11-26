@@ -3,10 +3,14 @@
 using System;
 using JPEngine.Entities;
 using JPEngine.Managers;
+using JPEngine.Managers.Input;
+using JPEngine.Managers.Window;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 #endregion
 
@@ -16,25 +20,26 @@ namespace JPEngine
     {
         #region Attributes
 
-        private static float _framesPerSecond;
-        
+        //TODO: Make Interface for each managers to abstract the functionalities
+
+        //TODO: Remove this, since it may not be used in custom ResourceManagers
         private static ContentManager _contentManager;
+
+        //TODO: Use with some kind of GameManager/GamePlayManager?
+        private static EntitiesManager _entitiesManager;
+
         private static ScriptConsole _console;
+        private static SpriteBatchManager _spriteManager;
 
-        //Managers
-        private static SpriteBatchManager _spriteBatchManager;
-        private static WindowManager _windowManager;
-        private static EntitiesManager _entityManager;
-        private static InputManager _inputManager;
-        private static SettingsManager _settingsManager;
-        private static CameraManager _cameraManager;
-
-        //Resources managers
-        private static TextureManager _textureManager;
-        private static MusicManager _musicManager;
-        private static SoundFXManager _soundManager;
-        private static FontsManager _fontsManager;
-
+        private static IWindowManager _windowManager;
+        private static IResourceManager<Texture2D> _texturesManager;
+        private static IResourceManager<Song> _musicManager;
+        private static IResourceManager<SoundEffect> _soundFXManager;
+        private static IResourceManager<SpriteFont> _fontsManager;
+        private static ISettingsManager _settingsManager;
+        private static IInputManager _inputManager;
+        private static ICameraManager _cameraManager;
+        
         #endregion
 
         #region Properties
@@ -42,63 +47,136 @@ namespace JPEngine
         public static ScriptConsole Console
         {
             get { return _console; }
-            set { _console = value; }
+            set
+            {
+                if (_console != null)
+                    _console.Dispose();
+
+                _console = value;
+            }
         }
 
         public static SpriteBatchManager SpriteManager
         {
-            get { return _spriteBatchManager; }
-        }
+            get { return _spriteManager; }
+            private set
+            {
+                if (_spriteManager != null)
+                    _spriteManager.Dispose();
 
-        public static WindowManager Window
-        {
-            get { return _windowManager; }
-        }
-
-        public static TextureManager Textures
-        {
-            get { return _textureManager; }
-        }
-
-        public static MusicManager Music
-        {
-            get { return _musicManager; }
-        }
-
-        public static SoundFXManager SoundFX
-        {
-            get { return _soundManager; }
-        }
-
-        public static SettingsManager Settings
-        {
-            get { return _settingsManager; }
-        }
-
-        public static InputManager Input
-        {
-            get { return _inputManager; }
+                _spriteManager = value;
+            }
         }
 
         public static EntitiesManager Entities
         {
-            get { return _entityManager; }
+            get { return _entitiesManager; }
+            private set
+            {
+                if (_entitiesManager != null)
+                    _entitiesManager.Dispose();
+
+                _entitiesManager = value;
+            }
         }
 
-        public static CameraManager Cameras
+        public static IWindowManager Window 
+        { 
+            get { return _windowManager; }
+            private set
+            {
+                if(_windowManager != null)
+                    _windowManager.Dispose();
+
+                _windowManager = value;
+            }
+        }
+
+        public static IResourceManager<Texture2D> Textures
         {
-            get { return _cameraManager; }
+            get { return _texturesManager; }
+            private set
+            {
+                if (_texturesManager != null)
+                    _texturesManager.Dispose();
+
+                _texturesManager = value;
+            }
         }
 
-        public static FontsManager Fonts
+        public static IResourceManager<Song> Music
+        {
+            get { return _musicManager; }
+            private set
+            {
+                if (_musicManager != null)
+                    _musicManager.Dispose();
+
+                _musicManager = value;
+            }
+        }
+
+        public static IResourceManager<SoundEffect> SoundFX
+        {
+            get { return _soundFXManager; }
+            private set
+            {
+                if (_soundFXManager != null)
+                    _soundFXManager.Dispose();
+
+                _soundFXManager = value;
+            }
+        }
+
+        public static IResourceManager<SpriteFont> Fonts
         {
             get { return _fontsManager; }
+            private set
+            {
+                if (_fontsManager != null)
+                    _fontsManager.Dispose();
+
+                _fontsManager = value;
+            }
         }
 
-        public static float FramesPerSecond
+        public static ISettingsManager Settings
         {
-            get { return _framesPerSecond; }
+            get { return _settingsManager; }
+            private set
+            {
+                if (_settingsManager != null)
+                    _settingsManager.Dispose();
+
+                _settingsManager = value;
+            }
         }
+
+        public static IInputManager Input
+        {
+            get { return _inputManager; }
+            private set
+            {
+                if (_inputManager != null)
+                    _inputManager.Dispose();
+
+                _inputManager = value;
+            }
+        }
+
+        public static ICameraManager Cameras
+        {
+            get { return _cameraManager; }
+            private set
+            {
+                if (_cameraManager != null)
+                    _cameraManager.Dispose();
+
+                _cameraManager = value;
+            }
+        }
+
+        public static float FramesPerSecond { get; private set; }
 
         #endregion
         
@@ -108,13 +186,11 @@ namespace JPEngine
         /// Initialize the engine.
         /// </summary>
         /// <param name="graphicsDeviceManager"></param>
-        /// <param name="game">The Form containing the game handle.</param>
-        //public static void Initialize(Game game)
+        /// <param name="game">The game.</param>
         public static void Initialize(GraphicsDeviceManager graphicsDeviceManager, Game game)
         {
-            _windowManager = WindowManager.Create(graphicsDeviceManager, game);
-
-            InitializeCore(graphicsDeviceManager);
+            Window = WindowManagerFactory.Create(graphicsDeviceManager, game);
+            InitializeDefaultCore(graphicsDeviceManager);
         }
 
         /// <summary>
@@ -122,12 +198,10 @@ namespace JPEngine
         /// </summary>
         /// <param name="graphicsDeviceService"></param>
         /// <param name="windowHandle">The Form containing the game handle.</param>
-        //public static void Initialize(Game game)
         public static void Initialize(IGraphicsDeviceService graphicsDeviceService, IntPtr windowHandle)
         {
-            _windowManager = WindowManager.Create(graphicsDeviceService, windowHandle);
-
-            InitializeCore(graphicsDeviceService);
+            Window = WindowManagerFactory.Create(graphicsDeviceService, windowHandle);
+            InitializeDefaultCore(graphicsDeviceService);
         }
 
         /// <summary>
@@ -135,48 +209,122 @@ namespace JPEngine
         /// </summary>
         /// <param name="graphicsDeviceService"></param>
         /// <param name="gameWindow">The Game window.</param>
-        //public static void Initialize(Game game)
         public static void Initialize(IGraphicsDeviceService graphicsDeviceService, GameWindow gameWindow)
         {
-            _windowManager = WindowManager.Create(graphicsDeviceService, gameWindow);
-
-            InitializeCore(graphicsDeviceService);
+            Window = WindowManagerFactory.Create(graphicsDeviceService, gameWindow);
+            InitializeDefaultCore(graphicsDeviceService);
         }
 
-        private static void InitializeCore(IGraphicsDeviceService graphicsDeviceService)
+        /// <summary>
+        /// Initialize the engine.
+        /// </summary>
+        /// <param name="graphicsDeviceService"></param>
+        /// <param name="windowManager">The window manager.</param>
+        public static void Initialize(IGraphicsDeviceService graphicsDeviceService, IWindowManager windowManager)
+        {
+            if(windowManager == null)
+                throw new ArgumentNullException("windowManager");
+
+            Window = windowManager;
+
+            InitializeDefaultCore(graphicsDeviceService);
+        }
+
+        public static void Initialize(
+            IWindowManager windowManager,
+            IInputManager inputManager,
+            IResourceManager<Texture2D> textureManager,
+            IResourceManager<Song> musicManager,
+            IResourceManager<SoundEffect> soundFXManager,
+            IResourceManager<SpriteFont> fontsManager,
+            ISettingsManager settingsManager,
+            ICameraManager cameraManager)
+        {
+            //TODO: Do not require EVERYTHING
+
+            if(windowManager == null)
+                throw new ArgumentNullException("windowManager");
+
+            if (inputManager == null)
+                throw new ArgumentNullException("inputManager");
+
+            if (textureManager == null)
+                throw new ArgumentNullException("textureManager");
+
+            if (musicManager == null)
+                throw new ArgumentNullException("musicManager");
+
+            if (soundFXManager == null)
+                throw new ArgumentNullException("soundFXManager");
+
+            if (fontsManager == null)
+                throw new ArgumentNullException("fontsManager");
+
+            if (settingsManager == null)
+                throw new ArgumentNullException("settingsManager");
+
+            if (cameraManager == null)
+                throw new ArgumentNullException("cameraManager");
+
+            Window = windowManager;
+            Input = inputManager;
+            Textures = textureManager;
+            Music = musicManager;
+            SoundFX = soundFXManager;
+            Fonts = fontsManager;
+            Settings = settingsManager;
+            Cameras = cameraManager;
+
+            /////////////////////
+            // TODO: FOR NOW
+            Entities = new EntitiesManager();
+            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
+            ////////////////////
+
+            InitializeManagers();
+        }
+
+        private static void InitializeDefaultCore(IGraphicsDeviceService graphicsDeviceService)
         {
             if (graphicsDeviceService == null)
-                throw new NullReferenceException("The graphicsDeviceService cannot be null.");
+                throw new ArgumentNullException("graphicsDeviceService");
 
-            //TODO: Keep globally and use services?
+            //TODO: Remove this or make a way to remove it if it is not used (ContentManager)
+            ////////////////////////////////////////////////////////////////
             var services = new GameServiceContainer();
             services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
 
             //TODO: Enable the user to change the RootDirectory
             //TODO: EngineSettings object?
             _contentManager = new ContentManager(services, "Content");
+            ///////////////////////////////////////////////////
 
-            _spriteBatchManager = new SpriteBatchManager(_windowManager.GraphicsDevice);
+            SpriteManager = new SpriteBatchManager(Window.GraphicsDevice);
 
-            _entityManager = new EntitiesManager();
-            _settingsManager = new SettingsManager();
-            _inputManager = new InputManager();
-            _cameraManager = new CameraManager();
-            _musicManager = new MusicManager(_contentManager);
-            _soundManager = new SoundFXManager(_contentManager);
-            _textureManager = new TextureManager(_contentManager);
-            _fontsManager = new FontsManager(_contentManager);
+            Entities = new EntitiesManager();
+            Settings = new SettingsManager();
+            Input = new InputManager();
+            Cameras = new CameraManager();
+            Music = new MusicManager(_contentManager);
+            SoundFX = new SoundFXManager(_contentManager);
+            Textures = new TextureManager(_contentManager);
+            Fonts = new FontsManager(_contentManager);
 
-            _spriteBatchManager.Initialize();
-            _windowManager.Initialize();
-            _entityManager.Initialize();
-            _settingsManager.Initialize();
-            _inputManager.Initialize();
-            _cameraManager.Initialize();
-            _musicManager.Initialize();
-            _soundManager.Initialize();
-            _textureManager.Initialize();
-            _fontsManager.Initialize();
+            InitializeManagers();
+        }
+
+        private static void InitializeManagers()
+        {
+            SpriteManager.Initialize();
+            Window.Initialize();
+            Entities.Initialize();
+            Settings.Initialize();
+            Input.Initialize();
+            Cameras.Initialize();
+            Music.Initialize();
+            SoundFX.Initialize();
+            Textures.Initialize();
+            Fonts.Initialize();
         }
 
         #endregion
@@ -185,42 +333,49 @@ namespace JPEngine
 
         public static void UnloadContent()
         {
-            _musicManager.UnloadContent();
-            _soundManager.UnloadContent();
-            _textureManager.UnloadContent();
+            Music.UnloadContent();
+            SoundFX.UnloadContent();
+            Textures.UnloadContent();
 
-            _contentManager.Unload();
+            if (_contentManager != null)
+                _contentManager.Unload();
         }
 
         public static void Update(GameTime gameTime)
         {
-            _spriteBatchManager.Update(gameTime);
-            _inputManager.Update(gameTime);
+            Input.Update(gameTime);
 
-            if (!(_console != null &&
-                  _console.IsActive &&
-                  _console.Options.PauseGameWhenOpened))
+            if (CanGameUpdate())
             {
-                _entityManager.Update(gameTime);
+                Entities.Update(gameTime);
             }
+        }
+
+        //TODO: Clean this...
+        private static bool CanGameUpdate()
+        {
+            return !(Console != null &&
+                     Console.IsActive &&
+                     Console.Options.PauseGameWhenOpened);
         }
 
         public static void Draw(GameTime gameTime)
         {
-            _windowManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-            _framesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Window.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //System.Console.WriteLine("FPS : " + FramesPerSecond);
+            FramesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            System.Console.WriteLine("FPS: " + FramesPerSecond);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
-            SpriteBatch spriteBatch = _spriteBatchManager.Begin();
+            SpriteBatch spriteBatch = SpriteManager.Begin();
 
-            _entityManager.Draw(spriteBatch, gameTime);
+            Entities.Draw(spriteBatch, gameTime);
 
-            _spriteBatchManager.End();
+            SpriteManager.End();
 
-            if (_console != null)
-                _console.Draw(spriteBatch, gameTime);
+            if (Console != null)
+                Console.Draw(spriteBatch, gameTime);
         }
 
         #endregion

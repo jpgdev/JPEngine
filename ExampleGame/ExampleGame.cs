@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using FarseerPhysics;
-using FarseerPhysics.Collision.Shapes;
-using FarseerPhysics.Common;
+﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using JPEngine.Components;
@@ -34,6 +31,8 @@ namespace ExampleGame
         protected override void Initialize()
         {
             Engine.Initialize(graphics, this);
+            Engine.Window.Width = 1280;
+            Engine.Window.Height = 720;
             Engine.Console = new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
             {
                 Width = GraphicsDevice.Viewport.Width
@@ -48,8 +47,8 @@ namespace ExampleGame
         {
             Engine.Textures.Add("crate", "Sprites/crate", true);
             Engine.Textures.Add("grass", "Tiles/grass", true);
+            Engine.Textures.Add("lumberjack", "Sprites/lumberjack", true);
             Engine.Textures.Add("background", "Background/clouds_and_trees", true);
-            
 
             Engine.SoundFX.Add("ammo_pickup", "Sounds/ammo_pickup", true);
             
@@ -80,68 +79,38 @@ namespace ExampleGame
         private void LoadTestsEntities()
         {
             //Setup & Add the base Camera entity
-            Entity mainCamera = new Entity("_MainCamera", true);
+            Entity mainCamera = Engine.Entities.CreateEntity("_MainCamera");
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             //mainCamera.AddComponent(new CameraInput(mainCamera));
             mainCamera.AddComponent(new AutoMovingComponent(mainCamera) {Speed = 20, IsHorizontal = true});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
-            
-            //{
-            //    Texture2D texture = Engine.Textures["grass"];
-            //    var e = new Entity("ground");
-            //    e.AddComponent(new DrawableSpriteComponent(e, texture)
-            //    {
-            //        Layer = DrawingLayer.Background1
-            //    });
-
-            //    Engine.Entities.AddEntity(e);
-            //}
-
+          
             {
-                var e = new Entity("background");
+                var e = Engine.Entities.CreateEntity("background");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
                 {
                     Layer = DrawingLayer.Background3,
-                    ParallaxRatio = 0.8f
+                    ParallaxRatio = 1f
                 });
                 //e.Transform.Scale *= 1/4f;
-
-                Engine.Entities.AddEntity(e);
             }
-
-
-            //{
-            //    var e = new Entity("crate_cloud");
-            //    e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
-            //    {
-            //        Layer = DrawingLayer.Background2,
-            //        ParallaxRatio = 0.5f
-            //    });
-            //    e.Transform.Position = new Vector2(100, -100);
-            //    //e.Transform.Scale *= 1/4f;
-
-            //    Engine.Entities.AddEntity(e);
-            //}
-
+            
             {
-                var e = new Entity("crate_cloud2");
+                var e = Engine.Entities.CreateEntity("crate_cloud2");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
                 {
                     Layer = DrawingLayer.Background2,
                     ParallaxRatio = -1.2f
                 });
+                e.AddComponent(new AutoMovingComponent(e) { Speed = -10});
                 e.Transform.Position = new Vector2(-170, -180);
                 //e.Transform.Scale *= 1/4f;
-
-                Engine.Entities.AddEntity(e);
             }
-
-
             
             Entity player = CreatePlayer(new Vector2(-350, 30));
 
-            CreateCrate(new Vector2(-200, 60), "platform", 64, 64, BodyType.Static, Color.LightBlue, 0);
+            CreateCrate(new Vector2(-212, 70), "platform", 64, 64, BodyType.Static, Color.LightBlue, 0);
             //CreateCrate(new Vector2(-136, 60), "platform", 64, 64, BodyType.Static);
 
             float cubeStartX = player.Transform.Position.X;
@@ -149,67 +118,76 @@ namespace ExampleGame
             const int cubeWidth = 64;
             const int cubeHeight = 64;
 
-
             Vector2 lastPos = new Vector2(cubeStartX + 5, cubeStartY + 5);
             for (int x = 0; x < 10; x++)
             {
                 int y = 0;
                 int mod = x % 2;
-                string name = mod == 1 ? "ground" : "platform";
-                BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                //string name = mod == 1 ? "ground" : "platform";
+                string name = "platform";
+
+                //BodyType bodyType = mod == 1 ? BodyType.Dynamic : BodyType.Static;
+                BodyType bodyType = BodyType.Static;
+
                 
                 CreateCrate(lastPos , name, 64, 64, bodyType);
 
-                lastPos.X += cubeWidth + 5;
+                lastPos.X += cubeWidth;// + 5;
                 //lastPos.Y += cubeHeight + 5;
             }
         }
 
         private Entity CreatePlayer(Vector2 pos)
         {
-            Entity player = new Entity("player");
+            Entity player = Engine.Entities.CreateEntity("player");
 
-            player.Transform.Scale = new Vector2(0.5f, 0.5f);
+            //player.Transform.Scale = new Vector2(0.5f, 1f);
             player.Transform.Position = pos;
 
             const int playerWidth = 64; //96;
             const int playerHeight = 64; //96;
 
-            player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
+            AnimatedSpriteComponent animationComponent = new AnimatedSpriteComponent(player, Engine.Textures["lumberjack"]);
+            animationComponent.AddAnimation("walk_left", new SpriteAnimation(64, 64, 4, 256, 64, 0, 64));
+            animationComponent.AddAnimation("walk_right", new SpriteAnimation(64, 64, 4, 256, 64, 0, 128));
+            animationComponent.AddAnimation("walk_up", new SpriteAnimation(64, 64, 4, 256, 64, 0, 196));
+            animationComponent.AddAnimation("walk_down", new SpriteAnimation(64, 64, 4, 256, 64, 0, 0));
+            animationComponent.SetCurrentAnimation("walk_right");
+
+            player.AddComponent(animationComponent);
+            //player.AddComponent(new SpriteComponent(player, Engine.Textures["crate"]));
             player.AddComponent(new PlayerInput(player));
 
-            Body body = BodyFactory.CreateRectangle(
-                Engine.Entities.PhysicsSystem.World,
-                ConvertUnits.ToSimUnits(playerWidth*player.Transform.Scale.X),
-                ConvertUnits.ToSimUnits(playerHeight*player.Transform.Scale.Y),
-                1);
+            //Body body = BodyFactory.CreateRectangle(
+            //    Engine.Entities.PhysicsSystem.World,
+            //    ConvertUnits.ToSimUnits(playerWidth/2 * player.Transform.Scale.X),
+            //    ConvertUnits.ToSimUnits(playerHeight * player.Transform.Scale.Y),
+            //    1);
 
-            body.BodyType = BodyType.Dynamic;
-            body.FixedRotation = true;
-            body.Mass = 0;
-            body.Friction = 1f;
-            body.LinearDamping = 1f;
+            //body.BodyType = BodyType.Dynamic;
+            //body.FixedRotation = true;
+            //body.Mass = 0;
+            //body.Friction = 1f;
+            //body.LinearDamping = 1f;
 
-            body.Position = new Vector2(
-                ConvertUnits.ToSimUnits(player.Transform.Position.X),
-                ConvertUnits.ToSimUnits(player.Transform.Position.Y));
+            //body.Position = new Vector2(
+            //    ConvertUnits.ToSimUnits(player.Transform.Position.X),
+            //    ConvertUnits.ToSimUnits(player.Transform.Position.Y));
 
-            body.Rotation = player.Transform.Rotation;
-            BodyComponent bodyComponent = new BodyComponent(player, body);
+            //body.Rotation = player.Transform.Rotation;
+            //BodyComponent bodyComponent = new BodyComponent(player, body);
 
-            bodyComponent.OnCollision += (sender, args) =>
-            {
-                if (args.BodyComponentB.GameObject.Tag == "ground")
-                    args.BodyComponentB.Body.IgnoreGravity = false;
-            };
+            //bodyComponent.OnCollision += (sender, args) =>
+            //{
+            //    if (args.BodyComponentB.GameObject.Tag == "ground")
+            //        args.BodyComponentB.Body.IgnoreGravity = false;
+            //};
 
-
-            player.AddComponent(bodyComponent);
+            //player.AddComponent(bodyComponent);
 
             //e.AddComponent(new RectCollider(e) { Width = width, Height = height });
-            //e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
+            player.AddComponent(new RectRenderer(player, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
 
-            Engine.Entities.AddEntity(player);
 
             return player;
         }
@@ -219,7 +197,7 @@ namespace ExampleGame
             const int crateWidth = 64;
             const int crateHeight = 64;
 
-            var e = new Entity(name);
+            var e = Engine.Entities.CreateEntity(name);
             e.Transform.Position.X = pos.X;
             e.Transform.Position.Y = pos.Y;
             e.Transform.Scale.X = width / (float)crateWidth;
@@ -248,9 +226,7 @@ namespace ExampleGame
 
             Color c = color ?? Color.White;
 
-            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { DrawingColor = c });
-
-            Engine.Entities.AddEntity(e);
+            e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]) { Color = c });
         }
 
         protected override void UnloadContent()
@@ -261,35 +237,12 @@ namespace ExampleGame
         protected override void Update(GameTime gameTime)
         {
             Engine.Update(gameTime);
-            
-            //if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["BtnF"].Value))
-            //{
-            //    Engine.Settings.SaveSettings();
-            //    Engine.Settings.LoadSettings();
-            //    Engine.WindowManager.IsFullScreen = !Engine.WindowManager.IsFullScreen;
-            //}
-
-            //if (Engine.Input.IsKeyClicked(Keys.P))
-            //{
-            //    Engine.Window.ScreenWidth += 32;
-            //    Engine.Window.ScreenHeight += 24;
-            //    Engine.Window.ApplySettings();
-            //}
-
-            //if (Engine.Input.IsKeyClicked(Keys.M))
-            //{
-            //    Engine.Window.ScreenWidth -= 32;
-            //    Engine.Window.ScreenHeight -= 24;
-            //    Engine.Window.ApplySettings();
-            //}
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             Engine.Draw(gameTime);
-
             base.Draw(gameTime);
         }
     }

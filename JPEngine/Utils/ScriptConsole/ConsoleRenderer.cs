@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Utils.ScriptConsole
 {
-    internal class ConsoleRenderer
+    internal class ConsoleRenderer : IDisposable
     {
         private enum State
         {
@@ -201,5 +201,11 @@ namespace JPEngine.Utils.ScriptConsole
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            //TODO: Dispose...
+            _pixel.Dispose();
+        }
     }
 }

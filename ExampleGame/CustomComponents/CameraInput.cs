@@ -25,27 +25,27 @@ namespace ExampleGame.CustomComponents
         {
             float deltaSinceLastUpdate = gameTime.ElapsedGameTime.Milliseconds/1000.0f;
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["W"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys) Engine.Settings["W"].Value))
             {
                 Transform.Position.Y -= _speed * deltaSinceLastUpdate;
             }
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["S"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["S"].Value))
             {
                 Transform.Position.Y += _speed * deltaSinceLastUpdate;
             }
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["D"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["D"].Value))
             {
                 Transform.Position.X += _speed * deltaSinceLastUpdate;
             }
 
-            if (Engine.Input.IsKeyDown((Keys) Engine.Settings["A"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["A"].Value))
             {
                 Transform.Position.X -= _speed * deltaSinceLastUpdate;
             }
 
-            if (Engine.Input.IsKeyDown((Keys)Engine.Settings["R"].Value))
+            if (Engine.Input.Keyboard.IsKeyDown((Keys)Engine.Settings["R"].Value))
             {
                 Transform.Rotation = 0;
             }
@@ -60,12 +60,12 @@ namespace ExampleGame.CustomComponents
             //    Transform.Rotation -= MathHelper.ToRadians(10f);
             //}
 
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
+            if (Engine.Input.Keyboard.IsKeyClicked((Keys)Engine.Settings["PageUp"].Value))
             {
                 Transform.Scale *= 1.1f;
             }
 
-            if (Engine.Input.IsKeyClicked((Keys)Engine.Settings["PageDown"].Value))
+            if (Engine.Input.Keyboard.IsKeyClicked((Keys)Engine.Settings["PageDown"].Value))
             {
                 Transform.Scale *= 0.9f;
             }

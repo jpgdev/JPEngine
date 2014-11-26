@@ -8,7 +8,7 @@ namespace JPEngine.Managers
 {
     //TODO: Launch exceptions instead of returning false? (for Add & Load)
 
-    public abstract class ResourceManager<T> : Manager
+    public abstract class ResourceManager<T> : Manager, IResourceManager<T>
     {
         #region Attributes
 

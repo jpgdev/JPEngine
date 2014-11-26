@@ -1,5 +1,8 @@
 ### TODOS
 
+- Move the components out of the entities. Keep them in the EntityManager / Scene. 
+	- Keep a reference in the Entity of the EntityManager/World/Scene that contains the components, so a GetComponent method is easily achievabale. 
+
 - Add a global (to the solution) 'libs' directory for all externals dll.
 
 - Implements Unit Tests for current functionalities

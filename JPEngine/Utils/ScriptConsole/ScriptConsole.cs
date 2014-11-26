@@ -1,4 +1,5 @@
 ﻿using System;
+using JPEngine.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 namespace JPEngine.Utils.ScriptConsole
 {
     //TODO: Check if null on each option?
-    public class ConsoleOptions
+    public class ConsoleOptions 
     {
         public SpriteFont Font { get; set; }
         public Keys ToggleKey { get; set; }
@@ -42,7 +43,7 @@ namespace JPEngine.Utils.ScriptConsole
         {
             //TODO: Find a way to have a Font in the Engine, without relying on the Game
             if (font == null)
-                throw new ArgumentNullException("The font cannot be null.");
+                throw new ArgumentNullException("font");
 
             Font = font;
 
@@ -72,7 +73,7 @@ namespace JPEngine.Utils.ScriptConsole
         }
     }
 
-    public class ScriptConsole
+    public class ScriptConsole : IDisposable
     {
         private readonly ConsoleInputProcessor _consoleInputProcessor;
         private readonly ConsoleRenderer _consoleRenderer;
@@ -136,6 +137,12 @@ namespace JPEngine.Utils.ScriptConsole
             if (!_consoleInputProcessor.IsActive) return;
 
             _consoleRenderer.Draw(spriteBatch, gameTime);
+        }
+
+        public void Dispose()
+        {
+            //todo: Dispose...
+            _consoleRenderer.Dispose();
         }
     }
 }
