@@ -272,7 +272,7 @@ namespace JPEngine.Entities
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             if (!Enabled) 
                 return;
@@ -281,7 +281,7 @@ namespace JPEngine.Entities
             _tempDrawableComponents.AddRange(_drawableComponents);
 
             foreach (IDrawableComponent c in _tempDrawableComponents.Where(c => c.Visible))
-                c.Draw(spriteBatch, gameTime);
+                c.Draw(gameTime);
         }
 
         #region Order Changing Event handling

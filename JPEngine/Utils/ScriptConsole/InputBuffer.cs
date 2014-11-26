@@ -137,7 +137,7 @@ namespace JPEngine.Utils.ScriptConsole
         internal void Set(string text)
         {
             _outputLine.Output = text;
-            _cursorPos += text.Length;
+            _cursorPos = text.Length;
         }
 
         internal void Clear()

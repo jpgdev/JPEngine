@@ -17,6 +17,6 @@ namespace JPEngine.Managers.Input
 
         bool SetVibration(float leftMotor, float rightMotor);
 
-        void Update(GameTime gameTime);
+        void Update();
     }
 }

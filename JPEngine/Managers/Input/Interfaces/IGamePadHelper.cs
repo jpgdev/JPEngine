@@ -4,7 +4,7 @@ namespace JPEngine.Managers.Input
 {
     public interface IGamePadHelper
     {
-        void Update(GameTime gameTime);
+        void Update();
 
         IGamePadInfos GamePad1 { get; }
 

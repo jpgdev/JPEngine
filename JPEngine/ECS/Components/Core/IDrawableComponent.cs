@@ -16,7 +16,7 @@ namespace JPEngine.Components
 
         event EventHandler<ValueChangedEventArgs<DrawingLayer>> LayerChanged;
 
-        void Draw(SpriteBatch spriteBatch, GameTime gameTime);
+        void Draw(GameTime gameTime);
         //void Draw();
 
     }

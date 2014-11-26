@@ -178,12 +178,13 @@ namespace JPEngine.Components
             base.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             if (_currentAnimation != null)
                 DrawnPortion = _currentAnimation.CurrentFrame;
 
-            base.Draw(spriteBatch, gameTime);
+            //base.Draw(spriteBatch, gameTime);
+            base.Draw(gameTime);
         }
 
 

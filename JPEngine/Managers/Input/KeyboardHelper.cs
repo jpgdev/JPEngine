@@ -18,7 +18,7 @@ namespace JPEngine.Managers.Input
         public event EventHandler<KeyEventArgs> KeyClicked;
         public event EventHandler<KeyEventArgs> KeyReleased;
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             _oldKBState = _currentKBState;
             _currentKBState = Keyboard.GetState();

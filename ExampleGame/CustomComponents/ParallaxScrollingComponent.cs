@@ -1,6 +1,7 @@
 ﻿using JPEngine;
 using JPEngine.Components;
 using JPEngine.Entities;
+using JPEngine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,18 +27,33 @@ namespace ExampleGame.CustomComponents
             _paralaxPosition.X = Transform.Position.X + Engine.Cameras.Current.Position.X * ParallaxRatio;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Draw(
-                Texture,
-                new Vector2(_paralaxPosition.X, Transform.Position.Y),
-                DrawnPortion,
-                Color,
-                GameObject.Transform.Rotation,
-                Origin,
-                GameObject.Transform.Scale,
-                SpriteEffects,
-                Engine.SpriteManager.GetZIndex(this));
+            //TODO: Keep only one sprite and change it, do not recreate one
+            Sprite s = new Sprite(Texture, new Vector2(_paralaxPosition.X, Transform.Position.Y), Color, Layer)
+            {
+                DrawnPortion = DrawnPortion,
+                Rotation = GameObject.Transform.Rotation,
+                Color = Color,
+                Origin = Origin,
+                Scale = GameObject.Transform.Scale,
+                Layer = Layer
+            };
+
+            Engine.SpriteRenderer.Draw(s);
+
+
+
+            //spriteBatch.Draw(
+            //    Texture,
+            //    new Vector2(_paralaxPosition.X, Transform.Position.Y),
+            //    DrawnPortion,
+            //    Color,
+            //    GameObject.Transform.Rotation,
+            //    Origin,
+            //    GameObject.Transform.Scale,
+            //    SpriteEffects,
+            //    Engine.SpriteManager.GetZIndex(this));
         }
     }
 }

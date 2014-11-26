@@ -132,11 +132,11 @@ namespace JPEngine.Utils.ScriptConsole
             _consoleInputProcessor.ToggleConsole();
         }
 
-        internal void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        internal void Draw(GameTime gameTime)
         {
             if (!_consoleInputProcessor.IsActive) return;
 
-            _consoleRenderer.Draw(spriteBatch, gameTime);
+            _consoleRenderer.Draw(gameTime);
         }
 
         public void Dispose()

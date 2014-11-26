@@ -38,12 +38,12 @@ namespace JPEngine.Managers.Input
             GamePad4 = gamePad4;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            GamePad1.Update(gameTime);
-            GamePad2.Update(gameTime);
-            GamePad3.Update(gameTime);
-            GamePad4.Update(gameTime);
+            GamePad1.Update();
+            GamePad2.Update();
+            GamePad3.Update();
+            GamePad4.Update();
         }
     }
 }

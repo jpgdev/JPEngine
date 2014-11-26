@@ -52,8 +52,8 @@ namespace UnitTestProject.Tests
             Assert.True(Engine.SoundFX != null);
             Assert.True(Engine.SoundFX.IsInitialized);
 
-            Assert.True(Engine.SpriteManager != null);
-            Assert.True(Engine.SpriteManager.IsInitialized);
+            Assert.True(Engine.SpriteRenderer != null);
+            Assert.True(Engine.SpriteRenderer.IsInitialized);
 
             Assert.True(Engine.Textures != null);
             Assert.True(Engine.Textures.IsInitialized);
