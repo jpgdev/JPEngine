@@ -83,8 +83,8 @@ namespace ExampleGame
             Entity mainCamera = new Entity("_MainCamera", true);
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
-            mainCamera.AddComponent(new CameraInput(mainCamera));
-            mainCamera.AddComponent(new AutoScrollingCamera(mainCamera) {Speed = 20, IsHorizontal = false});
+            //mainCamera.AddComponent(new CameraInput(mainCamera));
+            mainCamera.AddComponent(new AutoMovingComponent(mainCamera) {Speed = 20, IsHorizontal = true});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
             
             //{

@@ -39,7 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CustomComponents\AutoScrollingCamera.cs" />
+    <Compile Include="CustomComponents\AutoMovingComponent.cs" />
     <Compile Include="CustomComponents\CameraInput.cs" />
     <Compile Include="CustomComponents\ParallaxScrollingComponent.cs" />
     <Compile Include="CustomComponents\PlayerInput.cs" />
@@ -48,9 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FarseerPhysics MonoGame, Version=3.5.0.34195, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\JPEngine\External DLLs\FarseerPhysics\FarseerPhysics MonoGame.dll</HintPath>
+    <Reference Include="FarseerPhysics MonoGame">
+      <HintPath>..\JPEngine\libs\FarseerPhysics\FarseerPhysics MonoGame.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
