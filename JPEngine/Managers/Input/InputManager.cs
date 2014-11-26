@@ -38,7 +38,7 @@ namespace JPEngine.Managers.Input
             GamePads = gamePadHelper;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             Keyboard.Update();
             Mouse.Update();

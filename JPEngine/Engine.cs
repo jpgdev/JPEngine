@@ -1,12 +1,12 @@
 ﻿#region Include Statements
 
 using System;
+using System.Collections.Generic;
 using JPEngine.Entities;
 using JPEngine.Graphics;
 using JPEngine.Managers;
 using JPEngine.Managers.Input;
 using JPEngine.Managers.Window;
-using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -21,6 +21,10 @@ namespace JPEngine
     {
         #region Attributes
 
+
+        //TODO: Improve this, make a class to add them (like the Service.AddService) and split them in here (2 lists : IRenderableManagers & IUpdateableManager)
+        private static Dictionary<Type, IManager> _customManagers; 
+
         //TODO: Make Interface for each managers to abstract the functionalities
 
         //TODO: Remove this, since it may not be used in custom ResourceManagers
@@ -29,9 +33,6 @@ namespace JPEngine
         //TODO: Use with some kind of GameManager/GamePlayManager?
         //TODO: Remove this from the Engine, the can use it or not, do not force it
         private static EntitiesManager _entitiesManager;
-
-        //TODO: Remove this from the Engine, the can use it or not, do not force it
-        private static ScriptConsole _console;
 
         private static ISpriteRenderer _spriteRenderer;
         private static IWindowManager _windowManager;
@@ -47,17 +48,30 @@ namespace JPEngine
 
         #region Properties
 
-        public static ScriptConsole Console
+        public static Dictionary<Type, IManager> Managers
         {
-            get { return _console; }
-            set
+            get { return _customManagers; }
+            private set
             {
-                if (_console != null)
-                    _console.Dispose();
+                if (_customManagers != null)
+                    foreach (IManager manager in _customManagers.Values)
+                        manager.Dispose();
 
-                _console = value;
+                _customManagers = value;
             }
         }
+
+        //public static ScriptConsole Console
+        //{
+        //    get { return _console; }
+        //    set
+        //    {
+        //        if (_console != null)
+        //            _console.Dispose();
+
+        //        _console = value;
+        //    }
+        //}
 
         public static ISpriteRenderer SpriteRenderer
         {
@@ -316,6 +330,8 @@ namespace JPEngine
 
         private static void InitializeManagers()
         {
+            Managers = new Dictionary<Type, IManager>();
+
             SpriteRenderer.Initialize();
             Window.Initialize();
             Entities.Initialize();
@@ -344,21 +360,29 @@ namespace JPEngine
 
         public static void Update(GameTime gameTime)
         {
-            Input.Update();
+            Input.Update(gameTime);
 
-            if (CanGameUpdate())
+            foreach (IManager manager in _customManagers.Values)
             {
-                Entities.Update(gameTime);
+                IUpdateableManager updateableManager = manager as IUpdateableManager;
+                if (updateableManager != null)
+                    updateableManager.Update(gameTime);
             }
+
+            //TODO: Remove and do it in the IRenderableManager Draw () loop
+           // if (CanGameUpdate())
+            //{
+                Entities.Update(gameTime);
+            //}
         }
 
         //TODO: Clean this...
-        private static bool CanGameUpdate()
-        {
-            return !(Console != null &&
-                     Console.IsActive &&
-                     Console.Options.PauseGameWhenOpened);
-        }
+        //private static bool CanGameUpdate()
+        //{
+        //    return !(Console != null &&
+        //             Console.IsActive &&
+        //             Console.Options.PauseGameWhenOpened);
+        //}
 
         public static void Draw(GameTime gameTime)
         {
@@ -366,23 +390,34 @@ namespace JPEngine
 
             FramesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            System.Console.WriteLine("FPS: " + FramesPerSecond);
+            Console.WriteLine("FPS: " + FramesPerSecond);
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
 
+            //TODO: Remove
+            //////////////////////////////////////////////////
             if (Cameras.Current != null)
                 SpriteRenderer.Begin(Cameras.Current.TransformMatrix);
             else
                 SpriteRenderer.Begin();
 
-            //SpriteBatch spriteBatch = SpriteManager.Begin();
-
             Entities.Draw(gameTime);
 
             SpriteRenderer.End();
+            
+            /////////////////////////////////////////////////
+            
+            foreach (IManager manager in _customManagers.Values)
+            {
+                IRenderableManager renderableManager = manager as IRenderableManager; 
+                if(renderableManager != null)
+                    renderableManager.Draw(gameTime);
+            }
 
-            if (Console != null)
-                Console.Draw(gameTime);
+
+            //TODO: Remove and do it in the IRenderableManager Draw () loop
+            //if (Console != null)
+                //Console.Draw(gameTime);
         }
 
         #endregion

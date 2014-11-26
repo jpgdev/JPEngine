@@ -33,10 +33,10 @@ namespace ExampleGame
             Engine.Initialize(graphics, this);
             Engine.Window.Width = 1280;
             Engine.Window.Height = 720;
-            Engine.Console = new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
+            Engine.Managers.Add(typeof(ScriptConsole), new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
             {
                 Width = GraphicsDevice.Viewport.Width
-            });
+            }));
 
             Engine.Window.IsMouseVisible = true;
 

@@ -86,7 +86,10 @@
     <Compile Include="Graphics\IRenderable.cs" />
     <Compile Include="Graphics\IText.cs" />
     <Compile Include="Graphics\RenderedText.cs" />
-    <Compile Include="Graphics\Sprite.cs" />    <Compile Include="Managers\Interfaces\IUpdateableManager.cs" />    <Compile Include="Managers\Interfaces\IRenderableManager.cs" />    <Compile Include="Utils\ICamera.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
+    <Compile Include="Managers\Interfaces\IUpdateableManager.cs" />
+    <Compile Include="Managers\Interfaces\IRenderableManager.cs" />
+    <Compile Include="Utils\ICamera.cs" />
     <Compile Include="Physics\Farseers\BodyComponent.cs" />
     <Compile Include="ECS\Components\RectCollider.cs" />
     <Compile Include="ECS\Components\Core\DrawableComponent.cs" />
@@ -98,7 +101,7 @@
     <Compile Include="ECS\Components\Core\IUpdateableComponent.cs" />
     <Compile Include="ECS\Components\Rendering\RectRenderer.cs" />
     <Compile Include="ECS\Components\TransformComponent.cs" />
-    <Compile Include="ECS\Entities\EntitiesManager.cs" />
+    <Compile Include="ECS\EntitiesManager.cs" />
     <Compile Include="Enums\MouseButton.cs" />
     <Compile Include="Graphics\ISprite.cs" />
     <Compile Include="BaseGame.cs" />
