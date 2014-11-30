@@ -85,6 +85,7 @@
     <Compile Include="ECS\Components\CameraComponent.cs" />
     <Compile Include="Graphics\IRenderable.cs" />
     <Compile Include="Graphics\IText.cs" />
+    <Compile Include="Graphics\PrimitiveBatch.cs" />
     <Compile Include="Graphics\RenderedText.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Managers\Interfaces\IUpdateableManager.cs" />

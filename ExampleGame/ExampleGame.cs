@@ -4,6 +4,7 @@ using FarseerPhysics.Factories;
 using JPEngine.Components;
 using JPEngine.Components.Physics;
 using JPEngine.Enums;
+using JPEngine.Graphics;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +19,8 @@ namespace ExampleGame
 {
     public class ExampleGame : Game
     {
-        readonly GraphicsDeviceManager graphics;  
+        private readonly GraphicsDeviceManager graphics;
+        private PrimitiveBatch _primitiveBatch;
 
         public ExampleGame()
         {
@@ -39,6 +41,8 @@ namespace ExampleGame
             }));
 
             Engine.Window.IsMouseVisible = true;
+
+            _primitiveBatch = new PrimitiveBatch(Engine.Window.GraphicsDevice);
 
             base.Initialize();
         }
@@ -82,7 +86,7 @@ namespace ExampleGame
             Entity mainCamera = Engine.Entities.CreateEntity("_MainCamera");
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
-            //mainCamera.AddComponent(new CameraInput(mainCamera));
+            mainCamera.AddComponent(new CameraInput(mainCamera));
             mainCamera.AddComponent(new AutoMovingComponent(mainCamera) {Speed = 20, IsHorizontal = true});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
           
@@ -243,6 +247,14 @@ namespace ExampleGame
         protected override void Draw(GameTime gameTime)
         {
             Engine.Draw(gameTime);
+
+            _primitiveBatch.Begin(PrimitiveType.LineList, Engine.Cameras.Current.TransformMatrix);
+
+            _primitiveBatch.AddVertex(new Vector2(0, 0), Color.Red);
+            _primitiveBatch.AddVertex(new Vector2(100, 100), Color.Red);
+
+            _primitiveBatch.End();
+            
             base.Draw(gameTime);
         }
     }
