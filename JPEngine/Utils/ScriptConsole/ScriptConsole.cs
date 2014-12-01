@@ -1,4 +1,5 @@
 ﻿using System;
+using JPEngine.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 namespace JPEngine.Utils.ScriptConsole
 {
     //TODO: Check if null on each option?
-    public class ConsoleOptions
+    public class ConsoleOptions 
     {
         public SpriteFont Font { get; set; }
         public Keys ToggleKey { get; set; }
@@ -72,13 +73,15 @@ namespace JPEngine.Utils.ScriptConsole
         }
     }
 
-    public class ScriptConsole : IDisposable
+    public class ScriptConsole : IRenderableManager
     {
         private readonly ConsoleInputProcessor _consoleInputProcessor;
         private readonly ConsoleRenderer _consoleRenderer;
 
         public bool IsActive { get { return _consoleInputProcessor.IsActive;}}
 
+        public bool IsInitialized { get; private set; }
+      
         public ConsoleOptions Options { get; private set; }
 
         public event EventHandler Open;
@@ -116,6 +119,15 @@ namespace JPEngine.Utils.ScriptConsole
             _consoleRenderer = new ConsoleRenderer(_consoleInputProcessor, options);
         }
 
+        public void Initialize()
+        {
+            if (IsInitialized)
+                return;
+
+            //TODO: Implement correctly ?
+            IsInitialized = true;
+        }
+
         public void AddToBuffer(string text)
         {
             _consoleInputProcessor.AddToInputBuffer(text);
@@ -131,12 +143,13 @@ namespace JPEngine.Utils.ScriptConsole
             _consoleInputProcessor.ToggleConsole();
         }
 
-        internal void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             if (!_consoleInputProcessor.IsActive) return;
 
             _consoleRenderer.Draw(gameTime);
         }
+
 
         public void Dispose()
         {

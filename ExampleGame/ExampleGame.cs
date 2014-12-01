@@ -4,6 +4,7 @@ using FarseerPhysics.Factories;
 using JPEngine.Components;
 using JPEngine.Components.Physics;
 using JPEngine.Enums;
+using JPEngine.Graphics;
 using JPEngine.Utils.ScriptConsole;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +19,8 @@ namespace ExampleGame
 {
     public class ExampleGame : Game
     {
-        readonly GraphicsDeviceManager graphics;  
+        private readonly GraphicsDeviceManager graphics;
+        private PrimitiveBatch _primitiveBatch;
 
         public ExampleGame()
         {
@@ -33,12 +35,14 @@ namespace ExampleGame
             Engine.Initialize(graphics, this);
             Engine.Window.Width = 1280;
             Engine.Window.Height = 720;
-            Engine.Console = new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
+            Engine.Managers.Add(typeof(ScriptConsole), new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
             {
                 Width = GraphicsDevice.Viewport.Width
-            });
+            }));
 
             Engine.Window.IsMouseVisible = true;
+
+            _primitiveBatch = new PrimitiveBatch(Engine.Window.GraphicsDevice);
 
             base.Initialize();
         }
@@ -83,7 +87,7 @@ namespace ExampleGame
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
-            //mainCamera.AddComponent(new AutoScrollingCamera(mainCamera) {Speed = 10, IsHorizontal = false});
+            mainCamera.AddComponent(new AutoMovingComponent(mainCamera) {Speed = 20, IsHorizontal = true});
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
           
             {
@@ -103,7 +107,7 @@ namespace ExampleGame
                     Layer = DrawingLayer.Background2,
                     ParallaxRatio = -1.2f
                 });
-                e.AddComponent(new AutoScrollingCamera(e) { Speed = -10});
+                e.AddComponent(new AutoMovingComponent(e) { Speed = -10});
                 e.Transform.Position = new Vector2(-170, -180);
                 //e.Transform.Scale *= 1/4f;
             }
@@ -243,6 +247,14 @@ namespace ExampleGame
         protected override void Draw(GameTime gameTime)
         {
             Engine.Draw(gameTime);
+
+            _primitiveBatch.Begin(PrimitiveType.LineList, Engine.Cameras.Current.TransformMatrix);
+
+            _primitiveBatch.AddVertex(new Vector2(0, 0), Color.Red);
+            _primitiveBatch.AddVertex(new Vector2(100, 100), Color.Red);
+
+            _primitiveBatch.End();
+            
             base.Draw(gameTime);
         }
     }

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Entities
 {
-    public class EntitiesManager : Manager
+    public class EntitiesManager : Manager, IRenderableManager
     {
         /* TODO: Scenes
          * 
@@ -58,7 +58,7 @@ namespace JPEngine.Entities
             _tempEntities.ForEach(e => e.Initialize());
         }
 
-        internal void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             UpdateSystems(gameTime);
 
@@ -85,7 +85,7 @@ namespace JPEngine.Entities
             PhysicsSystem.Update(components, gameTime);
         }
 
-        internal void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);

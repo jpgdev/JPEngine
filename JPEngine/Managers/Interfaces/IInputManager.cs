@@ -3,14 +3,12 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public interface IInputManager : IManager
+    public interface IInputManager : IUpdateableManager
     {
         IKeyboardHelper Keyboard { get; }
 
         IMouseHelper Mouse { get; }
 
         IGamePadHelper GamePads { get; }
-
-        void Update();
     }
 }
