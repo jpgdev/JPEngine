@@ -8,9 +8,9 @@
 
         object[] ParseFile(string path);
 
-        ////TODO: Overkill?
+        //TODO: Overkill?
         //void AddCommand(string name, object behavior);
-        ////TODO: Overkill?
+        //TODO: Overkill?
         //void AddCommand(string name, object target, object behavior);
     }
 }

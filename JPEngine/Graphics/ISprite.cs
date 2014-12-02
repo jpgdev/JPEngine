@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Graphics
 {
-    public interface ISprite : IRenderable
+    public interface ISprite<out TTextureType> : IRenderable
     {
-        Texture2D Texture { get; }
+        TTextureType Texture { get; }
 
         Rectangle Bounds { get; }
 

@@ -3,9 +3,9 @@
 namespace JPEngine.Graphics
 {
 
-    public interface IText : IRenderable
+    public interface IText<out TFontType> : IRenderable
     {
-        SpriteFont Font { get; }
+        TFontType Font { get; }
 
         string Text { get; }
     }

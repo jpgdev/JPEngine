@@ -7,10 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Graphics
 {
-    public class SpriteBatchRenderer : Manager, ISpriteRenderer
+    public class SpriteBatchRenderer : Manager, ISpriteRenderer<Texture2D, SpriteFont>
     {
-        private readonly List<ISprite> _sprites = new List<ISprite>();
-        private readonly List<IText> _texts = new List<IText>();
+        private readonly List<ISprite<Texture2D>> _sprites = new List<ISprite<Texture2D>>();
+        private readonly List<IText<SpriteFont>> _texts = new List<IText<SpriteFont>>();
 
         private readonly int _numberOfLayers;
 
@@ -36,13 +36,13 @@ namespace JPEngine.Graphics
             _isBegan = true;
         }
 
-        public void DrawString(IText text)
+        public void DrawString(IText<SpriteFont> text)
         {
             //TODO: Sort
             _texts.Add(text);
         }
 
-        public void Draw(ISprite sprite)
+        public void Draw(ISprite<Texture2D> sprite)
         {
             //TODO: Sort
             _sprites.Add(sprite);
@@ -55,7 +55,7 @@ namespace JPEngine.Graphics
             
             //TODO: Sort here maybe?
 
-            foreach (ISprite sprite in _sprites)
+            foreach (ISprite<Texture2D> sprite in _sprites)
             {
                 if (sprite.Bounds != Rectangle.Empty)
                 {
@@ -84,7 +84,7 @@ namespace JPEngine.Graphics
                 }
             }
 
-            foreach (IText text in _texts)
+            foreach (IText<SpriteFont> text in _texts)
             {
                 _spriteBatch.DrawString(
                     text.Font,

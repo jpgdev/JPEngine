@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Graphics
 {
-    public class Sprite : ISprite
+    public class Sprite : ISprite <Texture2D>
     {
         public Vector2 Position { get; set; }
 

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace JPEngine.Graphics
 {
-    public struct RenderedText : IText
+    public struct RenderedText : IText<SpriteFont>
     {
         public Vector2 Position { get; set; }
 

@@ -87,6 +87,11 @@ namespace JPEngine.Entities
 
         public void Draw(GameTime gameTime)
         {
+            if (Engine.Cameras.Current != null)
+                Engine.SpriteRenderer.Begin(Engine.Cameras.Current.TransformMatrix);
+            else
+                Engine.SpriteRenderer.Begin();
+
             _tempEntities.Clear();
             _tempEntities.AddRange(_entities);
 
@@ -96,6 +101,9 @@ namespace JPEngine.Entities
                 if (e.Enabled)
                     e.Draw(gameTime);
             });
+
+           Engine.SpriteRenderer.End();
+
         }
 
         #region Entities Handling

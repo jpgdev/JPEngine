@@ -248,6 +248,7 @@ namespace ExampleGame
         {
             Engine.Draw(gameTime);
 
+            //TODO: Move to a manager/renderer \ la SpriteBatchRenderer
             _primitiveBatch.Begin(PrimitiveType.LineList, Engine.Cameras.Current.TransformMatrix);
 
             _primitiveBatch.AddVertex(new Vector2(0, 0), Color.Red);

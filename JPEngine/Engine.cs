@@ -34,7 +34,7 @@ namespace JPEngine
         //TODO: Remove this from the Engine, the can use it or not, do not force it
         private static EntitiesManager _entitiesManager;
 
-        private static ISpriteRenderer _spriteRenderer;
+        private static ISpriteRenderer<Texture2D, SpriteFont> _spriteRenderer;
         private static IWindowManager _windowManager;
         private static IResourceManager<Texture2D> _texturesManager;
         private static IResourceManager<Song> _musicManager;
@@ -61,22 +61,10 @@ namespace JPEngine
             }
         }
 
-        //public static ScriptConsole Console
-        //{
-        //    get { return _console; }
-        //    set
-        //    {
-        //        if (_console != null)
-        //            _console.Dispose();
-
-        //        _console = value;
-        //    }
-        //}
-
-        public static ISpriteRenderer SpriteRenderer
+        public static ISpriteRenderer<Texture2D, SpriteFont> SpriteRenderer
         {
             get { return _spriteRenderer; }
-            set
+            private set
             {
                 if (_spriteRenderer != null)
                     _spriteRenderer.Dispose();
@@ -257,7 +245,7 @@ namespace JPEngine
             ISettingsManager settingsManager,
             ICameraManager cameraManager)
         {
-            //TODO: Do not require EVERYTHING
+            //TODO: Do not require EVERYTHING... Maybe only put the Managers setter public?
 
             if(windowManager == null)
                 throw new ArgumentNullException("windowManager");
@@ -369,20 +357,9 @@ namespace JPEngine
                     updateableManager.Update(gameTime);
             }
 
-            //TODO: Remove and do it in the IRenderableManager Draw () loop
-           // if (CanGameUpdate())
-            //{
-                Entities.Update(gameTime);
-            //}
+            //TODO: Remove from the engine
+            Entities.Update(gameTime);
         }
-
-        //TODO: Clean this...
-        //private static bool CanGameUpdate()
-        //{
-        //    return !(Console != null &&
-        //             Console.IsActive &&
-        //             Console.Options.PauseGameWhenOpened);
-        //}
 
         public static void Draw(GameTime gameTime)
         {
@@ -394,17 +371,9 @@ namespace JPEngine
 
             //TODO: Better version that wraps and manage the layers, z-index etc...
 
-            //TODO: Remove
-            //////////////////////////////////////////////////
-            if (Cameras.Current != null)
-                SpriteRenderer.Begin(Cameras.Current.TransformMatrix);
-            else
-                SpriteRenderer.Begin();
-
+            //TODO: Remove from the engine
+            /////////////////////////////////////////////////
             Entities.Draw(gameTime);
-
-            SpriteRenderer.End();
-            
             /////////////////////////////////////////////////
             
             foreach (IManager manager in _customManagers.Values)
@@ -413,11 +382,6 @@ namespace JPEngine
                 if(renderableManager != null)
                     renderableManager.Draw(gameTime);
             }
-
-
-            //TODO: Remove and do it in the IRenderableManager Draw () loop
-            //if (Console != null)
-                //Console.Draw(gameTime);
         }
 
         #endregion

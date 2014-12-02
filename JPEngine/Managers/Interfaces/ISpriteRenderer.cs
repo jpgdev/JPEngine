@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework;
 
 namespace JPEngine.Managers
 {
-    public interface ISpriteRenderer : IManager
+    public interface ISpriteRenderer<in TTextureType, in TFontType> : IManager
     {
         void Begin(Matrix? transformMatrix = null);
 
-        void Draw(ISprite sprite);
+        void Draw(ISprite<TTextureType> sprite);
 
-        void DrawString(IText text);
+        void DrawString(IText<TFontType> text);
 
         void End();
     }
