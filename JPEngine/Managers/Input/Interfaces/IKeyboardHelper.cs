@@ -1,6 +1,5 @@
 ﻿using System;
 using JPEngine.Events;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Managers.Input
@@ -9,13 +8,13 @@ namespace JPEngine.Managers.Input
     {
         void Update();
 
-        bool IsKeyClicked(Keys key);
+        bool IsClicked(Keys key);
 
-        bool IsKeyReleased(Keys key);
+        bool IsReleased(Keys key);
 
-        bool IsKeyDown(Keys key);
+        bool IsDown(Keys key);
 
-        bool IsKeyUp(Keys key);
+        bool IsUp(Keys key);
 
         Keys[] GetPressedKeys();
 

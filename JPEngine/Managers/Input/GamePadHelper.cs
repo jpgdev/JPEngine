@@ -5,45 +5,44 @@ namespace JPEngine.Managers.Input
 {
     public class GamePadHelper : IGamePadHelper
     {
-        public IGamePadInfos GamePad1 { get; private set; }
-        public IGamePadInfos GamePad2 { get; private set; }
-        public IGamePadInfos GamePad3 { get; private set; }
-        public IGamePadInfos GamePad4 { get; private set; }
+        private readonly int _amount = 4;
+        private readonly IGamePadInfos[] _gamePads;
+
+        public int Amount { get { return _amount; } }
+        
+        public IGamePadInfos this[int playerIndex]
+        {
+            get { return _gamePads[playerIndex]; }
+        }
 
         public GamePadHelper()
         {
-            GamePad1 = new GamePadInfos(PlayerIndex.One);
-            GamePad2 = new GamePadInfos(PlayerIndex.Two);
-            GamePad3 = new GamePadInfos(PlayerIndex.Three);
-            GamePad4 = new GamePadInfos(PlayerIndex.Four);
+            _gamePads = new IGamePadInfos[]
+            {
+                new GamePadInfos(PlayerIndex.One),
+                new GamePadInfos(PlayerIndex.Two),
+                new GamePadInfos(PlayerIndex.Three),
+                new GamePadInfos(PlayerIndex.Four)
+            };
         }
 
-        public GamePadHelper(IGamePadInfos gamePad1, IGamePadInfos gamePad2, IGamePadInfos gamePad3, IGamePadInfos gamePad4)
+        public GamePadHelper(params IGamePadInfos[] gamePads)
         {
-            if (gamePad1 == null)
-                throw new ArgumentNullException("gamePad1");
+            if (gamePads == null)
+                throw new ArgumentNullException("gamePads");
 
-            if (gamePad2 == null)
-                throw new ArgumentNullException("gamePad2");
+            if(gamePads.Length < 1)
+                throw new ArgumentException("The array of GamePads must have at least one entry.");
 
-            if (gamePad3 == null)
-                throw new ArgumentNullException("gamePad3");
-
-            if (gamePad4 == null)
-                throw new ArgumentNullException("gamePad4");
-
-            GamePad1 = gamePad1;
-            GamePad2 = gamePad2;
-            GamePad3 = gamePad3;
-            GamePad4 = gamePad4;
+            gamePads.CopyTo(_gamePads, 0);
+            _amount = _gamePads.Length;
         }
 
         public void Update()
         {
-            GamePad1.Update();
-            GamePad2.Update();
-            GamePad3.Update();
-            GamePad4.Update();
+            foreach (IGamePadInfos gamePad in _gamePads)
+                gamePad.Update();
         }
+
     }
 }

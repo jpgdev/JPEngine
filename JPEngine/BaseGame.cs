@@ -59,6 +59,6 @@ namespace JPEngine
         protected abstract void Draw(GameTime gameTime);
 
 
-       
+
     }
 }

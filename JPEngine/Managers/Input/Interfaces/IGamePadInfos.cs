@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Managers.Input
 {
@@ -7,13 +6,13 @@ namespace JPEngine.Managers.Input
     {
         bool IsConnected { get; }
 
-        bool IsButtonUp(Buttons button);
+        bool IsUp(Buttons button);
 
-        bool IsButtonDown(Buttons button);
+        bool IsDown(Buttons button);
 
-        bool IsButtonClicked(Buttons button);
+        bool IsClicked(Buttons button);
 
-        bool IsButtonReleased(Buttons button);
+        bool IsReleased(Buttons button);
 
         bool SetVibration(float leftMotor, float rightMotor);
 

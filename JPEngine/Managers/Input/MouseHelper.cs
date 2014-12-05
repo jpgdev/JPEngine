@@ -26,7 +26,7 @@ namespace JPEngine.Managers.Input
             _currentMouseState = Mouse.GetState();
         }
 
-        public bool IsButtonClicked(MouseButton button)
+        public bool IsClicked(MouseButton button)
         {
             switch (button)
             {
@@ -47,7 +47,7 @@ namespace JPEngine.Managers.Input
             }
         }
 
-        public bool IsButtonReleased(MouseButton button)
+        public bool IsReleased(MouseButton button)
         {
             switch (button)
             {
@@ -68,7 +68,7 @@ namespace JPEngine.Managers.Input
             }
         }
 
-        public bool IsButtonDown(MouseButton button)
+        public bool IsDown(MouseButton button)
         {
             switch (button)
             {
@@ -80,6 +80,24 @@ namespace JPEngine.Managers.Input
 
                 case MouseButton.Middle:
                     return _currentMouseState.MiddleButton == ButtonState.Pressed;
+
+                default:
+                    throw new NotImplementedException(string.Format("The button {0} is not implemented", button));
+            }
+        }
+
+        public bool IsUp(MouseButton button)
+        {
+            switch (button)
+            {
+                case MouseButton.Left:
+                    return _currentMouseState.LeftButton == ButtonState.Released;
+
+                case MouseButton.Right:
+                    return _currentMouseState.RightButton == ButtonState.Released;
+
+                case MouseButton.Middle:
+                    return _currentMouseState.MiddleButton == ButtonState.Released;
 
                 default:
                     throw new NotImplementedException(string.Format("The button {0} is not implemented", button));

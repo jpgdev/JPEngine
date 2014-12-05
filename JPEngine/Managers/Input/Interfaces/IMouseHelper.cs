@@ -11,10 +11,12 @@ namespace JPEngine.Managers.Input
 
         void Update();
 
-        bool IsButtonClicked(MouseButton button);
+        bool IsClicked(MouseButton button);
 
-        bool IsButtonReleased(MouseButton button);
+        bool IsReleased(MouseButton button);
 
-        bool IsButtonDown(MouseButton button);
+        bool IsDown(MouseButton button);
+
+        bool IsUp(MouseButton key);
     }
 }

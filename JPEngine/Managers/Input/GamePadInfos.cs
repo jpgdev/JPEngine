@@ -27,22 +27,22 @@ namespace JPEngine.Managers.Input
             _gamePadCapabilities = GamePad.GetCapabilities(playerIndex);
         }
 
-        public bool IsButtonUp(Buttons button)
+        public bool IsUp(Buttons button)
         {
             return _newGamePadState.IsButtonUp(button);
         }
 
-        public bool IsButtonDown(Buttons button)
+        public bool IsDown(Buttons button)
         {
             return _newGamePadState.IsButtonDown(button);
         }
 
-        public bool IsButtonClicked(Buttons button)
+        public bool IsClicked(Buttons button)
         {
             return _oldGamePadState.IsButtonUp(button) && _newGamePadState.IsButtonDown(button);
         }
 
-        public bool IsButtonReleased(Buttons button)
+        public bool IsReleased(Buttons button)
         {
             return _oldGamePadState.IsButtonDown(button) && _newGamePadState.IsButtonUp(button);
         }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
-using JPEngine.Graphics;
-using JPEngine.Utils;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 

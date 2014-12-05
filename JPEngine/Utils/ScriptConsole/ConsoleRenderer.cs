@@ -104,9 +104,9 @@ namespace JPEngine.Utils.ScriptConsole
             //spriteBatch.Begin();
 
             //TODO: Keep only one sprite and change it, do not recreate one
-            Sprite backGroundSprite = new Sprite(_pixel, Bounds, _options.BackgroundColor, DrawingLayer.Foreground1);
+            Sprite backgroundSprite = new Sprite(_pixel, Bounds, _options.BackgroundColor, DrawingLayer.Foreground1);
 
-            Engine.SpriteRenderer.Draw(backGroundSprite);
+            Engine.SpriteRenderer.Draw(backgroundSprite);
             //spriteBatch.Draw(_pixel, Bounds, _options.BackgroundColor);
 
             Vector2 nextCommandPosition = DrawCommands(_consoleInputProcessor.Out, FirstCommandPosition);

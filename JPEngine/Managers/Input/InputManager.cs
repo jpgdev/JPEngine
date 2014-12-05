@@ -1,5 +1,7 @@
 ﻿using System;
+using JPEngine.Enums;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace JPEngine.Managers.Input
 {
@@ -12,7 +14,7 @@ namespace JPEngine.Managers.Input
         public IMouseHelper Mouse { get; private set; }
 
         public IGamePadHelper GamePads { get; private set; }
-
+        
         #endregion
 
         internal InputManager()
@@ -37,6 +39,86 @@ namespace JPEngine.Managers.Input
             Mouse = mouseHelper;
             GamePads = gamePadHelper;
         }
+
+        #region IsClicked
+
+        public bool IsClicked(Keys key)
+        {
+            return Keyboard.IsClicked(key);
+        }
+
+        public bool IsClicked(MouseButton button)
+        {
+            return Mouse.IsClicked(button);
+        }
+
+        public bool IsClicked(Buttons button, int playerIndex = 0)
+        {
+            return GamePads[playerIndex].IsClicked(button);
+        }
+
+        #endregion
+
+
+        #region IsReleased
+
+        public bool IsReleased(Keys key)
+        {
+            return Keyboard.IsReleased(key);
+        }
+
+        public bool IsReleased(MouseButton button)
+        {
+            return Mouse.IsReleased(button);
+        }
+
+        public bool IsReleased(Buttons button, int playerIndex = 0)
+        {
+            return GamePads[playerIndex].IsReleased(button);
+        }
+
+        #endregion
+
+
+        #region IsDown
+
+        public bool IsDown(Keys key)
+        {
+            return Keyboard.IsDown(key);
+        }
+
+        public bool IsDown(MouseButton button)
+        {
+            return Mouse.IsDown(button);
+        }
+
+        public bool IsDown(Buttons button, int playerIndex = 0)
+        {
+            return GamePads[playerIndex].IsDown(button);
+
+        }
+
+        #endregion
+
+
+        #region IsUp
+
+        public bool IsUp(Keys key)
+        {
+            return Keyboard.IsUp(key);
+        }
+
+        public bool IsUp(MouseButton button)
+        {
+            return Mouse.IsUp(button);
+        }
+
+        public bool IsUp(Buttons button, int playerIndex = 0)
+        {
+            return GamePads[playerIndex].IsUp(button);
+        }
+
+        #endregion
 
         public void Update(GameTime gameTime)
         {

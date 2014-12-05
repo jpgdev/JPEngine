@@ -23,7 +23,7 @@ namespace JPEngine
 
 
         //TODO: Improve this, make a class to add them (like the Service.AddService) and split them in here (2 lists : IRenderableManagers & IUpdateableManager)
-        private static Dictionary<Type, IManager> _customManagers; 
+        private static Dictionary<Type, IManager> _customManagers;
 
         //TODO: Make Interface for each managers to abstract the functionalities
 
@@ -43,7 +43,7 @@ namespace JPEngine
         private static ISettingsManager _settingsManager;
         private static IInputManager _inputManager;
         private static ICameraManager _cameraManager;
-        
+
         #endregion
 
         #region Properties
@@ -85,8 +85,8 @@ namespace JPEngine
             }
         }
 
-        public static IWindowManager Window 
-        { 
+        public static IWindowManager Window
+        {
             get { return _windowManager; }
             private set
             {
@@ -184,7 +184,7 @@ namespace JPEngine
         public static float FramesPerSecond { get; private set; }
 
         #endregion
-        
+
         #region Initialization
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace JPEngine
             //TODO: Enable the user to change the RootDirectory
             _contentManager = new ContentManager(services, "Content");
             ///////////////////////////////////////////////////
-            
+
             SpriteRenderer = new SpriteBatchRenderer(Window.GraphicsDevice);
             Entities = new EntitiesManager();
             Settings = new SettingsManager();
@@ -374,11 +374,17 @@ namespace JPEngine
             //TODO: Remove from the engine
             /////////////////////////////////////////////////
             Entities.Draw(gameTime);
+<<<<<<< HEAD
+=======
+
+            SpriteRenderer.End();
+
+>>>>>>> Changed the Inputs managers methods names and added the method calls in the IInputManager core.
             /////////////////////////////////////////////////
-            
+
             foreach (IManager manager in _customManagers.Values)
             {
-                IRenderableManager renderableManager = manager as IRenderableManager; 
+                IRenderableManager renderableManager = manager as IRenderableManager;
                 if(renderableManager != null)
                     renderableManager.Draw(gameTime);
             }

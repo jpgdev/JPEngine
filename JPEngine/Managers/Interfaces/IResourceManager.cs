@@ -2,7 +2,7 @@
 {
     public interface IResourceManager<out T> : IManager
     {
-       bool IsResourceLoaded(string name);
+        bool IsResourceLoaded(string name);
 
         bool IsResourcePathAdded(string name);
 

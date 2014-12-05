@@ -1,61 +1,60 @@
-### TODOS
+# TODOS
 
-- Move the components out of the entities. Keep them in the EntityManager / Scene. 
-	- Keep a reference in the Entity of the EntityManager/World/Scene that contains the components, so a GetComponent method is easily achievabale. 
+### Move the components out of the entities. Keep them in the EntityManager / Scene.
+Keep a reference in the Entity of the EntityManager/World/Scene that contains the components, so a GetComponent method is easily achievabale.
 
-- Add a global (to the solution) 'libs' directory for all externals dll.
+### Add a global (to the solution) 'libs' directory for all externals dll.
 
-- Implements Unit Tests for current functionalities
-	- EntityManager
-		- Events
-		- Entity Handling
-	
-	- Entity
-		- Events
-		- Components Handling
-		
-	- Components
-	
-	- WindowManager 
-		- FormWindowManager
-		- OpenTKWindowManager
-		- BaseWindowManager
-		
-- Console	
-	- Implement Scrollbar
-		- ConsoleOptions.IsScrollable
-		- ConsoleOptions.ScrollUpKey
-		- ConsoleOptions.ScrollDownKey		
-		
-- Entity & Component IClonable (or Copy Constructor?)
+### Implements Unit Tests for current functionalities
+- EntityManager
+	- Events
+	- Entity Handling
+
+- Entity
+	- Events
+	- Components Handling
+
+- Components
+
+- WindowManager
+	- FormWindowManager
+	- OpenTKWindowManager
+	- BaseWindowManager
+
+### Console
+- Implement Scrollbar
+	- ConsoleOptions.IsScrollable
+	- ConsoleOptions.ScrollUpKey
+	- ConsoleOptions.ScrollDownKey
+
+### Entity & Component IClonable (or Copy Constructor?)
 
 - Call the Start() function only when the Component is Enabled, otherwise subscribe to the OnEnabledChanged event to do it the first time it is enabled
 
-- Add Events in Entity
-	- OnComponentAdded
-	- OnComponentRemoved
+### Add Events in Entity
+- OnComponentAdded
+- OnComponentRemoved
 
-- Add Events in EntityManager
-	- OnComponentAdded
-	- OnComponentRemoved
-	
-- Implement Scenes
+### Add Events in EntityManager
+- OnComponentAdded
+- OnComponentRemoved
 
-- Implement Systems 
-	- Loop in Entitymanager
-	- System Order
-	- Constant Systems (ex. PhysicsSystem in always last and is directly accessible (Engine.Entities.Physics)
+### Implement Scenes
 
-- Implement PhysicsSystem
-	- Make a FarseersEngine wrapper, but keep an interface so we can implement our own?
+### Implement Systems
+- Loop in Entitymanager
+- System Order
+- Constant Systems (ex. PhysicsSystem in always last and is directly accessible (Engine.Entities.Physics)
 
-- Find a way to load Resources (Fonts, Textures etc..) directly in the engine, without relying on the game and its ContentManager
+### Implement PhysicsSystem
+- Make a FarseersEngine wrapper, but keep an interface so we can implement our own?
 
-- SpriteManager
-	- Make a wrapper for all the SpriteBatch.Draw calls, do not return the _spriteBatch instance.
-	
-	- Handle a HUD/GUI (maybe another SpriteBatch.Begin(), ..Draw(), ..End() when the layer is DrawingLayer.GUI ?)
-	
-		-  and handle multiples layers of GUI too
+### Find a way to load Resources (Fonts, Textures etc..) directly in the engine, without relying on the game and its ContentManager
 
--  Implement a Lighting engine ([Krypton XNA](https://krypton.codeplex.com/))
+### SpriteManager
+- Make a wrapper for all the SpriteBatch.Draw calls, do not return the _spriteBatch instance.
+
+- Handle a HUD/GUI (maybe another SpriteBatch.Begin(), ..Draw(), ..End() when the layer is DrawingLayer.GUI ?)
+	-  and handle multiples layers of GUI too
+
+###  Implement a Lighting engine ([Krypton XNA](https://krypton.codeplex.com/))

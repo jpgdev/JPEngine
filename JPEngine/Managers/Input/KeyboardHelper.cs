@@ -58,13 +58,13 @@ namespace JPEngine.Managers.Input
                     default:
                         e.Key = key;
 
-                        if (IsKeyDown(key))
+                        if (IsDown(key))
                             OnKeyDown(this, e);
 
-                        if (IsKeyClicked(key))
+                        if (IsClicked(key))
                             OnKeyClicked(this, e);
 
-                        if (IsKeyReleased(key))
+                        if (IsReleased(key))
                             OnKeyReleased(this, e);
 
                         break;
@@ -148,22 +148,22 @@ namespace JPEngine.Managers.Input
 
         #region State getter
 
-        public bool IsKeyClicked(Keys key)
+        public bool IsClicked(Keys key)
         {
             return (_currentKBState.IsKeyDown(key) && _oldKBState.IsKeyUp(key));
         }
 
-        public bool IsKeyReleased(Keys key)
+        public bool IsReleased(Keys key)
         {
             return (_currentKBState.IsKeyUp(key) && _oldKBState.IsKeyDown(key));
         }
 
-        public bool IsKeyDown(Keys key)
+        public bool IsDown(Keys key)
         {
             return _currentKBState.IsKeyDown(key);
         }
 
-        public bool IsKeyUp(Keys key)
+        public bool IsUp(Keys key)
         {
             return _currentKBState.IsKeyUp(key);
         }
