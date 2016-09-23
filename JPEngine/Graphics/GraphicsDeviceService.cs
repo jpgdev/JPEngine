@@ -28,9 +28,11 @@ namespace JPEngine.Graphics
         #region Fields
 
         private Game _game; //HACK : Temp fix for the GraphicsDevice ctor that crashes if there is no Game instance
+		private GraphicsDeviceManager _graphicsDeviceManager;
 
         // Singleton device service instance.
-        private static GraphicsDeviceService _singletonInstance;
+		private static GraphicsDeviceService _instance;// = new GraphicsDeviceService();
+
 
         // Keep track of how many controls are sharing the singletonInstance.
         private static int _referenceCount;
@@ -53,32 +55,38 @@ namespace JPEngine.Graphics
         public event EventHandler<EventArgs> DeviceReset;
         public event EventHandler<EventArgs> DeviceResetting;
 
-        /// <summary>
-        /// Constructor is private, because this is a singleton class:
-        /// client controls should use the public AddRef method instead.
-        /// </summary>
-        protected GraphicsDeviceService(IntPtr windowHandle, int width, int height)
-        {
-            PresentationParameters parameters = new PresentationParameters
-            {
-                DeviceWindowHandle = windowHandle,
-                BackBufferWidth = Math.Max(width, 1),
-                BackBufferHeight = Math.Max(height, 1)
-            };
-            //parameters.BackBufferFormat = SurfaceFormat.Color;
+		/// <summary>
+		/// Constructor is private, because this is a singleton class:
+		/// client controls should use the public AddRef method instead.
+		/// </summary>
+		protected GraphicsDeviceService (IntPtr windowHandle, int width, int height)
+		{ 		
+			PresentationParameters _presentationParams = new PresentationParameters
+			{
+				DeviceWindowHandle = windowHandle,
+				BackBufferWidth = Math.Max(width, 1),
+				BackBufferHeight = Math.Max(height, 1)
+			};
+			//parameters.BackBufferFormat = SurfaceFormat.Color;
 
-            //HACK : Need a Game to be created to be able to create a GraphicsDevice
-            _game = new Game();
+			//HACK : Need a Game to be created to be able to create a GraphicsDevice
+			_game = new Game();
 
-            _graphicsDevice = new GraphicsDevice(
-                GraphicsAdapter.DefaultAdapter,
-                GraphicsProfile.Reach,
-                parameters);
+            // HACK : There is a side effect in the GraphicsDeviceManager ctor. It adds itself as a IGraphicsDeviceManager & IGraphicsDeviceService. 
+            // This is also why it does not correctly work, since when we try to create
+            // Anything with the GraphicsDevice, it will try to use the GraphicsDevice from the 
+            // GraphiceDeviceManager created here, not the GraphicsDeviceService (this class).
+            _graphicsDeviceManager = new GraphicsDeviceManager(_game);           
 
-            //Useless because no-one can subscribe to it before it happens
+			_graphicsDevice = new GraphicsDevice(
+				GraphicsAdapter.DefaultAdapter,
+				GraphicsProfile.Reach,
+				_presentationParams);	
+
+			// Currently useless, since it is impossible to bind to this before the object is created
             //if (DeviceCreated != null)
-            //    DeviceCreated(this, EventArgs.Empty);
-        }
+			//    DeviceCreated(this, EventArgs.Empty);
+		}
 
 
         /// <summary>
@@ -92,11 +100,12 @@ namespace JPEngine.Graphics
             {
                 // If this is the first control to start using the
                 // device, we must create the singleton instance.
-                _singletonInstance = new GraphicsDeviceService(windowHandle,
-                                                              width, height);
+				_instance = new GraphicsDeviceService(windowHandle, width, height);
+                //_singletonInstance = new GraphicsDeviceService(windowHandle,
+                                                            //  width, height);
             }
 
-            return _singletonInstance;
+			return _instance;
         }
 
 

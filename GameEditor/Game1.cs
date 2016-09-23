@@ -15,7 +15,7 @@ namespace GameEditor
 
             Engine.Initialize((IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService)), TopLevelControl.Handle);
 
-            Entity mainCamera = new Entity("_MainCamera", true);
+			Entity mainCamera = Engine.Entities.CreateEntity("_MainCamera");
 
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             //mainCamera.AddComponent(new CameraInput(mainCamera));
@@ -33,16 +33,14 @@ namespace GameEditor
 
         private static void InitTestEntities()
         {
-            var e = new Entity("player");
+			var e = Engine.Entities.CreateEntity("player");
             //e.Transform.Scale = new Vector2(0.5f, 0.5f);
 
             e.AddComponent(new SpriteComponent(e, Engine.Textures["crate"]));
             //e.AddComponent(new PlayerInput(e));
-            e.AddComponent(new RectCollider(e) {Width = 96, Height = 96});
+            e.AddComponent(new RectCollider(e) { Width = 96, Height = 96 });
             e.AddComponent(new RectRenderer(e, Rectangle.Empty, new Texture2D(Engine.Window.GraphicsDevice, 1, 1)));
-
-            Engine.Entities.AddEntity(e);
-        }
+		}
 
         protected override void Update(GameTime gameTime)
         {

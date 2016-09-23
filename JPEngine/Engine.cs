@@ -374,12 +374,9 @@ namespace JPEngine
             //TODO: Remove from the engine
             /////////////////////////////////////////////////
             Entities.Draw(gameTime);
-<<<<<<< HEAD
-=======
 
-            SpriteRenderer.End();
+//          SpriteRenderer.End();
 
->>>>>>> Changed the Inputs managers methods names and added the method calls in the IInputManager core.
             /////////////////////////////////////////////////
 
             foreach (IManager manager in _customManagers.Values)

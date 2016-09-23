@@ -6,11 +6,15 @@ using JPEngine.Components.Physics;
 using JPEngine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using JPEngine.Managers.Input;
 
 namespace ExampleGame.CustomComponents
 {
+
     public class PlayerInput : BaseComponent
     {
+		private IKeyboardHelper Keyboard = Engine.Input.Keyboard;
+
         private BodyComponent _bodyComponent;
         private RectRenderer _rectRenderer;
         private AnimatedSpriteComponent _animatedSpriteComponent;
@@ -44,7 +48,7 @@ namespace ExampleGame.CustomComponents
             
             Vector2 moveVelocity = new Vector2();
 
-            if (Engine.Input.Keyboard.IsClicked((Keys)Engine.Settings["Q"].Value))
+            if (Keyboard.IsClicked((Keys)Engine.Settings["Q"].Value))
             {
                 Engine.SoundFX["ammo_pickup"].Play(0.05f, 0, 0);
             }
@@ -59,37 +63,37 @@ namespace ExampleGame.CustomComponents
             //    Transform.Position.Z -= 1;
             //}
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["Q"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["Q"].Value))
             {
                 Rotate(-MathHelper.ToRadians(10f * deltaSinceLastUpdate));
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["E"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["E"].Value))
             {
                 Rotate(MathHelper.ToRadians(10f * deltaSinceLastUpdate));
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["R"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["R"].Value))
             {
                 ResetRotation();
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["UP"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["UP"].Value))
             {
                 moveVelocity.Y -= 1;
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["DOWN"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["DOWN"].Value))
             {
                 moveVelocity.Y += 1;
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["RIGHT"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["RIGHT"].Value))
             {
                 moveVelocity.X += 1;
             }
 
-            if (Engine.Input.Keyboard.IsDown((Keys)Engine.Settings["LEFT"].Value))
+            if (Keyboard.IsDown((Keys)Engine.Settings["LEFT"].Value))
             {
                 moveVelocity.X -= 1;
             }
@@ -101,7 +105,7 @@ namespace ExampleGame.CustomComponents
 
             Move(moveVelocity);
 
-            if (Engine.Input.Keyboard.IsClicked((Keys)Engine.Settings["SpaceBar"].Value))
+            if (Keyboard.IsClicked((Keys)Engine.Settings["SpaceBar"].Value))
             {
                 const float verticalJumpVelocity = 400;
                 const float horizontalJumpVelocity = 50;
