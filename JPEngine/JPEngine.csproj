@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JPEngine</RootNamespace>
     <AssemblyName>JPEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -41,6 +41,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -51,34 +53,28 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FarseerPhysics MonoGame">
-      <HintPath>External DLLs\FarseerPhysics\FarseerPhysics MonoGame.dll</HintPath>
-    </Reference>
-    <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="NLua">
-      <HintPath>External DLLs\NLua.NoPInvoke\net40\NLua.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>External DLLs\OpenTK\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NVorbis">
+      <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\NVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\packages\Lidgren.Network.1.0.2\lib\net451\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>libs\NLua.NoPInvoke\net45\NLua.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -172,17 +168,16 @@
   <ItemGroup>
     <None Include="Analysis\Ideas.md" />
     <None Include="Analysis\TODOs.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="libs\FarseerPhysics\FarseerPhysics MonoGame.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net35\KopiLua.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net35\NLua.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net40\KopiLua.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net40\NLua.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net45\KopiLua.dll" />
-    <Content Include="libs\NLua.NoPInvoke\net45\NLua.dll" />
-    <Content Include="libs\OpenTK\OpenTK.dll" />
-    <Content Include="libs\OpenTK\OpenTK.GLControl.dll" />
+    <None Include="packages.config" />
+    <None Include="libs\FarseerPhysics\FarseerPhysics MonoGame.dll" />
+    <None Include="libs\NLua.NoPInvoke\net35\KopiLua.dll" />
+    <None Include="libs\NLua.NoPInvoke\net35\NLua.dll" />
+    <None Include="libs\NLua.NoPInvoke\net40\KopiLua.dll" />
+    <None Include="libs\NLua.NoPInvoke\net40\NLua.dll" />
+    <None Include="libs\NLua.NoPInvoke\net45\KopiLua.dll" />
+    <None Include="libs\NLua.NoPInvoke\net45\NLua.dll" />
+    <None Include="libs\OpenTK\OpenTK.GLControl.dll" />
+    <None Include="libs\OpenTK\OpenTK.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -192,4 +187,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\FarseerEngine\Farseer Physics MonoGame.csproj">
+      <Project>{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}</Project>
+      <Name>Farseer Physics MonoGame</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

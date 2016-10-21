@@ -90,7 +90,7 @@ namespace JPEngine
             get { return _windowManager; }
             private set
             {
-                if(_windowManager != null)
+                if (_windowManager != null)
                     _windowManager.Dispose();
 
                 _windowManager = value;
@@ -227,7 +227,7 @@ namespace JPEngine
         /// <param name="windowManager">The window manager.</param>
         public static void Initialize(IGraphicsDeviceService graphicsDeviceService, IWindowManager windowManager)
         {
-            if(windowManager == null)
+            if (windowManager == null)
                 throw new ArgumentNullException("windowManager");
 
             Window = windowManager;
@@ -247,7 +247,7 @@ namespace JPEngine
         {
             //TODO: Do not require EVERYTHING... Maybe only put the Managers setter public?
 
-            if(windowManager == null)
+            if (windowManager == null)
                 throw new ArgumentNullException("windowManager");
 
             if (inputManager == null)
@@ -297,7 +297,7 @@ namespace JPEngine
             //TODO: Remove this or make a way to remove it if it is not used (ContentManager)
             ////////////////////////////////////////////////////////////////
             var services = new GameServiceContainer();
-            services.AddService(typeof (IGraphicsDeviceService), graphicsDeviceService);
+            services.AddService(typeof(IGraphicsDeviceService), graphicsDeviceService);
 
             //TODO: Enable the user to change the RootDirectory
             _contentManager = new ContentManager(services, "Content");
@@ -365,7 +365,7 @@ namespace JPEngine
         {
             Window.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            FramesPerSecond = 1f/ (float)gameTime.ElapsedGameTime.TotalSeconds;
+            FramesPerSecond = 1f / (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             Console.WriteLine("FPS: " + FramesPerSecond);
 
@@ -374,18 +374,12 @@ namespace JPEngine
             //TODO: Remove from the engine
             /////////////////////////////////////////////////
             Entities.Draw(gameTime);
-<<<<<<< HEAD
-=======
-
-            SpriteRenderer.End();
-
->>>>>>> Changed the Inputs managers methods names and added the method calls in the IInputManager core.
             /////////////////////////////////////////////////
 
             foreach (IManager manager in _customManagers.Values)
             {
                 IRenderableManager renderableManager = manager as IRenderableManager;
-                if(renderableManager != null)
+                if (renderableManager != null)
                     renderableManager.Draw(gameTime);
             }
         }

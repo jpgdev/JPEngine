@@ -1,12 +1,9 @@
-﻿#region Using Statements
-using System;
-using System.Collections.Generic;
-using System.Linq;
-#endregion
+﻿using System;
+
 
 namespace ExampleGame
 {
-#if WINDOWS || LINUX
+    //#if WINDOWS || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -22,5 +19,5 @@ namespace ExampleGame
                 game.Run();
         }
     }
-#endif
+    //#endif
 }

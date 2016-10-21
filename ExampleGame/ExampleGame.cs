@@ -26,19 +26,19 @@ namespace ExampleGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.ApplyChanges();
         }
-        
+
         protected override void Initialize()
         {
             Engine.Initialize(graphics, this);
             Engine.Window.Width = 1280;
             Engine.Window.Height = 720;
             Engine.Managers.Add(typeof(ScriptConsole), new ScriptConsole(new ConsoleOptions(Content.Load<SpriteFont>("Fonts/ConsoleFont"))
-            {
-                Width = GraphicsDevice.Viewport.Width
-            }));
+                    {
+                        Width = GraphicsDevice.Viewport.Width
+                    }));
 
             Engine.Window.IsMouseVisible = true;
 
@@ -87,27 +87,27 @@ namespace ExampleGame
             //mainCamera.Transform.Scale *= 1.1f;
             mainCamera.AddComponent(new CameraComponent(mainCamera));
             mainCamera.AddComponent(new CameraInput(mainCamera));
-            mainCamera.AddComponent(new AutoMovingComponent(mainCamera) {Speed = 20, IsHorizontal = true});
+            mainCamera.AddComponent(new AutoMovingComponent(mainCamera) { Speed = 20, IsHorizontal = true });
             Engine.Cameras.SetCurrent(mainCamera.GetComponent<CameraComponent>());
           
             {
                 var e = Engine.Entities.CreateEntity("background");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["background"])
-                {
-                    Layer = DrawingLayer.Background3,
-                    ParallaxRatio = 1f
-                });
+                    {
+                        Layer = DrawingLayer.Background3,
+                        ParallaxRatio = 1f
+                    });
                 //e.Transform.Scale *= 1/4f;
             }
             
             {
                 var e = Engine.Entities.CreateEntity("crate_cloud2");
                 e.AddComponent(new ParallaxScrollingComponent(e, Engine.Textures["crate"])
-                {
-                    Layer = DrawingLayer.Background2,
-                    ParallaxRatio = -1.2f
-                });
-                e.AddComponent(new AutoMovingComponent(e) { Speed = -10});
+                    {
+                        Layer = DrawingLayer.Background2,
+                        ParallaxRatio = -1.2f
+                    });
+                e.AddComponent(new AutoMovingComponent(e) { Speed = -10 });
                 e.Transform.Position = new Vector2(-170, -180);
                 //e.Transform.Scale *= 1/4f;
             }
@@ -134,7 +134,7 @@ namespace ExampleGame
                 BodyType bodyType = BodyType.Static;
 
                 
-                CreateCrate(lastPos , name, 64, 64, bodyType);
+                CreateCrate(lastPos, name, 64, 64, bodyType);
 
                 lastPos.X += cubeWidth;// + 5;
                 //lastPos.Y += cubeHeight + 5;
@@ -208,10 +208,10 @@ namespace ExampleGame
             e.Transform.Scale.Y = height / (float)crateHeight;
 
             Body body = BodyFactory.CreateRectangle(
-                Engine.Entities.PhysicsSystem.World,
-                ConvertUnits.ToSimUnits(width),
-                ConvertUnits.ToSimUnits(height),
-                100);
+                            Engine.Entities.PhysicsSystem.World,
+                            ConvertUnits.ToSimUnits(width),
+                            ConvertUnits.ToSimUnits(height),
+                            100);
 
             body.Mass = 100;
             body.Friction = friction;
